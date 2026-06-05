@@ -170,7 +170,7 @@ body {
   .post-body .product-family {
     border: 1px solid var(--color-line);
     background: color-mix(in srgb, var(--color-paper-2) 72%, white 28%);
-    margin: 34px 0 12px;
+    margin: 34px 0 28px; /* bottom must outweigh the caption's -18px pull (same net 10px as .post-body img) */
     padding: 22px;
   }
   .post-body .product-family-row {
