@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const FACTS = [
-  "Kottavalasa, Andhra Pradesh, IN",
+  "Srikakulam, Andhra Pradesh, IN",
   "1.5 yrs shipping production",
   "full-stack · product · releases",
   "B.Tech AI/ML · gold medalist",
