@@ -11,6 +11,6 @@ export const site = {
   author: "Govind",
   email: "hello@govind.dev",
   linkedin: "https://www.linkedin.com/in/govind",
-  github: "https://github.com/govind",
+  github: "https://github.com/Govind-19",
   fine: "Govind — building the Maahita school ERP, one shipped lesson at a time.",
 } as const;
