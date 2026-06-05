@@ -1,0 +1,38 @@
+---
+title: "The deploy that broke during a school's attendance hour"
+summary: "What a real production incident taught me that no tutorial ever did — about release process, and about staying calm."
+date: "2026-01-19"
+tag: "Production"
+arc: "incident → root cause → process changed forever"
+readTime: 5
+draft: false
+featured: false
+---
+
+there's a specific feeling when production breaks and you know real people are staring at a spinner because of you.
+
+we pushed a deploy in the morning. small change, looked harmless. tested on our side.
+
+what we didnt think about.... morning is attendance hour. teachers across schools were marking attendance at that exact moment.
+
+the deploy broke it. calls started coming.
+
+my first instinct was to panic and start changing things fast. the seniors did the opposite. slow down. reproduce it. find the actual cause before touching anything.
+
+<Pull>Fixing the wrong thing fast is worse than fixing the right thing slow.</Pull>
+
+we found the root cause, rolled out the fix, and schools were back before the period ended.
+
+but the real change came after. we sat and asked how this got out at all.
+
+<Ex>Ex: our checklist now literally asks "what time is it for the schools" before any deploy. attendance hour is frozen. no exceptions.</Ex>
+
+things that changed forever after that day....
+
+deploys moved out of school working hours. releases got a proper checklist instead of vibes. rollback steps written down BEFORE deploying, not invented during the fire.
+
+no tutorial teaches this because no tutorial has a teacher standing in front of 40 kids waiting for your fix 😮‍💨
+
+production is a different teacher. it grades hard and it doesnt repeat the lesson.
+
+#production #devops #startup #buildinpublic

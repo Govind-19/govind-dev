@@ -1,0 +1,36 @@
+---
+title: "Naming conventions felt like bikeshedding until I grepped my own code"
+summary: "Six months in, I couldn't find my own functions. That i when I understood why my team lead always asked."
+date: "2026-01-06"
+tag: "Engineering"
+arc: "resist → reject → real requirement → revelation"
+readTime: 3
+draft: false
+featured: false
+---
+
+PR reviews at our place have this one recurring comment that used to annoy me....
+
+"rename this."
+
+handleClick to handleStudentRowClick. getData to fetchAttendanceSummary. on and on.
+
+the code WORKED. the names were fine to me. i wrote them, i knew what they did 🤷‍♂️
+
+it felt like bikeshedding. arguing about paint while the house is being built.
+
+then six months passed.
+
+i had to fix a bug in a feature i wrote myself. searched for the function.... couldnt find it. i had three different getData's in three files and no idea which one was mine.
+
+<Pull>I was a stranger in my own code. Six months is all it took.</Pull>
+
+<Ex>Ex: grep "getData" → 14 results. grep "fetchAttendanceSummary" → 1 result. thats the whole argument right there.</Ex>
+
+that i when i understood. names arent for the day you write the code. theyre for the day you come back.
+
+and someone always comes back. usually you. usually in a hurry.
+
+now im the one leaving "rename this" comments 🥲
+
+#softwareengineering #cleancode #buildinpublic #learninginpublic

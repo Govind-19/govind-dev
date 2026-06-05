@@ -1,0 +1,38 @@
+import Link from "next/link";
+import { formatDate, type PostMeta } from "@/lib/post-meta";
+
+export default function EntryRow({
+  post,
+  last = false,
+}: {
+  post: PostMeta;
+  last?: boolean;
+}) {
+  return (
+    <Link
+      href={`/journal/${post.slug}`}
+      className={`group block py-[26px] no-underline transition-[padding-left] duration-200 ease-out hover:pl-3 ${
+        last ? "" : "border-b border-line"
+      }`}
+    >
+      <div className="mb-[10px] flex items-center gap-[14px] font-mono text-[12px] text-muted">
+        <span className="uppercase tracking-[0.5px] text-accent">
+          {post.tag}
+        </span>
+        <span aria-hidden="true">·</span>
+        <span>{formatDate(post.date)}</span>
+        <span aria-hidden="true">·</span>
+        <span>{post.readTime} min</span>
+      </div>
+      <h3 className="mb-2 font-display text-[27px] font-medium leading-[1.2] tracking-[-0.5px] text-ink transition-colors group-hover:text-accent">
+        {post.title}
+      </h3>
+      <p className="max-w-[580px] text-[18px] text-muted">{post.summary}</p>
+      {post.arc && (
+        <div className="mt-3 font-mono text-[11px] tracking-[0.5px] text-accent-soft">
+          arc: {post.arc}
+        </div>
+      )}
+    </Link>
+  );
+}
