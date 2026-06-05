@@ -143,6 +143,7 @@ body {
   }
   /* italic caption line right under an image: *like this* */
   .post-body img + em,
+  .post-body div + p > em:only-child,
   .post-body p:has(> img) + p > em:only-child {
     display: block;
     margin-top: -18px;
