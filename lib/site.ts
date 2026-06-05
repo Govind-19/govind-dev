@@ -2,8 +2,11 @@
  * One spot to change the domain and identity.
  * Set NEXT_PUBLIC_SITE_URL in Vercel (or .env) when the custom domain changes.
  */
+// When the custom domain is live, change DEFAULT_URL to https://govind.dev
+const DEFAULT_URL = "https://govind-dev-eta.vercel.app";
+
 export const site = {
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://govind.dev",
+  url: process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_URL,
   name: "govind.dev",
   title: "Govind — Building in public",
   description:
