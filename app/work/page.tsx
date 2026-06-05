@@ -28,6 +28,40 @@ const PRODUCT_OPS = [
   "branding decisions",
 ];
 
+interface SideProject {
+  kicker: string;
+  title: string;
+  story: string[];
+  stack: string[];
+  links: { label: string; href: string }[];
+}
+
+const SIDE_PROJECTS: SideProject[] = [
+  {
+    kicker: "Built for my father",
+    title: "Site Bill Automator",
+    story: [
+      "My father is a paint contractor. Every time he finished painting a bank branch, someone had to make the bill for the owner — material lists, work measurements, totals. That someone was me: typing every line into MS Word, colouring fonts, adjusting sizes, running each calculation on a phone calculator, exporting a PDF. I made calculation mistakes more than once, and my father let me know about it.",
+      "So I built the proper fix: an Android app (Kotlin, Jetpack Compose) and a web app (Next.js) sharing one Firestore database in real time — multi-section bills, work measurements, per-day rates, advances, and a one-tap PDF whose maths is never wrong. A bill that used to eat an evening now takes minutes.",
+    ],
+    stack: ["Kotlin · Jetpack Compose", "Next.js", "Firebase Firestore", "PDF generation", "PWA"],
+    links: [{ label: "live app", href: "https://web-sable-rho-20.vercel.app" }],
+  },
+  {
+    kicker: "Built for myself — now my friends use it",
+    title: "Roots",
+    story: [
+      "I was spending a lot, lending money to friends and forgetting about it. My system was a notepad app on my phone and redoing the maths by hand — who owes me, what I owe, constant confusion.",
+      "Roots is the fix: a simple expense tracker that also tracks lent and borrowed money per person, with repayments, budgets, recurring expenses, and charts — offline-first, installable on Android. I kept it simple enough that my friends now use it daily too.",
+    ],
+    stack: ["React", "Capacitor (Android)", "Firebase", "offline-first", "Recharts"],
+    links: [
+      { label: "live app", href: "https://expensetracker-seven-zeta.vercel.app" },
+      { label: "github", href: "https://github.com/Govind-19/Roots" },
+    ],
+  },
+];
+
 export default function WorkPage() {
   return (
     <>
@@ -128,6 +162,57 @@ export default function WorkPage() {
             maintainability, and product thinking. The kind of thing you only
             learn standing next to someone who&apos;s seen it break before.
           </p>
+        </div>
+      </section>
+
+      <section className="border-b border-line py-[50px]">
+        <div className="mx-auto max-w-[760px] px-7">
+          <SectionLabel number="04" className="mb-7">
+            Side projects — built because real life demanded it
+          </SectionLabel>
+          <div className="flex flex-col gap-6">
+            {SIDE_PROJECTS.map((project) => (
+              <div
+                key={project.title}
+                className="rounded-[3px] border border-line bg-paper-2 px-[30px] py-7"
+              >
+                <p className="mb-[14px] font-mono text-[12px] uppercase tracking-[1px] text-accent">
+                  {project.kicker}
+                </p>
+                <h3 className="mb-3 font-display text-[24px] font-medium">
+                  {project.title}
+                </h3>
+                {project.story.map((para) => (
+                  <p key={para.slice(0, 40)} className="mb-4 text-[18px] text-lede">
+                    {para}
+                  </p>
+                ))}
+                <div className="mb-5 flex flex-wrap gap-2 font-mono text-[12px]">
+                  {project.stack.map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-[2px] border border-line bg-paper px-[10px] py-[5px] text-tag"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-[22px] font-mono text-[13px]">
+                  {project.links.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
+                    >
+                      {link.label} →
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
