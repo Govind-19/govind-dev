@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const CHANNELS = [
-  { label: "LinkedIn", value: "/in/govind", href: site.linkedin },
+  { label: "LinkedIn", value: "/in/bammidi-govinda-rao", href: site.linkedin },
   { label: "GitHub", value: "@Govind-19", href: site.github },
   { label: "Email", value: site.email, href: `mailto:${site.email}` },
 ];
