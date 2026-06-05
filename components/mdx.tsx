@@ -12,6 +12,26 @@ export const mdxComponents: MDXRemoteProps["components"] = {
   Ex: ({ children }: { children?: React.ReactNode }) => (
     <div className="ex">{children}</div>
   ),
+  // a row of small logo marks: <LogoRow items={[{src, alt, width?}]} />
+  LogoRow: ({
+    items,
+  }: {
+    items?: { src: string; alt: string; width?: number }[];
+  }) => (
+    <div className="logo-row">
+      {(items ?? []).map((item, i) => (
+        <span key={item.src} className="logo-row-item">
+          {i > 0 && <span className="logo-row-arrow">→</span>}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.src}
+            alt={item.alt}
+            style={{ width: item.width ?? 90 }}
+          />
+        </span>
+      ))}
+    </div>
+  ),
   // external links open in a new tab; internal links stay in-tab
   a: ({ href = "", children }: { href?: string; children?: React.ReactNode }) => {
     const external = /^https?:\/\//.test(href);

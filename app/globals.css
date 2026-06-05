@@ -141,6 +141,33 @@ body {
     border-radius: 3px;
     margin: 28px 0;
   }
+  /* small logo marks in a row, not full-width images */
+  .post-body .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 32px 0 8px;
+  }
+  .post-body .logo-row-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .post-body .logo-row img {
+    width: auto;
+    max-width: 110px;
+    border: none;
+    margin: 0;
+    display: inline-block;
+  }
+  .post-body .logo-row-arrow {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--color-accent);
+  }
+
   /* italic caption line right under an image: *like this* */
   .post-body img + em,
   .post-body div + p > em:only-child,
