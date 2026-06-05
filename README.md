@@ -46,6 +46,18 @@ Post body in markdown. Two extra components are available without imports:
 That's it. Posts are sorted newest first; drafts are excluded from the build
 entirely; OG preview cards, RSS, and the sitemap update automatically.
 
+### Images in posts
+
+Put the image in `public/journal/` and reference it from the post:
+
+```markdown
+![what the screenshot shows](/journal/day-6-receipt-flow.png)
+*optional caption line, italic, right under the image*
+```
+
+Images render full-width with the journal border style. Keep files under
+~300 KB (export PNG screenshots as 1200-1600px wide) so pages stay fast.
+
 ## How to change the domain
 
 One spot: `lib/site.ts`. Either edit `url` there, or set the

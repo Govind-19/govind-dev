@@ -12,7 +12,7 @@ const FACTS = [
   "Kottavalasa, Andhra Pradesh, IN",
   "1.5 yrs shipping production",
   "full-stack · product · releases",
-  "BTech, gold medalist",
+  "B.Tech AI/ML · gold medalist",
 ];
 
 const OWNERSHIP: { heading: string; items: string[] }[] = [
@@ -53,10 +53,16 @@ const OWNERSHIP: { heading: string; items: string[] }[] = [
 
 const SKILLS = [
   "JavaScript / TypeScript",
+  "Python",
   "React",
-  "Node.js",
+  "React Native",
+  "Node.js / Express",
+  "Next.js",
+  "PostgreSQL",
+  "MongoDB",
+  "Firebase",
   "REST APIs",
-  "SQL databases",
+  "WebRTC",
   "Git",
   "CI / deployments",
   "Jira",
@@ -71,10 +77,10 @@ export default function ResumePage() {
         <div className="mx-auto max-w-[760px] px-7">
           <p className="kicker mb-[18px]">Resume</p>
           <h1 className="mb-[10px] font-display text-[36px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
-            Govind
+            Bammidi Govinda Rao
           </h1>
           <p className="mb-6 text-[21px] text-lede">
-            <b className="font-medium text-accent">Software Engineer</b> at
+            <b className="font-medium text-accent">Full Stack Developer</b> at
             Maahita Technologies · building a school ERP for Indian schools
           </p>
           <div className="mb-7 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
@@ -139,37 +145,58 @@ export default function ResumePage() {
 
           <div className="flex flex-col gap-1 py-[18px] sm:flex-row sm:gap-[18px]">
             <div className="pt-[5px] font-mono text-[12px] text-muted sm:min-w-[130px]">
-              Aug 2025 — present
+              Jan 2025 — present
             </div>
             <div>
               <h4 className="mb-[3px] font-display text-[20px] font-medium">
-                Software Engineer
+                Full Stack Developer
               </h4>
               <div className="mb-[7px] font-mono text-[12.5px] text-accent">
-                Maahita Technologies
+                Maahita Technologies · Remote
               </div>
               <p className="text-[16.5px] text-muted">
-                Full-time. Owning end-to-end delivery on the school ERP —
-                engineering, releases, product, and production support.
+                Joined in my 4th year of BTech and started shipping production
+                code on the school ERP from day one — engineering, releases,
+                product, and production support, mentored through PR reviews
+                by senior engineers.
               </p>
             </div>
           </div>
 
           <div className="flex flex-col gap-1 border-t border-line py-[18px] sm:flex-row sm:gap-[18px]">
             <div className="pt-[5px] font-mono text-[12px] text-muted sm:min-w-[130px]">
-              Jan 2024 — Aug 2025
+              May 2025 — present
             </div>
             <div>
               <h4 className="mb-[3px] font-display text-[20px] font-medium">
-                Software Engineer Intern
+                Content Administrator
               </h4>
               <div className="mb-[7px] font-mono text-[12.5px] text-accent">
-                Maahita Technologies
+                Maahita Technologies · Remote
               </div>
               <p className="text-[16.5px] text-muted">
-                Joined in my 4th year of BTech. Started shipping production
-                code on a live SaaS product from day one, mentored through PR
-                reviews by senior engineers.
+                Own the LinkedIn content strategy — 60% increase in
+                engagement — keeping brand messaging consistent across the
+                platform.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1 border-t border-line py-[18px] sm:flex-row sm:gap-[18px]">
+            <div className="pt-[5px] font-mono text-[12px] text-muted sm:min-w-[130px]">
+              Jan 2025 — present
+            </div>
+            <div>
+              <h4 className="mb-[3px] font-display text-[20px] font-medium">
+                Thumbnail Editor
+              </h4>
+              <div className="mb-[7px] font-mono text-[12.5px] text-accent">
+                YouTube · Freelance
+              </div>
+              <p className="text-[16.5px] text-muted">
+                High-conversion thumbnails for creators with 7K+ and 21K+
+                subscribers; +15% average CTR through strategic visual
+                design.
               </p>
             </div>
           </div>
@@ -183,15 +210,16 @@ export default function ResumePage() {
           </SectionLabel>
           <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-[18px]">
             <div className="font-mono text-[12px] text-muted sm:min-w-[130px]">
-              2020 — 2024
+              2021 — 2025
             </div>
             <div>
               <h4 className="mb-[3px] font-display text-[20px] font-medium">
-                BTech, Computer Science
+                B.Tech, Artificial Intelligence &amp; Machine Learning
               </h4>
               <p className="text-[16.5px] text-muted">
-                <span className="text-accent">Gold medalist.</span> Graduated
-                top of program.
+                Sri Venkateswara College of Engineering and Technology,
+                Srikakulam. <span className="text-accent">Gold medalist.</span>{" "}
+                8.0/10 CGPA.
               </p>
             </div>
           </div>

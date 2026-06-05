@@ -133,6 +133,26 @@ body {
     border: none;
     padding: 0;
   }
+  .post-body img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+    margin: 28px 0;
+  }
+  /* italic caption line right under an image: *like this* */
+  .post-body img + em,
+  .post-body p:has(> img) + p > em:only-child {
+    display: block;
+    margin-top: -18px;
+    margin-bottom: 28px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 12.5px;
+    color: var(--color-muted);
+  }
 
   /* the mono "Ex:" callout block */
   .ex {
