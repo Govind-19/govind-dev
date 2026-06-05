@@ -1,4 +1,5 @@
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
+import * as React from "react";
 
 /**
  * Components available inside every post without imports.
@@ -31,6 +32,52 @@ export const mdxComponents: MDXRemoteProps["components"] = {
         </span>
       ))}
     </div>
+  ),
+  ProductFamily: ({ children }: { children?: React.ReactNode }) => {
+    const logos = React.Children.toArray(children).filter((child) => child !== "\n");
+
+    return (
+      <figure className="product-family" aria-label="Product family logos">
+        <div className="product-family-row">
+          {logos.map((child, i) => (
+            <div key={i} className="product-family-unit">
+              {i > 0 && (
+                <div className="product-family-branch" aria-hidden="true">
+                  <span>same tree</span>
+                  <span>{"->"}</span>
+                  <span>new product</span>
+                </div>
+              )}
+              {child}
+            </div>
+          ))}
+        </div>
+      </figure>
+    );
+  },
+  ProductLogo: ({
+    src,
+    alt,
+    label,
+    note,
+    width,
+  }: {
+    src: string;
+    alt: string;
+    label: string;
+    note: string;
+    width?: number | string;
+  }) => (
+    <>
+      <div className="product-family-mark">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={alt} style={{ width: width ?? 150 }} />
+      </div>
+      <figcaption>
+        <strong>{label}</strong>
+        <span>{note}</span>
+      </figcaption>
+    </>
   ),
   // external links open in a new tab; internal links stay in-tab
   a: ({ href = "", children }: { href?: string; children?: React.ReactNode }) => {

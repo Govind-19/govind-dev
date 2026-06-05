@@ -167,10 +167,80 @@ body {
     font-size: 18px;
     color: var(--color-accent);
   }
+  .post-body .product-family {
+    border: 1px solid var(--color-line);
+    background: color-mix(in srgb, var(--color-paper-2) 72%, white 28%);
+    margin: 34px 0 12px;
+    padding: 22px;
+  }
+  .post-body .product-family-row {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 18px;
+  }
+  .post-body .product-family-unit {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .post-body .product-family-unit:first-child {
+    grid-template-rows: 1fr auto;
+  }
+  .post-body .product-family-branch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 22px;
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent);
+    text-transform: uppercase;
+  }
+  .post-body .product-family-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 184px;
+    padding: 14px;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+  }
+  .post-body .product-family-mark img {
+    width: auto;
+    max-width: min(100%, 210px);
+    max-height: 160px;
+    object-fit: contain;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+  }
+  .post-body .product-family figcaption {
+    display: grid;
+    gap: 3px;
+    margin-top: 12px;
+    text-align: center;
+    font-family: var(--font-mono);
+    line-height: 1.35;
+  }
+  .post-body .product-family figcaption strong {
+    font-size: 13px;
+    color: var(--color-tag);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .post-body .product-family figcaption span {
+    font-size: 12px;
+    color: var(--color-muted);
+  }
 
   /* italic caption line right under an image: *like this* */
   .post-body img + em,
   .post-body div + p > em:only-child,
+  .post-body figure + p > em:only-child,
   .post-body p:has(> img) + p > em:only-child {
     display: block;
     margin-top: -18px;
@@ -193,6 +263,23 @@ body {
     margin: 24px 0;
     line-height: 1.6;
     color: var(--color-tag);
+  }
+}
+
+@media (max-width: 620px) {
+  @layer components {
+    .post-body .product-family {
+      padding: 16px;
+    }
+    .post-body .product-family-row {
+      flex-direction: column;
+    }
+    .post-body .product-family-mark {
+      min-height: 168px;
+    }
+    .post-body .product-family-unit:first-child {
+      grid-template-rows: 1fr auto;
+    }
   }
 }
 
