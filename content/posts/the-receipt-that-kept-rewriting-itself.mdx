@@ -1,0 +1,47 @@
+---
+title: "The receipt that kept rewriting itself"
+summary: "The payment was correct. The database was correct. Nothing crashed. The receipt was answering the wrong question."
+date: "2026-06-04"
+tag: "Production"
+arc: "bug in production → wrong question → real understanding"
+draft: false
+featured: false
+---
+
+a parent downloaded a fee receipt and the amount was wrong 🥲
+
+the payment was correct. the database was correct. nothing crashed. no errors in the logs.
+
+turns out our receipts were built fresh on every download. so they always showed TODAY's data about a payment from the PAST. a school changed its fee structure mid year and every old receipt silently recalculated against the new one 😮‍💨
+
+the receipt wasnt lying about the data. it was answering the wrong question.
+
+we asked "what do the fees look like?" we should have asked "what did the fees look like when the money changed hands?" 🤷‍♂️
+
+the fix.... freeze the moment. the instant a payment succeeds we snapshot it. the facts go into one column as JSON (frozen numbers, names, real date). the actual rendered PDF goes into another column as raw bytes (BYTEA). on download we just hand back the saved file. no rebuilding.
+
+```text
+NEW FLOW (freeze at payment time)
+─────────────────────────────────
+parent pays ₹2725
+      │
+      ├──► snapshot the FACTS as JSON ───► receipt_data  (JSONB)
+      │     student, amounts, balance,       "the caption"
+      │     fee structure, real date
+      │
+      └──► render the PDF once ──────────► receipt_pdf   (BYTEA)
+            store the raw bytes              "the photo"
+
+later — user clicks "Download"
+      ▼
+SELECT receipt_pdf FROM fee_payments
+      ▼
+hand back the EXACT bytes created at payment time.
+no rebuilding. history can't change.
+```
+
+honest bit: i didnt understand BYTEA at first. i thought it was for text files. it isnt. its for any raw binary data.... the actual PDF bytes. i shipped my first version half understanding it and only really got it later.
+
+<Pull>a receipt is a fact, not a query.</Pull>
+
+#buildinpublic #softwareengineering #startup #maahitatechnologies

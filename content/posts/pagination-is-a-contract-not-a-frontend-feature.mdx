@@ -1,0 +1,33 @@
+---
+title: "Pagination is a contract, not a frontend feature"
+summary: "My frontend was showing pages. The backend was still sending the entire list. 'Looks done' and 'is done' are different things."
+date: "2026-06-05"
+tag: "Engineering"
+arc: "looks done → one question → definition of done corrected"
+draft: false
+featured: false
+---
+
+Got a pagination task this week.
+
+Did it on frontend, claude helped me make it clean.... looked perfect. Pages, page numbers, everything working 😮‍💨
+
+I marked it almost done in my head.
+
+Then my lead asked one question....
+
+<Pull>"where is the backend pagination?"</Pull>
+
+That i when it hit me. My frontend was showing pages.... but the backend was still sending the ENTIRE list every time. I was just hiding rows on the screen 🥲
+
+It looked complete. It was not complete.
+
+<Ex>Ex: imagine a school with 5000 students. My API was happily sending all 5000 every single page. Today it works fine because our data is small. Tomorrow it breaks.</Ex>
+
+Pagination is not a FE feature. Its a contract between FE and BE. The screen showing pages means nothing if the data is not actually getting cut at the source.
+
+Claude made my FE perfect because i asked it a FE question.... it can only solve the scope i give it. The missing scope was on me.
+
+Feature completion is a trap. "looks done" and "is done" are different things 🤷‍♂️
+
+#buildinpublic #softwareengineering #startup #learninginpublic
