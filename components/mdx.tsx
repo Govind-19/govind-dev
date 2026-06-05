@@ -12,6 +12,18 @@ export const mdxComponents: MDXRemoteProps["components"] = {
   Ex: ({ children }: { children?: React.ReactNode }) => (
     <div className="ex">{children}</div>
   ),
+  // external links open in a new tab; internal links stay in-tab
+  a: ({ href = "", children }: { href?: string; children?: React.ReactNode }) => {
+    const external = /^https?:\/\//.test(href);
+    return (
+      <a
+        href={href}
+        {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+      >
+        {children}
+      </a>
+    );
+  },
   // hashtag sign-off lines render in mono accent, like the reference design
   p: ({ children }: { children?: React.ReactNode }) => {
     if (typeof children === "string" && children.startsWith("#")) {
