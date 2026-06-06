@@ -8,9 +8,8 @@ const DEFAULT_URL = "https://govind-dev-eta.vercel.app";
 export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_URL,
   name: "govind.dev",
-  title: "Govind — Building in public",
-  description:
-    "Software engineer at Maahita Technologies, shipping a real school ERP product end-to-end. An engineering journal: what I get wrong, and what shipping teaches me.",
+  title: "Govind",
+  description: "Engineering journal of Govind — building a school ERP in public.",
   author: "Govind",
   email: "bammidigovindarao3825@gmail.com",
   linkedin: "https://www.linkedin.com/in/bammidi-govinda-rao-b8286a229/",
