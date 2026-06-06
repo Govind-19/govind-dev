@@ -27,13 +27,13 @@ html {
   color-scheme: light;
 }
 
-/* dark theme: same warm paper-and-ink character, lamplight instead of daylight */
+/* dark theme: same warm paper-and-ink character on Claude's near-black ground */
 html[data-theme="dark"] {
   color-scheme: dark;
   --color-ink: #ece7da;
-  --color-paper: #16130e;
-  --color-paper-2: #211d15;
-  --color-line: #3a3426;
+  --color-paper: #1f1f1e;
+  --color-paper-2: #262624;
+  --color-line: #3a3a37;
   --color-muted: #a39a84;
   --color-accent: #e58a5b;
   --color-accent-soft: #f0a37b;
