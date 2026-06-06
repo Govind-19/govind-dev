@@ -11,10 +11,15 @@ export default function EntryRow({
   return (
     <Link
       href={`/journal/${post.slug}`}
-      className={`group block py-[26px] no-underline transition-[padding-left] duration-200 ease-out hover:pl-3 ${
+      className={`group relative block py-[26px] no-underline transition-[padding-left] duration-300 ease-settle hover:pl-4 ${
         last ? "" : "border-b border-line"
       }`}
     >
+      {/* rust rule grows in as the row makes room — same motif as the pull quote */}
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-1/2 h-9 w-[3px] -translate-y-1/2 scale-y-0 bg-accent transition-transform duration-300 ease-settle group-hover:scale-y-100"
+      />
       <div className="mb-[10px] flex items-center gap-[14px] font-mono text-[12px] text-muted">
         <span className="uppercase tracking-[0.5px] text-accent">
           {post.tag}

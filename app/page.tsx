@@ -1,6 +1,7 @@
 import Link from "next/link";
 import EntryRow from "@/components/EntryRow";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import { getAllPosts, toMeta } from "@/lib/posts";
 
@@ -27,18 +28,21 @@ export default function HomePage() {
     <>
       <header className="border-b border-line pb-14 pt-[78px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <p className="kicker mb-[22px]">Engineering journal · build in public</p>
-          <h1 className="mb-[26px] font-display text-[38px] font-medium leading-[1.05] tracking-[-1.5px] sm:text-[54px]">
+          <p className="kicker rise mb-[22px]">
+            Engineering journal · build in public
+          </p>
+          <h1 className="rise rise-1 mb-[26px] font-display text-[38px] font-medium leading-[1.05] tracking-[-1.5px] sm:text-[54px]">
             I&apos;m learning to build software the way it&apos;s{" "}
             <em className="italic text-accent">actually</em> built.
+            <span className="caret" aria-hidden="true" />
           </h1>
-          <p className="mb-[34px] max-w-[600px] text-[19px] text-lede sm:text-[21px]">
+          <p className="rise rise-2 mb-[34px] max-w-[600px] text-[19px] text-lede sm:text-[21px]">
             Software engineer at Maahita Technologies, shipping a real school
             ERP product end-to-end since my 4th year of BTech. Frontend to
             deployments to production fires. Documenting what I get wrong, and
             what shipping teaches me.
           </p>
-          <div className="flex flex-wrap gap-[10px] font-mono text-[12.5px]">
+          <div className="rise rise-3 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
             <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
               <b className="font-medium text-accent">1.5 yrs</b> shipping
               production
@@ -59,7 +63,7 @@ export default function HomePage() {
       </header>
 
       <section className="border-b border-line py-[54px]" id="about">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="01" className="mb-[30px]">
             About
           </SectionLabel>
@@ -91,11 +95,11 @@ export default function HomePage() {
               The longer story →
             </Link>
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[54px]" id="journal">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="02" className="mb-[30px]">
             The journal — latest entries
           </SectionLabel>
@@ -110,11 +114,11 @@ export default function HomePage() {
               all entries →
             </Link>
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[54px]" id="work">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="03" className="mb-[30px]">
             What I build, end to end
           </SectionLabel>
@@ -158,7 +162,7 @@ export default function HomePage() {
               the full surface area →
             </Link>
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <Footer who="One product. Every layer. Out in the open." />

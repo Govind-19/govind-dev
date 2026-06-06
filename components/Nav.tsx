@@ -25,9 +25,13 @@ export default function Nav() {
       <div className="mx-auto flex h-[60px] max-w-[760px] items-center justify-between px-7">
         <Link
           href="/"
-          className="font-mono text-[14px] font-medium tracking-[-0.3px] text-ink no-underline"
+          className="group font-mono text-[14px] font-medium tracking-[-0.3px] text-ink no-underline"
         >
-          govind<b className="text-accent">.</b>dev
+          govind
+          <b className="inline-block text-accent transition-transform duration-300 ease-settle group-hover:-translate-y-[3px]">
+            .
+          </b>
+          dev
         </Link>
 
         <div className="flex items-center gap-[22px]">
@@ -36,7 +40,8 @@ export default function Nav() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`no-underline transition-colors hover:text-accent ${
+                aria-current={isActive(l.href) ? "page" : undefined}
+                className={`nav-link no-underline transition-colors hover:text-accent ${
                   isActive(l.href) ? "text-accent" : "text-muted"
                 }`}
               >
@@ -60,13 +65,14 @@ export default function Nav() {
       </div>
 
       {open && (
-        <div className="border-t border-line sm:hidden">
+        <div className="rise border-t border-line [animation-duration:0.35s] sm:hidden">
           <div className="mx-auto flex max-w-[760px] flex-col gap-3 px-7 py-4 font-mono text-[13px]">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
+                aria-current={isActive(l.href) ? "page" : undefined}
                 className={`no-underline ${
                   isActive(l.href) ? "text-accent" : "text-muted"
                 }`}

@@ -26,7 +26,7 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
             type="button"
             aria-pressed={filter === f}
             onClick={() => setFilter(f)}
-            className={`rounded-[2px] border px-[15px] py-[7px] transition-colors ${
+            className={`rounded-[2px] border px-[15px] py-[7px] transition-colors active:translate-y-[1px] ${
               filter === f
                 ? "border-accent bg-accent text-paper"
                 : "border-line bg-paper-2 text-tag hover:border-accent hover:text-accent"
@@ -37,7 +37,8 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
         ))}
       </div>
 
-      <div className="pb-10 pt-2">
+      {/* key remount makes the list settle back in on every filter change */}
+      <div key={filter} className="rise pb-10 pt-2 [animation-duration:0.45s]">
         {visible.map((post, i) => (
           <EntryRow key={post.slug} post={post} last={i === visible.length - 1} />
         ))}

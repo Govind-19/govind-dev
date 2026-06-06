@@ -83,13 +83,13 @@ export default async function PostPage({ params }: Props) {
       <div className="mx-auto max-w-[680px] px-7">
         <Link
           href="/journal"
-          className="mt-[34px] inline-block font-mono text-[12.5px] text-muted no-underline hover:text-accent"
+          className="rise mt-[34px] inline-block font-mono text-[12.5px] text-muted no-underline hover:text-accent"
         >
           ← back to journal
         </Link>
 
         <article className="pb-[10px] pt-[30px]">
-          <div className="mb-5 flex items-center gap-[14px] font-mono text-[12.5px] text-muted">
+          <div className="rise mb-5 flex items-center gap-[14px] font-mono text-[12.5px] text-muted">
             <span className="uppercase tracking-[0.5px] text-accent">
               {post.tag}
             </span>
@@ -99,12 +99,12 @@ export default async function PostPage({ params }: Props) {
             <span>{post.readTime} min</span>
           </div>
 
-          <h1 className="mb-[18px] font-display text-[32px] font-medium leading-[1.1] tracking-[-1px] sm:text-[42px]">
+          <h1 className="rise rise-1 mb-[18px] font-display text-[32px] font-medium leading-[1.1] tracking-[-1px] sm:text-[42px]">
             {post.title}
           </h1>
 
           {post.arc && (
-            <div className="mb-[34px] border-b border-line pb-7 font-mono text-[11.5px] tracking-[0.5px] text-accent-soft">
+            <div className="rise rise-2 mb-[34px] border-b border-line pb-7 font-mono text-[11.5px] tracking-[0.5px] text-accent-soft">
               arc: {post.arc}
             </div>
           )}

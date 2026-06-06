@@ -24,8 +24,8 @@ export default function AboutPage() {
     <>
       <header className="border-b border-line pb-11 pt-[72px]">
         <div className="mx-auto max-w-[700px] px-7">
-          <p className="kicker mb-5">About</p>
-          <h1 className="font-display text-[34px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
+          <p className="kicker rise mb-5">About</p>
+          <h1 className="rise rise-1 font-display text-[34px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
             I learned engineering by{" "}
             <em className="italic text-accent">building</em>, not by grinding.
           </h1>

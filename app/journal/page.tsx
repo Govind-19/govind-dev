@@ -16,11 +16,11 @@ export default function JournalPage() {
     <>
       <header className="border-b border-line pb-9 pt-[70px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <p className="kicker mb-5">The journal</p>
-          <h1 className="mb-[18px] font-display text-[34px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
+          <p className="kicker rise mb-5">The journal</p>
+          <h1 className="rise rise-1 mb-[18px] font-display text-[34px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
             Everything I&apos;m learning, written down as it happens.
           </h1>
-          <p className="max-w-[580px] text-[20px] text-lede">
+          <p className="rise rise-2 max-w-[580px] text-[20px] text-lede">
             Honest notes from shipping a real product. The practices I fought,
             the incidents I survived, the lessons that only made sense months
             later.

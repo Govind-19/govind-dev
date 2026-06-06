@@ -12,18 +12,19 @@ export default function ThemeToggle() {
     }
   };
 
-  // Both icons render always; CSS shows the right one per theme.
-  // Identical DOM on server and client, so no hydration mismatch.
+  // Both icons render always, stacked in one grid cell; CSS cross-fades and
+  // counter-rotates them per theme. Identical DOM on server and client, so
+  // no hydration mismatch.
   return (
     <button
       type="button"
       aria-label="Toggle dark mode"
       onClick={toggle}
-      className="flex text-muted transition-colors hover:text-accent"
+      className="grid place-items-center text-muted transition-colors hover:text-accent"
     >
       {/* moon — shown in light mode */}
       <svg
-        className="dark:hidden"
+        className="col-start-1 row-start-1 transition-[opacity,transform] duration-300 ease-settle dark:-rotate-90 dark:scale-50 dark:opacity-0"
         width="15"
         height="15"
         viewBox="0 0 24 24"
@@ -38,7 +39,7 @@ export default function ThemeToggle() {
       </svg>
       {/* sun — shown in dark mode */}
       <svg
-        className="hidden dark:block"
+        className="col-start-1 row-start-1 -rotate-90 scale-50 opacity-0 transition-[opacity,transform] duration-300 ease-settle dark:rotate-0 dark:scale-100 dark:opacity-100"
         width="15"
         height="15"
         viewBox="0 0 24 24"
