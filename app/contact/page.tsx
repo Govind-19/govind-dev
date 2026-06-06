@@ -18,21 +18,26 @@ export default function ContactPage() {
     <>
       <main className="flex flex-1 items-center py-[60px]">
         <div className="mx-auto w-full max-w-[700px] px-7">
-          <p className="kicker mb-5">Contact</p>
-          <h1 className="mb-5 font-display text-[36px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[48px]">
+          <p className="kicker rise mb-5">Contact</p>
+          <h1 className="rise rise-1 mb-5 font-display text-[36px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[48px]">
             Want to see how I <em className="italic text-accent">think</em>?
           </h1>
-          <p className="mb-10 max-w-[520px] text-[20px] text-lede">
+          <p className="rise rise-2 mb-10 max-w-[520px] text-[20px] text-lede">
             The journal is the real answer. But if you want to talk shop,
             hire, or just compare notes on building in public — I&apos;m easy
             to reach.
           </p>
 
-          <div className="grid max-w-[520px] gap-px border border-line bg-line">
-            {CHANNELS.map((ch) => (
+          <div className="rise rise-3 grid max-w-[520px] gap-px border border-line bg-line">
+            {CHANNELS.map((ch) => {
+              // mailto opens the mail client, not a page — a new tab would be blank
+              const external = !ch.href.startsWith("mailto:");
+              return (
               <a
                 key={ch.label}
                 href={ch.href}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noopener noreferrer" : undefined}
                 className="group flex items-center justify-between bg-paper px-6 py-5 no-underline transition-colors hover:bg-paper-2"
               >
                 <span>
@@ -48,7 +53,8 @@ export default function ContactPage() {
                   →
                 </span>
               </a>
-            ))}
+              );
+            })}
           </div>
         </div>
       </main>
