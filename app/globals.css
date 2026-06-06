@@ -325,13 +325,16 @@ html[data-theme="dark"] .post-body .logo-row img {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
 }
 
+/* scaleX, not width: width re-runs layout every frame and shoves the
+   kicker text sideways; scaleX stays on the compositor and the text
+   never moves */
 @keyframes rule-draw {
   from {
-    width: 0;
+    transform: scaleX(0);
   }
 }
 
@@ -347,26 +350,29 @@ html[data-theme="dark"] .post-body .logo-row img {
 }
 
 @layer components {
-  /* page-load entrance: each .rise-N waits one beat longer */
+  /* page-load entrance: each .rise-N waits one beat longer.
+     0.5s / 10px — long slow tails crawl at sub-pixel speeds and make
+     text shimmer, especially on Windows display scaling */
   .rise {
-    animation: rise 0.7s var(--ease-settle) both;
+    animation: rise 0.5s var(--ease-settle) both;
   }
   .rise-1 {
-    animation-delay: 0.08s;
+    animation-delay: 0.06s;
   }
   .rise-2 {
-    animation-delay: 0.16s;
+    animation-delay: 0.12s;
   }
   .rise-3 {
-    animation-delay: 0.24s;
+    animation-delay: 0.18s;
   }
   .rise-4 {
-    animation-delay: 0.32s;
+    animation-delay: 0.24s;
   }
 
   /* a rising kicker also draws its leading rule */
   .kicker.rise::before {
-    animation: rule-draw 0.9s var(--ease-settle) both;
+    transform-origin: left;
+    animation: rule-draw 0.6s var(--ease-settle) both;
     animation-delay: inherit;
   }
 
@@ -405,10 +411,10 @@ html[data-theme="dark"] .post-body .logo-row img {
   @layer components {
     .reveal {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(10px);
       transition:
-        opacity 0.7s var(--ease-settle),
-        transform 0.7s var(--ease-settle);
+        opacity 0.5s var(--ease-settle),
+        transform 0.5s var(--ease-settle);
     }
     .reveal.is-visible {
       opacity: 1;
