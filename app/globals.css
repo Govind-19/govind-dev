@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(html[data-theme="dark"], html[data-theme="dark"] *));
+
 @theme {
   --color-ink: #1a1813;
   --color-paper: #f4f1e8;
@@ -19,6 +21,22 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+/* dark theme: same warm paper-and-ink character, lamplight instead of daylight */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-ink: #ece7da;
+  --color-paper: #16130e;
+  --color-paper-2: #211d15;
+  --color-line: #3a3426;
+  --color-muted: #a39a84;
+  --color-accent: #e58a5b;
+  --color-accent-soft: #f0a37b;
+  --color-tag: #d9d3c2;
+  --color-body: #d6d0bf;
+  --color-lede: #c9c3b1;
 }
 
 body {
@@ -264,6 +282,21 @@ body {
     line-height: 1.6;
     color: var(--color-tag);
   }
+}
+
+/* dark mode: panel raises gently instead of mixing toward white */
+html[data-theme="dark"] .post-body .product-family {
+  background: color-mix(in srgb, var(--color-paper-2) 88%, white 12%);
+}
+
+/* dark mode: logo art is black marks — keep it on light paper chips */
+html[data-theme="dark"] .post-body .product-family-mark {
+  background: #f4f1e8;
+}
+html[data-theme="dark"] .post-body .logo-row img {
+  background: #f4f1e8;
+  padding: 10px 14px;
+  border-radius: 3px;
 }
 
 @media (max-width: 620px) {
