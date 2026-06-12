@@ -1,0 +1,74 @@
+---
+title: "Every school thinks it's the only one. That's the whole point."
+summary: "We started on Firebase, single-tenant. Then schools with multiple branches showed up and one portal had to hold all of them without ever leaking data between them. Going multi-tenant on Postgres — and the migration discipline that keeps it sane."
+date: "2026-06-12"
+tag: "Engineering"
+arc: "single-tenant on firebase → layered backend → multi-tenant on postgres → migrations that keep every school in sync"
+draft: false
+featured: false
+---
+
+when we started the school ERP, we were on firebase. one school, one database, everything in one place. it was fine.... until it wasn't 🤷‍♂️
+
+then marketing kicked in, real clients were about to come on board, and we decided to move from firebase to postgres.
+
+but the backend had no real layering yet. so before the migration, **Jagan** sir made us do [separation of concerns](/journal/the-service-imported-the-adapter-directly) properly first — split everything into routes, controllers, services, repositories, and adapters. i spent days on it, making that flow concrete across the whole backend.
+
+the payoff was the entire reason we did it:
+
+```text
+the database lives behind ONE file — the adapter.
+
+  service → repository → adapter → (firebase | postgres | anything)
+
+swap firebase for a postgres adapter, and nothing above it changes.
+the queries, the services, the routes — all untouched.
+```
+
+<Pull>good layering isn't about tidy folders. it's so the thing you'll swap one day lives in exactly one place.</Pull>
+
+so we swapped the adapter, moved to postgres, and shipped the ERP.
+
+then the real shape of the problem showed up — **school switching**. one school might run several branches. another has none. and lots of different schools were about to share the same portal. on a single-tenant design that's a data nightmare waiting to happen — one wrong query and school A sees school B's students 😮‍💨
+
+this is where **Jagan** sir and his friend **Surendra** (a backend dev) sat down and designed our way out: go **multi-tenant**.
+
+```text
+multi-tenant layout
+  public            → shared by everyone (the registry of tenants)
+  tenant_schoolA    → its own tables: students, faculty, fees...
+  tenant_schoolB    → its own tables, fully isolated
+  ...
+
+every school is its own tenant. its data lives in its own space.
+school A literally cannot reach into school B.
+```
+
+register a new school → a new tenant gets created → it gets its own world. that one design decision turned "scary shared database" into "every school behaves like it's the only one on the platform". the experience got dramatically better.
+
+it was a big revamp. worth every minute of it.
+
+then came the part nobody warns you about — **keeping every tenant's schema in sync**. each new school needs all the tables. every existing school needs every future change. so we split migrations into two:
+
+```text
+migrations/
+  base-schema/   → the complete current structure: every table.
+                   run this to BIRTH a brand-new tenant.
+  versions/      → every change, numbered. v1, v2, v3...
+                   add a column to teachers? that's a new version,
+                   replayed onto the schools that already exist.
+```
+
+new school? run the base schema — it's born with everything. existing schools need a new column? write a numbered migration and run it across them.
+
+and here's the rule that bites you the moment you forget it — every schema change has to land in **both** places. the numbered migration (so existing schools get it) *and* the base schema (so the next new school is born with it). update only one, and your tenants quietly drift apart — new schools missing a column, or old schools missing it 🙃
+
+<Ex>Ex: this is exactly where AI trips. ask claude to "add a column to the teachers table" and it writes you a clean migration.... and forgets the base schema entirely. now every newly created school is missing that column, and you won't find out until one of them breaks.</Ex>
+
+so now, every time claude touches the schema, the question is automatic: **did you update both — the versioned migration and the base template?** i don't merge until it says yes and i've seen both diffs.
+
+<Pull>a migration that updates one of two sources of truth isn't a migration. it's a future bug with a version number.</Pull>
+
+firebase to postgres, single-tenant to multi-tenant, one loose migration to a disciplined two-folder system.... none of it was the feature the client asked for. all of it is why the feature keeps working as we onboard the next school 🤷‍♂️
+
+#buildinpublic #softwareengineering #postgres #multitenancy #databasemigrations #maahitatechnologies
