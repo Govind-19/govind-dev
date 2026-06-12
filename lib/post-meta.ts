@@ -12,6 +12,10 @@ export interface PostMeta {
   arc?: string;
   readTime: number; // minutes
   featured: boolean;
+  /** posts sharing a series name render as one connected story, ordered by part */
+  series?: string;
+  part?: number;
+  seriesTotal?: number; // derived, not frontmatter
 }
 
 export function formatDate(iso: string): string {

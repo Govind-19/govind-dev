@@ -30,6 +30,14 @@ export default function EntryRow({
           <span>{formatDate(post.date)}</span>
           <span aria-hidden="true">·</span>
           <span>{post.readTime} min</span>
+          {post.part != null && post.seriesTotal != null && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span className="text-accent-soft">
+                part {post.part} of {post.seriesTotal}
+              </span>
+            </>
+          )}
         </div>
         <h3 className="mb-2 font-display text-[27px] font-medium leading-[1.2] tracking-[-0.5px] text-ink transition-colors group-hover:text-accent">
           {post.title}

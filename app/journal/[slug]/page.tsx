@@ -97,6 +97,14 @@ export default async function PostPage({ params }: Props) {
             <span>{formatDate(post.date)}</span>
             <span aria-hidden="true">·</span>
             <span>{post.readTime} min</span>
+            {post.part != null && post.seriesTotal != null && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span className="text-accent-soft">
+                  part {post.part} of {post.seriesTotal} — {post.series}
+                </span>
+              </>
+            )}
           </div>
 
           <h1 className="rise rise-1 mb-[18px] font-display text-[32px] font-medium leading-[1.1] tracking-[-1px] sm:text-[42px]">
