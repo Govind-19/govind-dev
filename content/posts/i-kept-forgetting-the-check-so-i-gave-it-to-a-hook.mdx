@@ -3,7 +3,7 @@ title: "I kept forgetting the check. So I gave it to a hook."
 summary: "Last post: every schema change has to update both the migration and the base schema, so I'd ask Claude 'did you do both?'. Then I stopped asking — and the two quietly drifted until a bug exposed dozens of mismatched tables. The fix wasn't more discipline. It was a hook."
 date: "2026-06-12"
 tag: "Engineering"
-arc: "ask claude 'did you update both?' → forget to ask → the schemas drift → a hook that checks every edit"
+arc: "ask claude 'did you update both?' → forget to ask → the schemas drift → a hook that won't let me forget"
 draft: false
 featured: false
 ---
@@ -26,19 +26,25 @@ it came back with a pile. tables that didn't match. columns in one and not the o
 
 that could've been the end of it — "okay, i'll remember next time". but i'd already proved i won't. the answer wasn't more discipline. it was making the check impossible to skip.
 
-so i asked claude to build a small **skill**, wired to a **hook**:
+so i asked claude to build it for me. it landed as three small files:
 
 ```text
-hook: on every edit/write to a migration file
-   │
-   └─► run a script that diffs  base-schema  ⟷  versioned migrations
-          │
-          ├─ in sync?  → say nothing, carry on
-          └─ drifted?  → hand the diff back to claude:
-                         "these don't match. sync them."
+.claude/settings.json                  → registers the hook
+.claude/hooks/check-migration-sync.py  → a python hook that runs on its own
+.claude/commands/sync-tenant-schema.md → the /sync-tenant-schema command,
+                                         a prompt, not a shell script
 ```
 
-the key bit — it doesn't silently auto-fix. the moment a migration file is touched, the script checks the two against each other, and if they've drifted it feeds that difference straight back to the agent as context, with the instruction to reconcile them. the verification i kept forgetting now happens on its own — the instant the drift is created, inside the same loop where i can still catch it.
+and the flow turned out more subtle than "a script notices and fixes it" — which is honestly how i'd pictured it before i read what claude actually wired up:
+
+1. **i edit a file.** it's a `PostToolUse` hook matching `Write|Edit`, so it fires right after *my* tool calls. edit a file by hand in your IDE and it stays silent — only the agent's edits trip it.
+2. **the harness runs `check-migration-sync.py`,** piping in JSON of what i just did, including the file path.
+3. **the hook checks the path** for `database/migrations/tenant/`. not a tenant migration? it says nothing, we move on. is one? it prints a small JSON message.
+4. **here's the part i had backwards** — the hook does *not* run the sync, and it doesn't diff anything itself. all it does is drop a line into my context: *"you MUST now run /sync-tenant-schema."* (that's the `additionalContext` field.)
+5. **i read that reminder** and choose to run `/sync-tenant-schema` myself.
+6. **and that command is a prompt, not a bash script** — running it just loads the audit steps from the `.md` into my context. then i do the real work with normal tools (`git diff`, `ls`, read, edit) — checking whether `database/tenant-schema/tables/` drifted from the migration, reporting what's off, and asking before i change a thing.
+
+so it's a nudge, not an autopilot. the hook can't fix the schema, can't even block the edit. all it guarantees is that i can't *not* notice — and the actual fix still runs through a prompt that asks me first.
 
 <Ex>Ex: i turned "did you update both?" from a question i had to remember to ask.... into a thing the repo asks for me, every single time, automatically.</Ex>
 
