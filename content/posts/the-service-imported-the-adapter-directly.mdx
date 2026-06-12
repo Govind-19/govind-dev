@@ -1,0 +1,51 @@
+---
+title: "The service imported the adapter directly. The app ran fine anyway."
+summary: "Our backend layers go route → controller → service → repository → adapter. The AI skipped a link and imported the adapter straight into the service. It worked at runtime, so I missed it. My lead didn't."
+date: "2026-06-12"
+tag: "Engineering"
+arc: "ai built the feature → the PR ran green → my lead read the imports → it didn't mismatch the pattern, it skipped it"
+draft: false
+featured: false
+---
+
+i've been writing about how AI pattern-matches.... it copies the nearest thing, guards the wrong field, fixes the side it can see.
+
+here's the scarier version i hit this week — sometimes it doesn't *mismatch* the pattern. it skips the pattern entirely 🤷‍♂️
+
+i was building a backend feature. wrote it — okay, vibe-coded a good chunk of it — and raised the PR. everything worked. the app was happy. green across the board.
+
+then my lead, god-mode **Jagan** sir again, caught something i'd walked straight past.
+
+our backend has a clean separation of concerns. every layer is its own file, and they talk in a strict chain:
+
+```text
+the flow we follow
+  route → controller → service → repository → adapter → DB
+
+  each layer only knows the next one.
+  the service asks the repository. the repository holds the
+  queries and talks to the adapter. nobody reaches past their
+  neighbour.
+```
+
+simple rule. you don't skip a link in the chain.
+
+the AI skipped a link. in my PR the **service file imported the adapter directly** — straight past the repository. and the feature worked perfectly, because at runtime an import is just an import. the data flowed. nothing crashed. nothing complained.
+
+<Pull>the app doesn't care which file imports which. the architecture is the only thing that remembers.</Pull>
+
+and i overlooked it. completely. because who sits there thinking "let me check whether the AI respected my layering" 🙃 you assume the basics are safe. surely claude follows the flow.... it's such a small thing — one import in the wrong file.
+
+but that "small thing" is the entire point of separation of concerns. the moment the service talks straight to the adapter, the repository layer is a lie. the next person copies the shortcut. and six months later nobody can touch the data layer without breaking three files that were never supposed to know about it 😮‍💨
+
+<Ex>Ex: the app working told me the code *runs*. it told me nothing about whether the code *belongs where it is*. those are two different reviews — and i'd only done one.</Ex>
+
+so the lesson stacks on top of the others: AI doesn't only get patterns subtly wrong. sometimes it ignores the architecture completely and ships something that works today and quietly rots. and a fast review glides right over it, because you're checking "does it run", not "did it cross a layer".
+
+now when i review AI-written backend code, i don't start with the logic. i start with the imports — who is this file *allowed* to talk to, and who is it actually talking to?
+
+<Pull>"it works" is a runtime fact. "it fits" is an architecture decision. only one of them shows up when you click around the app.</Pull>
+
+same story as always. the AI missed it. i missed it. the one who reads code like it's prose caught it. that's the job i'm slowly learning to do 🤷‍♂️
+
+#buildinpublic #softwareengineering #cleanarchitecture #separationofconcerns #ai #maahitatechnologies
