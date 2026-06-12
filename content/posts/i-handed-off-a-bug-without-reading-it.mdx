@@ -1,0 +1,55 @@
+---
+title: "I handed off a bug without reading it. My lead opened the network tab."
+summary: "A 'frontend' search bug got fixed in the frontend — by loading all 1000 records into the browser and filtering there. No API call at all. The real fix lived in the backend, and reading the ticket first was my job."
+date: "2026-06-12"
+tag: "Engineering"
+arc: "handed off a 'frontend' bug → no API call at all → the fix was in the backend → own the ticket before you assign it"
+draft: false
+featured: false
+---
+
+we had a bug in the faculty tab of our school ERP. search was only finding people on the page you were already looking at 🤷‍♂️
+
+the list shows 10 records per page. and search only matched those 10. the faculty you wanted on page 3? search just couldn't see them 🥲
+
+i handle both frontend and backend. i took one look at the words "search" + "faculty tab" and decided — frontend bug. handed it straight to a frontend dev on my team. didn't analyse it. didn't read the code. just assigned it.
+
+she fixed it with claude, raised a PR. i didn't open that either.
+
+then my lead **Jagan** sir went into god-mode on the review.
+
+he asked her what the bug was and how she fixed it. she explained the page-3 thing. then he actually read the PR.... and it was a pure frontend fix — debounce, then filter the records already sitting on the client.
+
+so he opened the real app. typed in the search box. opened the network tab.
+
+<Pull>no API call. not one. for any letter he typed, the backend was never hit.</Pull>
+
+that's when it clicked for him — we weren't searching the database at all. the frontend was quietly fetching *every* faculty record at once and filtering the whole lot in the browser. he checked the params — `page`, `limit`, all there. but no `search` param. the backend was never built to search 😮‍💨
+
+and i'm sitting there going.... why didn't i check this myself first 🙃
+
+the lesson my lead handed me, in a call right after: every ticket that lands is MINE to read first. analyse it — frontend or backend? if it's backend, i fix it and find the real reason. if it's genuinely frontend, then i assign it. i don't get to skip the reading.
+
+<Ex>Ex: i "knew" how the app worked. but i never opened the code or the network tab. i pattern-matched on the words in the ticket — exactly the thing i keep warning about with the AI.</Ex>
+
+and the AI part — claude fixed the frontend because the bug was *running* in the frontend. that's all it could see. it never opened the backend, never asked "is there even a search endpoint?". it optimised the side that was in front of it. steering it to look at the other side.... that's the engineering. the tool only goes as deep as the person guiding it.
+
+so i fixed it for real. backend first — added a proper `search` parameter to the faculty query. then on the frontend, a 500ms debounce so each keystroke calls the API and gets back the right, already-paginated result.
+
+```text
+before — the "frontend fix"
+  load ALL ~1000 faculty into the browser  →  filter on the client
+  (the search box never touches the server)
+
+after — the real fix
+  type → debounce 500ms → GET /faculty?search=...&page=1&limit=10
+  server searches + paginates → return ONLY what was asked for
+```
+
+then i explained the why to her. don't load data the user never asked for. when the browser is holding all 1000 records just so it can "search", you've quietly made the page heavy for everyone. on a low-RAM or low-end device that's a genuinely bad experience.... and the user never even clicked "next page". show what they asked for, nothing more.
+
+<Pull>store and ship only the data the user asked for — not the data you might need.</Pull>
+
+she got it. said she'll look from this angle next time. and honestly.... it was my lesson more than hers 🤷‍♂️
+
+#buildinpublic #softwareengineering #frontend #backend #maahitatechnologies
