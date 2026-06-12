@@ -1,0 +1,57 @@
+---
+title: "I gave the AI the answer. It still guarded the wrong thing."
+summary: "Gender is a dropdown — Male, Female, Other. I'd already told the AI that. It still hardened my backend with a length check that would happily accept 'banana'."
+date: "2026-06-12"
+tag: "Engineering"
+arc: "ai suggests → it lints clean → i question it → validate the domain, not the column"
+draft: false
+featured: false
+---
+
+small bug in faculty enrollment. gender is marked mandatory, but the form let you skip it and move to the next page anyway 🤷‍♂️
+
+i asked claude to fix it. it fixed the frontend, then said the backend needed a guard too — and it was right about that part. the data layer had no check at all. an empty gender could walk straight into the DB.
+
+so far so good. then i actually looked at what it wrote.
+
+```text
+the AI's rule:
+  body('gender').isString().notEmpty().isLength({ max: 50 })
+
+the field on screen:
+  a dropdown.  Male / Female / Other.  three options. that's it.
+```
+
+a length check. on a dropdown 🥲
+
+think about what `isLength({ max: 50 })` actually allows. it accepts "banana". it accepts "asdfgh". it accepts any 50 characters of nonsense. it was never guarding the field.... it was guarding the field's *length*. two completely different things.
+
+the right rule is an allowlist:
+
+```text
+  body('gender').isIn(['Male', 'Female', 'Other'])
+```
+
+required and valid-value, in one line.
+
+here's the part that actually got me. i had ALREADY told it the options were Male / Female / Other. earlier in the same chat it read the dropdown and quoted them back to me. it had the right answer in its hands.... and still reached for a length check 😮‍💨
+
+so i asked it straight: you're an AI agent with "top-tier intelligence" — why the silly mistake?
+
+its own answer was the lesson.
+
+it copied the nearest validator it could find — the student one, which also used a length check. then it sized the number to the DB column, `gender VARCHAR(50)`. seeing that 50 made the bad choice *feel* grounded. but VARCHAR(50) only means "the database tolerates up to 50 characters". it says nothing about the actual rule. storage is a backstop, not the constraint.
+
+it ran the reasoning backwards. column → rule. it should be:
+
+<Pull>know the field's real values → write that rule → let the DB column be a sanity backstop, never the source of truth.</Pull>
+
+and the scary bit — `tsc` and `biome` both passed. a length check on a three-option enum compiles perfectly and lints clean. nothing is *broken*. it's just *wrong*. that whole class of bug doesn't show up in any tool. it only shows up if someone actually knows what the field is.
+
+<Ex>Ex: "valid code" and "correct code" are not the same thing. the AI handed me valid. only the domain told me it was wrong.</Ex>
+
+that's the realization. the AI is fast, it's confident, and it will guard the wrong thing with a completely straight face. the thing that caught it wasn't more intelligence.... it was me knowing gender was a dropdown.
+
+it's a brilliant tool. it is not the person who understands your product. that part is still my job 🤷‍♂️
+
+#buildinpublic #softwareengineering #ai #maahitatechnologies
