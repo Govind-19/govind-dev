@@ -80,6 +80,9 @@ export default async function PostPage({ params }: Props) {
         }}
       />
 
+      {/* how far into the entry you've read */}
+      <div className="read-progress" aria-hidden="true" />
+
       <div className="mx-auto max-w-[680px] px-7">
         <Link
           href="/journal"

@@ -96,6 +96,8 @@ body {
   }
   .post-body p {
     margin-bottom: 20px;
+    /* fewer orphaned words and ragged line-ends — quiet reading aid */
+    text-wrap: pretty;
   }
   .post-body strong {
     font-weight: 500;
@@ -111,6 +113,7 @@ body {
     font-size: 27px;
     letter-spacing: -0.5px;
     margin: 38px 0 16px;
+    text-wrap: balance;
   }
   .post-body ul,
   .post-body ol {
@@ -425,6 +428,42 @@ html[data-theme="dark"] .post-body .logo-row img {
       transform: none;
     }
   }
+}
+
+/* reading progress on posts — the kicker's rule-draw, driven by scroll.
+   pure CSS scroll timeline; browsers without it simply never show the line */
+.read-progress {
+  display: none;
+}
+@supports (animation-timeline: scroll()) {
+  .read-progress {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 30;
+    background: var(--color-accent);
+    transform-origin: left;
+    /* rule-draw goes scaleX(0) → natural width as scroll goes 0 → end */
+    animation: rule-draw 1s linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+/* theme switching: colors settle instead of snapping. the toggle holds
+   this class for ~450ms; the reduced-motion clamp below still wins. */
+html.theme-fade,
+html.theme-fade *,
+html.theme-fade *::before,
+html.theme-fade *::after {
+  transition:
+    background-color 0.4s var(--ease-settle),
+    border-color 0.4s var(--ease-settle),
+    color 0.4s var(--ease-settle),
+    fill 0.4s var(--ease-settle),
+    stroke 0.4s var(--ease-settle) !important;
 }
 
 a:focus-visible,

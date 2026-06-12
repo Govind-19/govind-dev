@@ -1,9 +1,15 @@
 "use client";
 
+let fadeTimer: ReturnType<typeof setTimeout> | undefined;
+
 export default function ThemeToggle() {
   const toggle = () => {
     const root = document.documentElement;
     const next = root.dataset.theme === "dark" ? "light" : "dark";
+    // colors settle into the new theme instead of snapping (see globals.css)
+    root.classList.add("theme-fade");
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 450);
     root.dataset.theme = next;
     try {
       localStorage.setItem("theme", next);
