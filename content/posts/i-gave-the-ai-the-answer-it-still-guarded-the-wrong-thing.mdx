@@ -3,7 +3,7 @@ title: "I gave the AI the answer. It still guarded the wrong thing."
 summary: "Gender is a dropdown — Male, Female, Other. I'd already told the AI that. It still hardened my backend with a length check that would happily accept 'banana'."
 date: "2026-06-12"
 tag: "Engineering"
-arc: "ai suggests → it lints clean → i question it → validate the domain, not the column"
+arc: "ai copies the nearest validator → it lints clean → i question it → validate the field, not its neighbour"
 draft: false
 featured: false
 ---
@@ -16,7 +16,7 @@ so far so good. then i actually looked at what it wrote.
 
 ```text
 the AI's rule:
-  body('gender').isString().notEmpty().isLength({ max: 50 })
+  body('gender').isString().notEmpty().isLength({ max: 20 })
 
 the field on screen:
   a dropdown.  Male / Female / Other.  three options. that's it.
@@ -24,7 +24,7 @@ the field on screen:
 
 a length check. on a dropdown 🥲
 
-think about what `isLength({ max: 50 })` actually allows. it accepts "banana". it accepts "asdfgh". it accepts any 50 characters of nonsense. it was never guarding the field.... it was guarding the field's *length*. two completely different things.
+think about what `isLength({ max: 20 })` actually allows. it accepts "banana". it accepts "asdfgh". it accepts any 20 characters of nonsense. it was never guarding the field.... it was guarding the field's *length*. two completely different things.
 
 the right rule is an allowlist:
 
@@ -34,24 +34,40 @@ the right rule is an allowlist:
 
 required and valid-value, in one line.
 
+![Claude's diff in teacherValidator.ts replacing the gender length check with an isIn allowlist of Male, Female, Other](/journal/ai-fix-diff.webp)
+
+*the actual fix in the repo — the length check (red) becomes the allowlist (green)*
+
 here's the part that actually got me. i had ALREADY told it the options were Male / Female / Other. earlier in the same chat it read the dropdown and quoted them back to me. it had the right answer in its hands.... and still reached for a length check 😮‍💨
 
 so i asked it straight: you're an AI agent with "top-tier intelligence" — why the silly mistake?
 
-its own answer was the lesson.
+its own answer was the whole lesson. one word — **pattern-mimicry**.
 
-it copied the nearest validator it could find — the student one, which also used a length check. then it sized the number to the DB column, `gender VARCHAR(50)`. seeing that 50 made the bad choice *feel* grounded. but VARCHAR(50) only means "the database tolerates up to 50 characters". it says nothing about the actual rule. storage is a backstop, not the constraint.
+when it went to harden the backend, it grabbed `studentValidator.ts` as the template, because that was the nearest validator that already enforced gender. and student used `isString().notEmpty().isLength({ max: 20 })`. so it just copied the *shape* of that rule.... without ever re-asking whether a length check was even the right tool for this field.
 
-it ran the reasoning backwards. column → rule. it should be:
+its exact words: it was in "match the neighbouring validator" mode, instead of "reason from what this field actually is" mode 😮‍💨
+
+![Claude's own root-cause write-up calling the mistake pattern-mimicry — it copied the shape of the neighbouring student validator instead of reasoning from what the gender field actually is](/journal/ai-root-cause.webp)
+
+*i asked for the root cause. this was its own post-mortem, word for word.*
+
+it reasoned backwards — nearest pattern → rule. it should be:
 
 <Pull>know the field's real values → write that rule → let the DB column be a sanity backstop, never the source of truth.</Pull>
 
-and the scary bit — `tsc` and `biome` both passed. a length check on a three-option enum compiles perfectly and lints clean. nothing is *broken*. it's just *wrong*. that whole class of bug doesn't show up in any tool. it only shows up if someone actually knows what the field is.
+then it hit me. if it *copied* the student validator.... then the student validator had the exact same bug. so i sent it back to fix `studentValidator.ts` too — same length check, same wrong tool, sitting in production this whole time. one bad pattern had quietly cloned itself, and the AI happily carried it forward instead of catching it.
+
+![Claude confirming gender is a closed dropdown so the correct rule is an isIn allowlist, and noting studentValidator.ts still carried the same looser length check](/journal/ai-same-pattern.webp)
+
+*it even admitted the student validator had the same weakness — the pattern it cloned from was wrong at the source.*
 
 <Ex>Ex: "valid code" and "correct code" are not the same thing. the AI handed me valid. only the domain told me it was wrong.</Ex>
 
-that's the realization. the AI is fast, it's confident, and it will guard the wrong thing with a completely straight face. the thing that caught it wasn't more intelligence.... it was me knowing gender was a dropdown.
+that's the realization that actually stuck. this is a "top-tier" model — claude 4.8 — and it didn't *think*. it pattern-matched. it saw a validator next door, copied it, and moved on. fast and confident and wrong. and honestly every AI i've used is the same.... they autocomplete from whatever's nearest. they don't *understand* your product.
 
-it's a brilliant tool. it is not the person who understands your product. that part is still my job 🤷‍♂️
+the only reason this got caught is a habit my team lead **Jagan Kumar Mudila** sir drilled into me — always question AI-written code. never trust it because it looks right or because it compiles. read it like a junior's PR, every single line 🙏
+
+the AI is a brilliant tool. it is not the person who understands your domain. that part is still my job 🤷‍♂️
 
 #buildinpublic #softwareengineering #ai #maahitatechnologies
