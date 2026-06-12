@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import EntryRow from "@/components/EntryRow";
 import { TAGS, type PostMeta, type Tag } from "@/lib/post-meta";
 
@@ -12,6 +12,16 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
     filter === "all" ? posts : posts.filter((p) => p.tag === filter);
 
   const filters: Filter[] = ["all", ...TAGS];
+
+  const counts = useMemo(() => {
+    const map: Record<Filter, number> = { all: posts.length } as Record<
+      Filter,
+      number
+    >;
+    for (const t of TAGS) map[t] = 0;
+    for (const p of posts) map[p.tag] += 1;
+    return map;
+  }, [posts]);
 
   return (
     <>
@@ -33,6 +43,7 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
             }`}
           >
             {f === "all" ? "All" : f}
+            <span className="ml-[6px] opacity-50">{counts[f]}</span>
           </button>
         ))}
       </div>
