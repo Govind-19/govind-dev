@@ -30,22 +30,35 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
         role="group"
         aria-label="Filter posts by tag"
       >
-        {filters.map((f) => (
-          <button
-            key={f}
-            type="button"
-            aria-pressed={filter === f}
-            onClick={() => setFilter(f)}
-            className={`rounded-[2px] border px-[15px] py-[7px] transition-colors active:translate-y-[1px] ${
-              filter === f
-                ? "border-accent bg-accent text-paper"
-                : "border-line bg-paper-2 text-tag hover:border-accent hover:text-accent"
-            }`}
-          >
-            {f === "all" ? "All" : f}
-            <span className="ml-[6px] opacity-50">{counts[f]}</span>
-          </button>
-        ))}
+        {filters.map((f) => {
+          const active = filter === f;
+          return (
+            <button
+              key={f}
+              type="button"
+              aria-pressed={active}
+              onClick={() => setFilter(f)}
+              className={`inline-flex items-center gap-[9px] rounded-[2px] border px-[14px] py-[7px] transition-colors active:translate-y-[1px] ${
+                active
+                  ? "border-accent bg-accent text-paper"
+                  : "border-line bg-paper-2 text-tag hover:border-accent hover:text-accent"
+              }`}
+            >
+              <span>{f === "all" ? "All" : f}</span>
+              <span
+                aria-hidden="true"
+                className="h-[11px] w-px bg-current opacity-25"
+              />
+              <span
+                className={`text-[11px] leading-none tabular-nums ${
+                  active ? "text-paper" : "text-muted"
+                }`}
+              >
+                {counts[f]}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* key remount makes the list settle back in on every filter change */}
