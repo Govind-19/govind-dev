@@ -258,9 +258,13 @@ body {
     color: var(--color-muted);
   }
 
-  /* italic caption line right under an image: *like this* */
+  /* italic caption line right under an image: *like this*
+     scoped to image containers only — a bare `div + p` also catches any
+     paragraph whose lone element child is an <em> (text-node siblings are
+     invisible to :only-child), which mis-styled inline *emphasis* after
+     .ex / .pull callouts. */
   .post-body img + em,
-  .post-body div + p > em:only-child,
+  .post-body .logo-row + p > em:only-child,
   .post-body figure + p > em:only-child,
   .post-body p:has(> img) + p > em:only-child {
     display: block;
