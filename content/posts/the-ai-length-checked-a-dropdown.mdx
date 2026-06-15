@@ -1,18 +1,16 @@
 ---
 title: "The AI length-checked a dropdown — and people call this AGI"
-summary: "Gender is a dropdown — Male, Female, Other. The 'top-tier' model hardened my backend with a length check that would happily accept 'banana'. This is the intelligence we're told will take our jobs."
+summary: "Gender is a dropdown — three options. The 'top-tier' model guarded it with a length check that accepts 'banana', then burned 100k tokens answering a question I never asked. This is the intelligence we're told will take our jobs."
 date: "2026-06-12"
 tag: "Engineering"
-arc: "a 'top-tier' ai length-checks a 3-option dropdown → i ask if it's even thinking → it isn't, it just pattern-matches → it's a tool, not a mind. validate everything."
+arc: "a 'top-tier' ai length-checks a 3-option dropdown, then burns 100k tokens answering the wrong question → it doesn't infer intent, it just pattern-matches → it's a tool, not a mind. validate everything."
 draft: false
 featured: false
 ---
 
-small bug in faculty enrollment. gender is marked mandatory, but the form let you skip it and walk to the next page anyway 🤷‍♂️
+small bug in faculty enrollment. gender is mandatory, but the form let you skip it and move on anyway 🤷‍♂️
 
-i asked claude to fix it. it patched the frontend, then said the backend needed a guard too — fair, the data layer had no check at all. an empty gender could walk straight into the DB.
-
-then i read what it actually wrote.
+i asked claude to fix it. it patched the frontend, then said the backend needed a guard too — fair, the data layer had no check at all. then i read what it actually wrote.
 
 ```text
 the AI's rule:
@@ -24,48 +22,50 @@ the field on screen:
 
 a length check. on a dropdown 🥲
 
-sit with that for a second. `isLength({ max: 20 })` happily accepts "banana". it accepts "asdfgh". it accepts any twenty characters of garbage. it was never guarding *gender* — it was guarding the *number of letters* in a field that can only ever hold one of three exact words. nobody has ever typed "i am male" into a gender box. it's a dropdown. it's *always* a dropdown.
-
-the correct rule isn't subtle. it's an allowlist:
+`isLength({ max: 20 })` happily accepts "banana". it accepts any twenty characters of garbage. it was never guarding *gender* — it was guarding the *number of letters* in a field that can only ever be one of three exact words. the correct rule isn't subtle:
 
 ```text
   body('gender').isIn(['Male', 'Female', 'Other'])
 ```
 
-required and valid-value, in one line. anyone who knows what a dropdown *is* would never reach for character-counting here.
+required and valid-value, in one line. the code it wrote was *valid* — it runs, it catches empty. it just wasn't *correct*. only knowing the domain told me which.
 
 ![Claude's diff in teacherValidator.ts replacing the gender length check with an isIn allowlist of Male, Female, Other](/journal/ai-fix-diff.webp)
 
 *the length check (red) becomes the allowlist (green) — one line, and it's actually correct.*
 
-so i didn't just correct it. i wanted to see something first. i asked it straight: are you doing this on purpose, or do you genuinely not notice? why are you counting characters on a three-option dropdown? why is the word "length" anywhere near a field called gender?
+so before correcting it, i asked it straight: are you doing this on purpose, or do you genuinely not notice you're counting characters on a three-option dropdown?
 
-it said sorry.
+it said sorry. no edge case it was guarding, no reasoning to defend — because there was never any thought there. it counted letters on a closed dropdown, and the second i pointed, it folded.
 
-that "sorry" is the whole post. there was no "here's the edge case i was protecting against," no reasoning to defend — because there was never any reasoning there to begin with. it counted letters on a closed dropdown, and the second i pointed at it, it folded.
-
-i asked for the root cause. its own answer gives the game away — **pattern-mimicry**. when it went to harden the backend, it grabbed the nearest validator that already touched gender (`studentValidator.ts`), saw `isString().notEmpty().isLength({ max: 20 })`, and copied the *shape* of it. it never once asked the obvious question a thinking thing asks itself: *wait — this is a dropdown. why am i measuring its length?*
+i asked for the root cause. its own word: **pattern-mimicry**. it had grabbed the nearest validator that touched gender (`studentValidator.ts`), seen `isLength({ max: 20 })`, and copied the *shape* of it — without ever asking what a thinking thing asks itself: *wait, this is a dropdown. why am i measuring its length?*
 
 ![Claude's own root-cause write-up calling the mistake pattern-mimicry — it copied the shape of the neighbouring student validator instead of reasoning from what the gender field actually is](/journal/ai-root-cause.webp)
 
-*its own post-mortem, word for word. read it as a confession: it pattern-matched, it didn't think.*
-
-that's not intelligence. that's autocomplete with a confident voice. it doesn't look at the field and understand "this can only ever be three things." it looks at the *code next door* and copies the rule sitting there. it reasons backwards — nearest pattern → rule — instead of:
+*its own post-mortem, word for word — read it as a confession.*
 
 <Pull>know what the field actually is → write the rule that fits it → let the DB column be a backstop, never the source of truth.</Pull>
 
-and because it copies instead of thinking, it *spreads* the dumbness. if it cloned the student validator, then the student validator had the same bug — same length check, same wrong tool, sitting in production this whole time. so i sent it back to fix that one too. one bad pattern had quietly copied itself, and the "intelligent" agent carried it forward without ever flinching.
+and because it copies instead of thinks, it *spreads* the mistake. if it cloned the student validator, the student validator had the same bug — same length check, sitting in production. so i sent it back to fix that one too.
 
 ![Claude confirming gender is a closed dropdown so the correct rule is an isIn allowlist, and noting studentValidator.ts still carried the same looser length check](/journal/ai-same-pattern.webp)
 
-*it even admitted the student validator had the same weakness — the pattern it cloned from was wrong at the source.*
+*it even admitted the student validator had the same weakness — the pattern it cloned was wrong at the source.*
 
-<Ex>Ex: "valid code" and "correct code" are not the same thing. it handed me valid. only knowing the domain told me it was wrong.</Ex>
+then it got worse. i asked it to sweep the whole codebase for the *same class* of problem — anywhere the frontend and backend disagree on what a field is allowed to be. it spent **100k tokens** crawling the repo and came back with: "no other issues with gender dropdowns." 🤦‍♂️
 
-here's the part that actually gets me. this is claude 4.8 — a "top-tier" model — and people line up to tell me it's about to be AGI, that it's a new kind of intelligence, that my job is in danger. and it can't reason that a three-option dropdown doesn't need its length measured. honestly, i laugh. every model i've used is the same underneath: fast, confident, and pattern-matching from whatever's nearest. they don't *think*. they don't *understand your product*. they autocomplete.
+i never asked about gender dropdowns. that was one *example*. i asked about validation mismatches, everywhere. it took my literal words and optimised for the narrowest reading of them — burning a fortune in tokens to answer a question i didn't ask.
 
-so let me say the unhyped version out loud. it does not replace a junior. a junior would look at a dropdown and ask why you're counting its characters — this didn't, because it wasn't thinking, and it never is. the companies selling you the AGI story are mostly selling *themselves*. the tool is genuinely useful. it is not a mind, and pretending it is one is how the dumb bugs reach production.
+people will say i prompted it badly. fine — but look at what that defence actually concedes:
 
-so use it like the tool it is. read every line it writes like a junior's PR — the only reason this got caught is a habit my team lead **Jagan Kumar Mudila** sir drilled into me: never trust AI code because it looks right or because it compiles. validate everything. the understanding is still your job, and it's not going anywhere 🤷‍♂️
+<Ex>Ex: if it needs me to spell out every word, then it isn't doing the thinking — i am. understanding that "similar issues" means the pattern, not the one noun, is the *easy* part of the job. that's the part it failed.</Ex>
+
+a junior gets this on the first try — say "check for similar issues" and they know *similar* means the pattern. this didn't, and not for lack of effort: it spent 100k tokens. it just doesn't grasp intent. it matches strings.
+
+and here's what gets me: this is claude 4.8, a "top-tier" model, and people queue up to tell me it's nearly AGI and my job is in danger. it can't tell that a three-option dropdown doesn't need its length measured, and it can't tell that "similar issues" means the pattern. every model i've used is the same underneath — fast, confident, pattern-matching from whatever's nearest. they don't *think*, and they don't *understand your product*.
+
+so, the unhyped version: it does not replace a junior. the companies selling the AGI story are mostly selling *themselves*. the tool is genuinely useful — it is not a mind, and pretending it is one is how dumb bugs reach production.
+
+use it like the tool it is. read every line like a junior's PR — the only reason any of this got caught is a habit my team lead **Jagan Kumar Mudila** sir drilled into me: never trust AI code because it looks right or because it compiles. validate everything. the understanding is still your job, and it isn't going anywhere 🤷‍♂️
 
 #buildinpublic #softwareengineering #ai #maahitatechnologies
