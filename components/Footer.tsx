@@ -26,6 +26,12 @@ export default function Footer({ who }: { who?: string }) {
             GitHub
           </a>
           <a
+            href={site.githubWork}
+            className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
+          >
+            GitHub · Maahita
+          </a>
+          <a
             href={`mailto:${site.email}`}
             className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
           >
