@@ -67,6 +67,7 @@ export default async function ProjectPage({ params }: Props) {
   // sections vary per project, so number them by their actual order
   const sectionKeys = [
     "overview",
+    ...(project.caseStudy && project.caseStudy.length > 0 ? ["casestudy"] : []),
     "features",
     ...(project.challenges && project.challenges.length > 0 ? ["challenges"] : []),
     ...(project.highlights && project.highlights.length > 0 ? ["highlights"] : []),
@@ -152,6 +153,31 @@ export default async function ProjectPage({ params }: Props) {
           ) : null}
         </div>
       </section>
+
+      {project.caseStudy && project.caseStudy.length > 0 ? (
+        <section className="border-b border-line py-[46px]">
+          <div className="mx-auto max-w-[760px] px-7">
+            <SectionLabel number={num("casestudy")} className="mb-7">
+              Case study
+            </SectionLabel>
+            {project.caseStudy.map((block) => (
+              <div key={block.heading} className="mb-9 last:mb-0">
+                <h3 className="mb-3 font-display text-[22px] font-medium tracking-[-0.4px]">
+                  {block.heading}
+                </h3>
+                {block.body.map((para) => (
+                  <p
+                    key={para.slice(0, 40)}
+                    className="mb-4 text-[18px] text-body last:mb-0"
+                  >
+                    {para}
+                  </p>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="border-b border-line py-[46px]">
         <div className="mx-auto max-w-[760px] px-7">

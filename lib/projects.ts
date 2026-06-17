@@ -20,6 +20,11 @@ export interface ChallengeSolution {
   solution: string;
 }
 
+export interface CaseStudySection {
+  heading: string;
+  body: string[];
+}
+
 export interface Project {
   slug: string;
   /** full title — detail page heading + metadata */
@@ -37,6 +42,8 @@ export interface Project {
   status: string;
   /** hero/intro paragraphs */
   overview: string[];
+  /** professional case-study narrative — opportunity through outcomes */
+  caseStudy?: CaseStudySection[];
   objectives?: string[];
   features: Feature[];
   /** technical implementation notes — rendered as its own section when present */
@@ -68,6 +75,49 @@ export const PROJECTS: Project[] = [
     overview: [
       "Manufacturing a metro train runs on continuous, multi-shift work — and for a long time the most important information moved on paper and across scattered chat threads. When one shift ended, the next began with a verbal recap and a hunt through messages: what had been tested, what failed, what was still pending. Any detail that didn't get written down was simply lost.",
       "This platform replaces that with a single operations system. Technicians, supervisors, and managers record shift handovers, track testing progress train by train, log pending activities, and post production updates in a consistent, structured format — so nothing falls through the gap between shifts, and management can read the state of the floor without asking anyone for a report.",
+    ],
+    caseStudy: [
+      {
+        heading: "The opportunity",
+        body: [
+          "The opportunity surfaced from inside a metro manufacturing operation, where someone close to the floor saw that critical work — shift handovers, testing updates, pending tasks, and team communication — still moved through manual notes and fragmented channels. Each gap carried risk: information lost between shifts, status that was hard to reconcile, and managers without a clear operational picture.",
+          "The brief was direct: turn those workflows into a single digital system that the people doing the work would actually use.",
+        ],
+      },
+      {
+        heading: "Discovery & research",
+        body: [
+          "Over a series of discussions, I gathered operational requirements directly from the people involved in manufacturing and testing. The early focus was on how shift handovers pass between teams, how testing activities are tracked, how pending tasks get communicated, how train-specific work is monitored, and how managers receive updates.",
+          "As the picture sharpened, additional workflows and reporting needs emerged — so discovery continued in parallel with the build rather than ending before it.",
+        ],
+      },
+      {
+        heading: "Solution design",
+        body: [
+          "Rather than building a generic dashboard, I designed the system around the actual shape of day-to-day operations. The core model followed the real hierarchy of the work — trains, test chapters and sub-chapters, statuses, and pending activities — so the software mirrored how teams already thought about the job instead of imposing a new mental model.",
+          "The handover flow became the spine of the system, with every entry, test, and update tied to the unit of work it belonged to.",
+        ],
+      },
+      {
+        heading: "Technical implementation",
+        body: [
+          "I built the platform as a workflow-driven web application: structured shift-handover capture, hierarchical train → test chapter → sub-chapter selection, live test-status tracking, automatic pending-activity carry-forward, and aggregated reporting for supervisors and management.",
+          "Role-based access scoped each view to the user, and a mobile-friendly interface let technicians record updates from the floor rather than only from a desk.",
+        ],
+      },
+      {
+        heading: "Iteration process",
+        body: [
+          "I worked prototype-first, putting a working build in front of users early and iterating on real operational scenarios instead of assumptions. Successive rounds refined the handover workflow, the test chapter and sub-chapter tracking, train selection, pending-activity management, and the status-reporting structures — each change driven by feedback from the people who would actually use it.",
+        ],
+      },
+      {
+        heading: "Outcomes & learnings",
+        body: [
+          "The prototype is currently under stakeholder review, with feedback being collected to guide its next direction.",
+          "The project was an exercise in translating real-world industrial operations into a structured digital workflow — and it sharpened how I convert business processes into software, gather requirements from non-technical stakeholders, design enterprise operational systems, and build around real-world constraints instead of assumptions.",
+        ],
+      },
     ],
     objectives: [
       "Digitize the shift handover process end to end.",
@@ -186,6 +236,49 @@ export const PROJECTS: Project[] = [
     overview: [
       "A modern child care management platform built to improve communication between care providers and parents. Centers share daily updates, announcements, activities, and important information through one centralized platform — instead of relying on phone calls and consumer messaging apps, where updates get missed and communication drifts out of sync.",
       "The platform is built around simplicity, accessibility, and trust. Parents get a clear, consistent view of their child's day; caregivers get a single place to communicate, with automated notifications taking over the manual follow-ups that used to eat into time better spent on care.",
+    ],
+    caseStudy: [
+      {
+        heading: "The opportunity",
+        body: [
+          "The opportunity originated from a collaborator on the QA team during work on the school ERP product. Drawing on challenges observed in child care centers, the proposal was a platform to help providers communicate with parents more effectively and reduce their dependence on scattered, informal channels.",
+          "The problem was concrete and human — parents left out of the loop, caregivers buried in manual follow-ups — and stood out immediately as worth exploring.",
+        ],
+      },
+      {
+        heading: "Discovery & research",
+        body: [
+          "To understand the space, I reviewed existing child care applications and analyzed their workflows, supported by recordings and demonstrations of tools currently used in the market.",
+          "That research surfaced recurring gaps: weak or missing notification mechanisms, communication that fell through informal channels, low parent engagement, and user experiences with clear room to improve.",
+        ],
+      },
+      {
+        heading: "Solution design",
+        body: [
+          "I framed the platform around the communication workflows that mattered most: a parent communication dashboard, child activity updates, announcement management, administrative screens, and a clean, accessible interface for both caregivers and parents.",
+          "The aim was simplicity and trust — making consistent, centralized communication the path of least resistance rather than one more task.",
+        ],
+      },
+      {
+        heading: "Technical implementation",
+        body: [
+          "I built the prototype with a React and TypeScript frontend on a Firebase backend, with authentication and role-based access protecting sensitive child information.",
+          "During evaluation, automated parent communication emerged as the highest-leverage improvement, so I researched and integrated email notifications using Brevo — letting the platform send updates and announcements automatically, and demonstrating how communication could move beyond traditional messaging.",
+        ],
+      },
+      {
+        heading: "Iteration process",
+        body: [
+          "The goal was deliberately not a finished product, but a tangible prototype that could be evaluated and discussed. I built quickly to validate the concept, then refined it as evaluation revealed new opportunities — the Brevo-powered notification system being the clearest example of an improvement identified and implemented mid-iteration.",
+        ],
+      },
+      {
+        heading: "Outcomes & learnings",
+        body: [
+          "The prototype is currently being reviewed and discussed for future direction and feature prioritization.",
+          "The project strengthened my ability to turn an idea into working software quickly, validate concepts through prototypes, study existing products to find improvement opportunities, implement communication and notification systems, and collaborate closely with stakeholders throughout product discovery.",
+        ],
+      },
     ],
     objectives: [
       "Centralize parent communication in one accessible platform.",
