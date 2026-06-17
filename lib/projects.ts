@@ -218,8 +218,8 @@ export const PROJECTS: Project[] = [
       "Workflow automation",
       "Deployment planning",
     ],
-    links: [],
-    access: "Private pilot — not publicly accessible.",
+    links: [{ label: "live demo", href: "https://metro-qms.vercel.app/login" }],
+    access: "Private pilot — login-gated demo.",
     featured: true,
   },
   {
@@ -372,8 +372,8 @@ export const PROJECTS: Project[] = [
       "Prototype development",
       "Feature planning",
     ],
-    links: [],
-    access: "Prototype — not publicly accessible.",
+    links: [{ label: "live demo", href: "https://safepickup-zeta.vercel.app/" }],
+    access: "Prototype — early validation stage.",
     featured: true,
   },
 ];
