@@ -1,9 +1,11 @@
 import Link from "next/link";
 import EntryRow from "@/components/EntryRow";
 import Footer from "@/components/Footer";
+import ProjectCard from "@/components/ProjectCard";
 import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import { getAllPosts, toMeta } from "@/lib/posts";
+import { getFeaturedProjects } from "@/lib/projects";
 
 const ENGINEERING = [
   "frontend & backend",
@@ -23,6 +25,7 @@ const PRODUCT_OPS = [
 
 export default function HomePage() {
   const latest = getAllPosts().slice(0, 3).map(toMeta);
+  const featured = getFeaturedProjects();
 
   return (
     <>
@@ -164,6 +167,29 @@ export default function HomePage() {
           </p>
         </Reveal>
       </section>
+
+      {featured.length > 0 && (
+        <section className="border-b border-line py-[54px]" id="projects">
+          <Reveal className="mx-auto max-w-[760px] px-7">
+            <SectionLabel number="04" className="mb-[30px]">
+              Selected work — a project in pilot
+            </SectionLabel>
+            <div className="flex flex-col gap-6">
+              {featured.map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
+            </div>
+            <p className="mt-6 font-mono text-[13px]">
+              <Link
+                href="/work"
+                className="text-accent no-underline hover:underline"
+              >
+                all projects →
+              </Link>
+            </p>
+          </Reveal>
+        </section>
+      )}
 
       <Footer who="One product. Every layer. Out in the open." />
     </>

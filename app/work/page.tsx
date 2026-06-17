@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import ProjectCard from "@/components/ProjectCard";
 import SectionLabel from "@/components/SectionLabel";
+import { getAllProjects } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "What I build",
@@ -64,6 +66,8 @@ const SIDE_PROJECTS: SideProject[] = [
 ];
 
 export default function WorkPage() {
+  const projects = getAllProjects();
+
   return (
     <>
       <header className="border-b border-line pb-[50px] pt-[70px]">
@@ -192,6 +196,23 @@ export default function WorkPage() {
       <section className="border-b border-line py-[50px]">
         <div className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="03" className="mb-7">
+            Selected projects
+          </SectionLabel>
+          <p className="mb-7 max-w-[600px] text-[18px] text-lede">
+            Client and product work with a dedicated breakdown — the problem, the
+            build, and where it landed.
+          </p>
+          <div className="flex flex-col gap-6">
+            {projects.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line py-[50px]">
+        <div className="mx-auto max-w-[760px] px-7">
+          <SectionLabel number="04" className="mb-7">
             How I learned it
           </SectionLabel>
           <p className="mb-4 max-w-[620px] text-body">
@@ -214,7 +235,7 @@ export default function WorkPage() {
 
       <section className="border-b border-line py-[50px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="04" className="mb-7">
+          <SectionLabel number="05" className="mb-7">
             Side projects — built because real life demanded it
           </SectionLabel>
           <div className="flex flex-col gap-6">
