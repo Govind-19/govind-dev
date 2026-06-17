@@ -172,7 +172,7 @@ export default function HomePage() {
         <section className="border-b border-line py-[54px]" id="projects">
           <Reveal className="mx-auto max-w-[760px] px-7">
             <SectionLabel number="04" className="mb-[30px]">
-              Selected work — a project in pilot
+              Selected work
             </SectionLabel>
             <div className="flex flex-col gap-6">
               {featured.map((project) => (

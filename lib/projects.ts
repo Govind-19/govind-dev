@@ -37,10 +37,12 @@ export interface Project {
   status: string;
   /** hero/intro paragraphs */
   overview: string[];
-  objectives: string[];
+  objectives?: string[];
   features: Feature[];
+  /** technical implementation notes — rendered as its own section when present */
+  highlights?: string[];
   stack: string[];
-  challenges: ChallengeSolution[];
+  challenges?: ChallengeSolution[];
   impact: string[];
   role: string[];
   /** external links; empty for private/pilot work */
@@ -168,6 +170,117 @@ export const PROJECTS: Project[] = [
     ],
     links: [],
     access: "Private pilot — not publicly accessible.",
+    featured: true,
+  },
+  {
+    slug: "child-care-parent-communication",
+    title: "Child Care & Parent Communication Platform",
+    cardTitle: "Child Care & Parent Communication",
+    kicker: "Product prototype · Communication platform",
+    tagline:
+      "Helping child care centers stay connected with parents through real-time updates and automated communication.",
+    summary:
+      "A web platform that centralizes parent communication for child care centers — activity updates, announcements, and automated email notifications — replacing scattered calls and messaging apps. Built with React, TypeScript, Firebase, and Brevo.",
+    year: "2026",
+    status: "Prototype — early validation stage",
+    overview: [
+      "A modern child care management platform built to improve communication between care providers and parents. Centers share daily updates, announcements, activities, and important information through one centralized platform — instead of relying on phone calls and consumer messaging apps, where updates get missed and communication drifts out of sync.",
+      "The platform is built around simplicity, accessibility, and trust. Parents get a clear, consistent view of their child's day; caregivers get a single place to communicate, with automated notifications taking over the manual follow-ups that used to eat into time better spent on care.",
+    ],
+    objectives: [
+      "Centralize parent communication in one accessible platform.",
+      "Replace ad-hoc phone calls and messaging apps with consistent updates.",
+      "Keep parents informed about their child's daily activities in real time.",
+      "Automate routine notifications to cut manual follow-up.",
+      "Build trust between caregivers and parents through reliable communication.",
+    ],
+    features: [
+      {
+        title: "Parent communication dashboard",
+        body: "A single place where parents see updates, announcements, and their child's activity in one consistent view.",
+      },
+      {
+        title: "Child activity updates",
+        body: "Caregivers log activities as the day unfolds, giving parents a real-time window into their child's care.",
+      },
+      {
+        title: "Announcement management",
+        body: "Centers compose and publish announcements once, reaching every relevant parent through the platform.",
+      },
+      {
+        title: "Email notification system",
+        body: "Automated emails push important updates the moment they're posted, so nothing depends on a manual reminder.",
+      },
+      {
+        title: "Parent contact management",
+        body: "Parent and guardian details are organized centrally, keeping the right people connected to the right child.",
+      },
+      {
+        title: "Secure role-based access",
+        body: "Caregivers, administrators, and parents each see and act on only what their role allows.",
+      },
+      {
+        title: "Mobile responsive design",
+        body: "A clean, responsive interface works on the phones parents check through the day, not only on a desktop.",
+      },
+      {
+        title: "Activity timeline tracking",
+        body: "Every update builds a chronological timeline, so a child's day reads as one continuous record.",
+      },
+    ],
+    highlights: [
+      "React + TypeScript frontend with reusable, responsive UI components",
+      "Firebase backend for authentication and real-time data management",
+      "Brevo integration powering the automated email notification system",
+      "Authentication and authorization with role-based access control",
+      "Real-time data sync so updates reach parents as they happen",
+      "Mobile-first responsive layout across the full experience",
+    ],
+    stack: ["React", "TypeScript", "Firebase", "Brevo", "REST APIs"],
+    challenges: [
+      {
+        challenge:
+          "Centers were juggling phone calls and consumer messaging apps to keep parents informed — so updates were missed, communication was inconsistent, and every gap turned into another manual follow-up.",
+        solution:
+          "A centralized parent-communication dashboard makes updates, announcements, and activity logs the default channel, so the same information reaches every parent the same way — without anyone chasing it.",
+      },
+      {
+        challenge:
+          "Keeping parents informed in real time without piling more work onto caregivers.",
+        solution:
+          "An automated email notification system, built on Brevo, sends updates the moment they're posted — replacing manual reminders with a reliable, hands-off channel.",
+      },
+      {
+        challenge:
+          "Children's information is sensitive; not every user should be able to see or do everything.",
+        solution:
+          "Authentication with secure role-based access scopes exactly what caregivers, administrators, and parents can view and manage.",
+      },
+      {
+        challenge:
+          "Parents check in from their phones across the day, while staff work from the center.",
+        solution:
+          "A mobile-responsive interface keeps the experience clean and accessible on any device, so updates are easy to post and easy to read.",
+      },
+    ],
+    impact: [
+      "Reduces communication overhead for child care providers.",
+      "Improves parent engagement and visibility into daily child activities.",
+      "Replaces scattered calls and messaging apps with one consistent, trusted channel.",
+      "Automates routine notifications, freeing caregiver time for actual care.",
+      "Currently in early validation as a working prototype.",
+    ],
+    role: [
+      "Product discovery",
+      "UI/UX design",
+      "Full-stack development",
+      "Notification system implementation",
+      "Email integration",
+      "Prototype development",
+      "Feature planning",
+    ],
+    links: [],
+    access: "Prototype — not publicly accessible.",
     featured: true,
   },
 ];

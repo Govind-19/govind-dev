@@ -64,6 +64,18 @@ export default async function ProjectPage({ params }: Props) {
     dateCreated: project.year,
   };
 
+  // sections vary per project, so number them by their actual order
+  const sectionKeys = [
+    "overview",
+    "features",
+    ...(project.challenges && project.challenges.length > 0 ? ["challenges"] : []),
+    ...(project.highlights && project.highlights.length > 0 ? ["highlights"] : []),
+    "impact",
+    "stack",
+  ];
+  const num = (key: string) =>
+    String(sectionKeys.indexOf(key) + 1).padStart(2, "0");
+
   return (
     <>
       <script
@@ -107,7 +119,7 @@ export default async function ProjectPage({ params }: Props) {
 
       <section className="border-b border-line py-[46px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="01" className="mb-[26px]">
+          <SectionLabel number={num("overview")} className="mb-[26px]">
             Overview
           </SectionLabel>
           {project.overview.map((para) => (
@@ -115,28 +127,35 @@ export default async function ProjectPage({ params }: Props) {
               {para}
             </p>
           ))}
-          <h3 className="mb-[14px] mt-9 font-mono text-[12px] uppercase tracking-[1px] text-accent">
-            Objectives
-          </h3>
-          <ul>
-            {project.objectives.map((item) => (
-              <li
-                key={item}
-                className="relative mb-[7px] pl-5 text-[17.5px] text-body"
-              >
-                <span className="absolute left-0 text-accent" aria-hidden="true">
-                  ›
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
+          {project.objectives && project.objectives.length > 0 ? (
+            <>
+              <h3 className="mb-[14px] mt-9 font-mono text-[12px] uppercase tracking-[1px] text-accent">
+                Objectives
+              </h3>
+              <ul>
+                {project.objectives.map((item) => (
+                  <li
+                    key={item}
+                    className="relative mb-[7px] pl-5 text-[17.5px] text-body"
+                  >
+                    <span
+                      className="absolute left-0 text-accent"
+                      aria-hidden="true"
+                    >
+                      ›
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </div>
       </section>
 
       <section className="border-b border-line py-[46px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="02" className="mb-7">
+          <SectionLabel number={num("features")} className="mb-7">
             Key features
           </SectionLabel>
           <div className="grid grid-cols-1 gap-px border border-line bg-line sm:grid-cols-2">
@@ -154,34 +173,64 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="border-b border-line py-[46px]">
-        <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="03" className="mb-7">
-            Challenges &amp; solutions
-          </SectionLabel>
-          <div className="flex flex-col gap-5">
-            {project.challenges.map((item) => (
-              <div
-                key={item.challenge.slice(0, 40)}
-                className="rounded-[3px] border border-line bg-paper-2 px-[26px] py-6"
-              >
-                <p className="mb-2 font-mono text-[11.5px] uppercase tracking-[1px] text-muted">
-                  Challenge
-                </p>
-                <p className="mb-5 text-[17.5px] text-body">{item.challenge}</p>
-                <p className="mb-2 font-mono text-[11.5px] uppercase tracking-[1px] text-accent">
-                  Solution
-                </p>
-                <p className="text-[17.5px] text-body">{item.solution}</p>
-              </div>
-            ))}
+      {project.challenges && project.challenges.length > 0 ? (
+        <section className="border-b border-line py-[46px]">
+          <div className="mx-auto max-w-[760px] px-7">
+            <SectionLabel number={num("challenges")} className="mb-7">
+              Challenges &amp; solutions
+            </SectionLabel>
+            <div className="flex flex-col gap-5">
+              {project.challenges.map((item) => (
+                <div
+                  key={item.challenge.slice(0, 40)}
+                  className="rounded-[3px] border border-line bg-paper-2 px-[26px] py-6"
+                >
+                  <p className="mb-2 font-mono text-[11.5px] uppercase tracking-[1px] text-muted">
+                    Challenge
+                  </p>
+                  <p className="mb-5 text-[17.5px] text-body">
+                    {item.challenge}
+                  </p>
+                  <p className="mb-2 font-mono text-[11.5px] uppercase tracking-[1px] text-accent">
+                    Solution
+                  </p>
+                  <p className="text-[17.5px] text-body">{item.solution}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
+
+      {project.highlights && project.highlights.length > 0 ? (
+        <section className="border-b border-line py-[46px]">
+          <div className="mx-auto max-w-[760px] px-7">
+            <SectionLabel number={num("highlights")} className="mb-7">
+              Technical highlights
+            </SectionLabel>
+            <ul>
+              {project.highlights.map((item) => (
+                <li
+                  key={item}
+                  className="relative mb-[10px] pl-5 text-[18px] text-body"
+                >
+                  <span
+                    className="absolute left-0 text-accent"
+                    aria-hidden="true"
+                  >
+                    ›
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       <section className="border-b border-line py-[46px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="04" className="mb-7">
+          <SectionLabel number={num("impact")} className="mb-7">
             Business impact
           </SectionLabel>
           <ul>
@@ -202,7 +251,7 @@ export default async function ProjectPage({ params }: Props) {
 
       <section className="border-b border-line py-[46px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="05" className="mb-7">
+          <SectionLabel number={num("stack")} className="mb-7">
             Tech stack &amp; my role
           </SectionLabel>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
