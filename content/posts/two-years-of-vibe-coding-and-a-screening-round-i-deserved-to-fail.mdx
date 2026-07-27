@@ -1,0 +1,101 @@
+---
+title: "Two years of vibe coding, and a screening round I deserved to fail"
+summary: "I didn't write code by hand for two years. I knew the architecture, I shipped constantly, and I let AI do the rest. Then someone asked me the basics and I had nothing. This is the honest version."
+date: "2026-07-27"
+tag: "Engineering"
+arc: "two years of vibe coding in a very good environment → a referral interview that never read my resume → i couldn't answer the basics → the AI was never the problem, what i did with the time it saved me was"
+draft: false
+featured: false
+---
+
+let me be honest about how i actually worked for the last two years.
+
+i vibe coded. every day. claude open from morning, every feature, every fix. i did not write code by hand. i didn't need to.
+
+and here's the part i want to be precise about, because "vibe coding" makes it sound like i had no idea what was happening — i did. i knew the app cold. i knew what was frontend and what was backend, which files sat where, and exactly what a new feature would touch. route file, controller, service, repository, middleware on the backend. service file, UI, the rest on the frontend. i knew the flow. so when i pointed AI at something, i pointed it at the right place.
+
+what i had was exposure, and judgement about the *shape* of the work. what i quietly lost was everything underneath it.
+
+when a network call failed, i copied the curl and pasted it in. that was my debugging. the whole of it. i never sat with the error, never went one level down to find out why 🤷‍♂️
+
+and it worked. for two years it worked fine.
+
+## the environment made it easy
+
+i should explain where i was, because it isn't an excuse but it is the reason.
+
+small startup, and i was the primary developer. the founders are 14-year engineers — Manish is top-notch at backend, the other founder owns frontend and the whole application development process. they know everything. anything that broke, they could resolve.
+
+and they had structured the app so well that an intern could sit down, open AI and ship a working feature. i mean that as a compliment — that is genuinely good architecture. the file structure did the thinking for you.
+
+so nobody wrote code by hand. why would you. leverage the AI, ship it, move on. that was the environment, and i was very comfortable in it.
+
+## what those two years actually gave me
+
+i don't want to write this like the time was wasted, because it wasn't.
+
+i talked to the CEO every single day. design, product, small decisions, constantly.
+
+our QA tester has six years of experience and she is the best i have worked with. she'd raise a pile of issues in a day and i'd fix all of them, and the app got reshaped continuously because of it. i learned how a tester looks at an app — genuinely different eyes than a developer's, and i can't unsee it now.
+
+i watched how deploys happen. i watched how marketing works inside a startup, how you actually take a product at a market. most of what's in the rest of this journal, i learned in that room.
+
+so the exposure was real. the fundamentals just rotted quietly underneath while all of that was going on.
+
+## the interview
+
+my own founder referred me.
+
+first call — she asked what i'm expecting. i said 9 LPA. then she told me to rewrite my resume and add Java, Spring Boot and AWS.
+
+so i did, and then i went and prepared them. i know the basics of both, but if it's on my resume i have to be able to stand behind it. i studied. i got ready.
+
+then the screening round happened and none of it mattered, because the guy never looked at my resume. not once. he opened with fundamentals and never came up for air.
+
+```text
+backend
+  middleware · streaming · why node · node's advantages and disadvantages
+  promises · callbacks · async/await · the next function
+  express · authentication vs authorization
+  exception handling · clustering · the event loop
+
+frontend
+  controlled vs uncontrolled components · props · keys
+  the virtual DOM · hooks · useMemo · useCallback
+```
+
+and one that has stayed with me: *if the backend returns a big JSON, how do you show it on the frontend without pagination?*
+
+i had never once considered there was another option. i still don't know the answer. i haven't looked it up yet.
+
+honestly, it felt like he'd googled "top 30 react interview questions" and read straight down the list. he made no attempt to find out what i'd built or where i'd been. he never tried to understand my experience at all.
+
+## it was still my fault
+
+it's easy to be annoyed that he didn't read the resume, and for a day i was.
+
+then, no. i should have been preparing fundamentals every single day. i had the perfect setup for exactly that — let AI do the work, spend the hours it hands back actually learning. it was sitting right there for two years. i didn't do it. that's laziness, and it's mine.
+
+<Pull>the AI was never the problem. what i did with the time it gave me was the problem.</Pull>
+
+## where i am now
+
+i've started, and the thing that surprised me is how easy it is.
+
+computer science background, two years as the primary developer on a real product — i'm not learning this from zero, i'm re-meeting it. all the theory from engineering that felt pointless at the time suddenly has something to stick to. i have *seen* the event loop cause a bug in production. i just couldn't name it in a room.
+
+<Ex>Ex: i shipped a 500ms debounce months ago and it worked. i couldn't have told you it was a closure holding that timer between keystrokes. using it and explaining it turned out to be two different skills.</Ex>
+
+i don't know yet whether i'll keep this up. but if i do, i'll get a better package than the number i quoted — not because i'll be working harder, but because confidence comes out of preparation, and preparation was the exact thing missing from that room. i walked in confident anyway. it was a referral, so i'd assumed system design and a conversation about what i'd built.
+
+it wasn't that. it was a good test, and it put me back in reality.
+
+## the part i don't usually put in writing
+
+the salary is the real problem here.
+
+i work like a dog. every day. and every day i'm hoping for the one client who pays for this product, because that's the thing that moves my number. that's what i'm waiting for. i'm not going to dress that up into a lesson.
+
+i think i'm doing okay. i also think i should have started this two years ago.
+
+#buildinpublic #softwareengineering #javascript #nodejs #learninginpublic
