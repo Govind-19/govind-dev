@@ -9,11 +9,12 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_URL,
   name: "govind.dev",
   title: "Govind",
-  description: "Engineering journal of Govind — building a school ERP in public.",
+  description:
+    "Engineering journal of Govind — building a school ERP in public, and the honest notes from doing it.",
   author: "Govind",
   email: "bammidigovindarao3825@gmail.com",
   linkedin: "https://www.linkedin.com/in/bammidi-govinda-rao-b8286a229/",
   github: "https://github.com/Govind-19",
   githubWork: "https://github.com/govindaraob-maahita",
-  fine: "Govind — building the Maahita school ERP, one shipped lesson at a time.",
+  fine: "Govind — building the Maahita school ERP, and writing down what it teaches me.",
 } as const;
