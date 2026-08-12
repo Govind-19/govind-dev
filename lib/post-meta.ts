@@ -1,6 +1,6 @@
 /** Pure post metadata types & helpers — safe to import from client components. */
 
-export const TAGS = ["Engineering", "Product", "Production", "Startup"] as const;
+export const TAGS = ["Engineering", "Product", "Production", "Startup", "Personal"] as const;
 export type Tag = (typeof TAGS)[number];
 
 export interface PostMeta {
