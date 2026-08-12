@@ -9,10 +9,13 @@ export default function SectionLabel({
 }) {
   return (
     <div
-      className={`flex items-center justify-between font-mono text-[12px] uppercase tracking-[1.5px] text-muted ${className}`}
+      className={`flex items-baseline gap-[14px] font-mono text-[12px] uppercase tracking-[1.5px] text-muted ${className}`}
     >
       <span>{children}</span>
-      <span className="text-muted/70" aria-hidden="true">
+      {/* the leader carries the eye across to the folio, like a printed
+          table of contents */}
+      <span className="leader" aria-hidden="true" />
+      <span className="tnum text-muted/70" aria-hidden="true">
         {number}
       </span>
     </div>

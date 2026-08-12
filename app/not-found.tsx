@@ -5,7 +5,7 @@ export default function NotFound() {
     <main className="flex flex-1 items-center py-[100px]">
       <div className="mx-auto w-full max-w-[700px] px-7">
         <p className="kicker rise mb-5">404</p>
-        <h1 className="rise rise-1 mb-5 font-display text-[36px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[48px]">
+        <h1 className="rise rise-1 mb-5 font-display text-display font-medium leading-[1.03] tracking-[-1.2px]">
           This page didn&apos;t <em className="italic text-accent">ship</em>.
         </h1>
         <p className="rise rise-2 mb-9 max-w-[520px] text-[20px] text-lede">

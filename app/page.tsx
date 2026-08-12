@@ -40,7 +40,7 @@ export default function HomePage() {
           <p className="kicker rise mb-[22px]">
             Engineering journal · build in public
           </p>
-          <h1 className="rise rise-1 mb-[26px] font-display text-[38px] font-medium leading-[1.05] tracking-[-1.5px] sm:text-[54px]">
+          <h1 className="rise rise-1 mb-[26px] font-display text-masthead font-medium leading-[1.02] tracking-[-1.5px]">
             I&apos;m learning to build software the way it&apos;s{" "}
             <em className="italic text-accent">actually</em> built.
             <span className="caret" aria-hidden="true" />

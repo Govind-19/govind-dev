@@ -110,7 +110,7 @@ export default async function PostPage({ params }: Props) {
             )}
           </div>
 
-          <h1 className="rise rise-1 mb-[18px] font-display text-[32px] font-medium leading-[1.1] tracking-[-1px] sm:text-[42px]">
+          <h1 className="rise rise-1 mb-[18px] font-display text-title font-medium leading-[1.08] tracking-[-1px]">
             {post.title}
           </h1>
 

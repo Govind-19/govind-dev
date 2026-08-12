@@ -95,7 +95,7 @@ export default async function ProjectPage({ params }: Props) {
             ← what i build
           </Link>
           <p className="kicker rise rise-1 mb-5">{project.kicker}</p>
-          <h1 className="rise rise-2 mb-[18px] font-display text-[32px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[44px]">
+          <h1 className="rise rise-2 mb-[18px] font-display text-title font-medium leading-[1.05] tracking-[-1.2px]">
             {project.title}
           </h1>
           <p className="rise rise-3 mb-7 max-w-[620px] text-[20px] text-lede">

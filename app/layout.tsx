@@ -59,7 +59,15 @@ export const viewport: Viewport = {
 
 // Runs synchronously during HTML parsing, before first paint — no theme flash.
 // Stored preference wins; otherwise follow the OS setting.
-const themeInit = `(function(){try{var t=localStorage.getItem("theme");if(!t)t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
+//
+// It also tracks input modality. Focus rings are for keyboard users, but
+// Chromium keeps :focus-visible on the link you *clicked* once a client-side
+// navigation lands, which paints a stray rust box around a nav item. Flagging
+// pointer input lets the CSS hide the ring for the mouse and keep it for Tab.
+const themeInit = `(function(){try{var t=localStorage.getItem("theme");if(!t)t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t)}catch(e){}
+var d=document.documentElement;
+document.addEventListener("pointerdown",function(){d.setAttribute("data-pointer","")},true);
+document.addEventListener("keydown",function(e){if(e.key==="Tab")d.removeAttribute("data-pointer")},true);})()`;
 
 export default function RootLayout({
   children,

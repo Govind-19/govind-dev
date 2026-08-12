@@ -20,6 +20,12 @@
 
   /* the one easing for all motion — a quick start that settles gently */
   --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* fluid display scale — headings grow with the page instead of jumping at a
+     breakpoint, so the masthead reads big on a desktop and still fits a phone */
+  --text-masthead: clamp(2.35rem, 1.1rem + 5vw, 3.7rem);
+  --text-display: clamp(2.05rem, 1.35rem + 2.8vw, 2.95rem);
+  --text-title: clamp(1.9rem, 1.25rem + 2.4vw, 2.7rem);
 }
 
 html {
@@ -58,7 +64,32 @@ body {
   color: var(--color-paper);
 }
 
+/* display headings set their own line breaks rather than filling to the edge */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 @layer components {
+  /* numbers that should line up in a column rather than fit their glyph width */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* index leader: the dotted hairline that carries the eye from a section
+     label across to its number, the way a printed contents page does */
+  .leader {
+    flex: 1;
+    align-self: center;
+    height: 1px;
+    background: repeating-linear-gradient(
+      to right,
+      var(--color-line) 0 3px,
+      transparent 3px 6px
+    );
+  }
+
   /* uppercase mono kicker with a short leading rule */
   .kicker {
     font-family: var(--font-mono);
@@ -466,10 +497,19 @@ html.theme-fade *::after {
     stroke 0.4s var(--ease-settle) !important;
 }
 
+/* keyboard focus ring — a rust rule around whatever Tab landed on */
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ...but not after a mouse click. the flag is set on pointerdown and cleared
+   the moment Tab is pressed, so keyboard users never lose the ring. */
+html[data-pointer] a:focus-visible,
+html[data-pointer] button:focus-visible {
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

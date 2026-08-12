@@ -17,7 +17,7 @@ export default function JournalPage() {
       <header className="border-b border-line pb-9 pt-[70px]">
         <div className="mx-auto max-w-[760px] px-7">
           <p className="kicker rise mb-5">The journal</p>
-          <h1 className="rise rise-1 mb-[18px] font-display text-[34px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
+          <h1 className="rise rise-1 mb-[18px] font-display text-display font-medium leading-[1.03] tracking-[-1.2px]">
             Everything I&apos;m learning, written down as it happens.
           </h1>
           <p className="rise rise-2 max-w-[580px] text-[20px] text-lede">

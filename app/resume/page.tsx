@@ -86,7 +86,7 @@ export default function ResumePage() {
       <header className="border-b border-line pb-9 pt-16">
         <div className="mx-auto max-w-[760px] px-7">
           <p className="kicker rise mb-[18px]">Resume</p>
-          <h1 className="rise rise-1 mb-[10px] font-display text-[36px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
+          <h1 className="rise rise-1 mb-[10px] font-display text-display font-medium leading-[1.03] tracking-[-1.2px]">
             Bammidi Govinda Rao
           </h1>
           <p className="rise rise-2 mb-6 text-[21px] text-lede">

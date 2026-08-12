@@ -65,21 +65,36 @@ export default function Nav() {
       </div>
 
       {open && (
-        <div className="rise border-t border-line [animation-duration:0.35s] sm:hidden">
-          <div className="mx-auto flex max-w-[760px] flex-col gap-3 px-7 py-4 font-mono text-[13px]">
-            {LINKS.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                aria-current={isActive(l.href) ? "page" : undefined}
-                className={`no-underline ${
-                  isActive(l.href) ? "text-accent" : "text-muted"
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
+        <div className="rise border-t border-line bg-paper [animation-duration:0.3s] sm:hidden">
+          {/* full-width rows: a comfortable tap target each, ruled like an index */}
+          <div className="mx-auto max-w-[760px] px-7 py-1">
+            {LINKS.map((l) => {
+              const active = isActive(l.href);
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex items-center justify-between border-b border-line/60 py-[14px] font-mono text-[14px] no-underline last:border-0 ${
+                    active ? "text-accent" : "text-tag"
+                  }`}
+                >
+                  <span className="flex items-center gap-[11px]">
+                    <span
+                      aria-hidden="true"
+                      className={`h-[5px] w-[5px] rounded-full ${
+                        active ? "bg-accent" : "bg-line"
+                      }`}
+                    />
+                    {l.label}
+                  </span>
+                  <span aria-hidden="true" className="text-muted">
+                    →
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}

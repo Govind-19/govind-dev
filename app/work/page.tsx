@@ -79,14 +79,14 @@ export default function WorkPage() {
       <header className="border-b border-line pb-[50px] pt-[70px]">
         <div className="mx-auto max-w-[760px] px-7">
           <p className="kicker rise mb-5">What I build, end to end</p>
-          <h1 className="rise rise-1 mb-[18px] font-display text-[34px] font-medium leading-[1.05] tracking-[-1.2px] sm:text-[46px]">
+          <h1 className="rise rise-1 mb-[18px] font-display text-display font-medium leading-[1.03] tracking-[-1.2px]">
             One product. <em className="italic text-accent">Every</em> layer.
           </h1>
           <p className="rise rise-2 max-w-[600px] text-[20px] text-lede">
-            Most engineers at {served}{" "}
-            have touched one slice of one codebase. I&apos;ve shipped a whole
-            product — from the database to the deploy to the customer call that
-            changed it.
+            At {served}{" "}
+            in, most engineers have touched one slice of one codebase.
+            I&apos;ve shipped a whole product — from the database to the deploy
+            to the customer call that changed it.
           </p>
         </div>
       </header>
