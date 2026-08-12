@@ -31,7 +31,7 @@ const PRODUCT_OPS = [
 export default function HomePage() {
   const latest = getAllPosts().slice(0, 3).map(toMeta);
   const featured = getFeaturedProjects();
-  const experience = experienceShort();
+  const served = experienceShort();
 
   return (
     <>
@@ -53,7 +53,7 @@ export default function HomePage() {
           </p>
           <div className="rise rise-3 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
             <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
-              <b className="font-medium text-accent">{experience}</b> shipping
+              <b className="font-medium text-accent">{served}</b> shipping
               production
             </span>
             <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">

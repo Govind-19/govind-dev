@@ -2,10 +2,10 @@
  * Experience length, derived from the start date instead of hardcoded, so the
  * numbers on the site never go stale.
  *
- * Call these inside a component, never at module scope — a module-level value
- * is computed once when the server loads the file and would survive an ISR
- * re-render. Pages using these set `revalidate` so the value refreshes without
- * a deploy.
+ * Call these inside a component, never at module scope — a module-level value is
+ * computed once when the server loads the file and would survive an ISR
+ * re-render. Pages using them set `revalidate` so the value refreshes without a
+ * deploy.
  */
 
 /** Joined Maahita Technologies — January 2025. */
@@ -20,30 +20,27 @@ function monthsSince(now: Date): number {
 }
 
 /**
- * Years rounded *down* to the nearest half. An experience claim should never
- * round up, so 19 months reads as 1.5 years and only becomes 2 at 24 months.
+ * Decimal years, to one place. This is a true decimal, not the month count
+ * after a dot: 19 months is 1.6 (7/12 = 0.58), not 1.7. Rounded to the nearest
+ * tenth, so it moves every month or two.
  */
 function years(now: Date): number {
-  return Math.floor(monthsSince(now) / 6) / 2;
+  return Math.round((monthsSince(now) / 12) * 10) / 10;
 }
 
-/** "1.5", "2" — no trailing ".0". */
+/** "1.6", "2" — a whole number drops the pointless ".0". */
 function trim(value: number): string {
   return value % 1 === 0 ? String(value) : value.toFixed(1);
 }
 
-/** Compact form for the stat chips: "1.5 yrs". */
+/** Compact form for the stat chips: "1.6 yrs". */
 export function experienceShort(now: Date = new Date()): string {
-  const months = monthsSince(now);
-  if (months < 12) return `${months} mos`;
   const value = years(now);
   return `${trim(value)} ${value === 1 ? "yr" : "yrs"}`;
 }
 
-/** Prose form for body copy: "1.5 years". */
+/** Prose form for body copy: "1.6 years". */
 export function experienceLong(now: Date = new Date()): string {
-  const months = monthsSince(now);
-  if (months < 12) return `${months} months`;
   const value = years(now);
   return `${trim(value)} ${value === 1 ? "year" : "years"}`;
 }

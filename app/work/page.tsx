@@ -72,7 +72,7 @@ const SIDE_PROJECTS: SideProject[] = [
 
 export default function WorkPage() {
   const projects = getAllProjects();
-  const experience = experienceLong();
+  const served = experienceLong();
 
   return (
     <>
@@ -83,7 +83,7 @@ export default function WorkPage() {
             One product. <em className="italic text-accent">Every</em> layer.
           </h1>
           <p className="rise rise-2 max-w-[600px] text-[20px] text-lede">
-            Most engineers at {experience}{" "}
+            Most engineers at {served}{" "}
             have touched one slice of one codebase. I&apos;ve shipped a whole
             product — from the database to the deploy to the customer call that
             changed it.
