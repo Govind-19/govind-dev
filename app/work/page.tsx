@@ -3,6 +3,7 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import SectionLabel from "@/components/SectionLabel";
+import { experienceLong } from "@/lib/experience";
 import { getAllProjects } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -10,6 +11,10 @@ export const metadata: Metadata = {
   description:
     "One product, every layer. The end-to-end surface area: engineering, product & ops, and the Maahita school ERP.",
 };
+
+// the peer comparison in the header is derived from the start date — re-render
+// daily so it moves on its own instead of freezing at the last deploy.
+export const revalidate = 86400;
 
 const ENGINEERING = [
   "frontend (UI, state, components)",
@@ -67,6 +72,7 @@ const SIDE_PROJECTS: SideProject[] = [
 
 export default function WorkPage() {
   const projects = getAllProjects();
+  const experience = experienceLong();
 
   return (
     <>
@@ -77,9 +83,10 @@ export default function WorkPage() {
             One product. <em className="italic text-accent">Every</em> layer.
           </h1>
           <p className="rise rise-2 max-w-[600px] text-[20px] text-lede">
-            Most engineers at 1.5 years have touched one slice of one
-            codebase. I&apos;ve shipped a whole product — from the database to
-            the deploy to the customer call that changed it.
+            Most engineers at {experience}{" "}
+            have touched one slice of one codebase. I&apos;ve shipped a whole
+            product — from the database to the deploy to the customer call that
+            changed it.
           </p>
         </div>
       </header>

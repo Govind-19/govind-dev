@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import SectionLabel from "@/components/SectionLabel";
+import { experienceShort } from "@/lib/experience";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -8,12 +9,21 @@ export const metadata: Metadata = {
     "Govind — Software Engineer at Maahita Technologies, building a school ERP for Indian schools. Full-stack, product, releases.",
 };
 
-const FACTS = [
-  "Srikakulam, Andhra Pradesh, IN",
-  "1.5 yrs shipping production",
-  "full-stack · product · releases",
-  "B.Tech AI/ML · gold medalist",
-];
+// the experience fact is derived from the start date — re-render daily so it
+// moves on its own instead of freezing at the last deploy.
+export const revalidate = 86400;
+
+// a function, not a const: the experience fact is derived from today's date,
+// and a module-level array would be computed once per server process and then
+// survive every ISR re-render.
+function facts(): string[] {
+  return [
+    "Srikakulam, Andhra Pradesh, IN",
+    `${experienceShort()} shipping production`,
+    "full-stack · product · releases",
+    "B.Tech AI/ML · gold medalist",
+  ];
+}
 
 const OWNERSHIP: { heading: string; items: string[] }[] = [
   {
@@ -84,7 +94,7 @@ export default function ResumePage() {
             Maahita Technologies · building a school ERP for Indian schools
           </p>
           <div className="rise rise-3 mb-7 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
-            {FACTS.map((f) => (
+            {facts().map((f) => (
               <span
                 key={f}
                 className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag"

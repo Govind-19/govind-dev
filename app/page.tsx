@@ -4,8 +4,13 @@ import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
+import { experienceShort } from "@/lib/experience";
 import { getAllPosts, toMeta } from "@/lib/posts";
 import { getFeaturedProjects } from "@/lib/projects";
+
+// the experience chip is derived from the start date — re-render daily so it
+// moves on its own instead of freezing at whatever the last deploy computed.
+export const revalidate = 86400;
 
 const ENGINEERING = [
   "frontend & backend",
@@ -26,6 +31,7 @@ const PRODUCT_OPS = [
 export default function HomePage() {
   const latest = getAllPosts().slice(0, 3).map(toMeta);
   const featured = getFeaturedProjects();
+  const experience = experienceShort();
 
   return (
     <>
@@ -47,7 +53,7 @@ export default function HomePage() {
           </p>
           <div className="rise rise-3 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
             <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
-              <b className="font-medium text-accent">1.5 yrs</b> shipping
+              <b className="font-medium text-accent">{experience}</b> shipping
               production
             </span>
             <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
