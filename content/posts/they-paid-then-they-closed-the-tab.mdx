@@ -34,17 +34,7 @@ the fix is that razorpay's servers tell my server directly, over a connection th
 
 i had this drawn wrong in my head, though. i thought the webhook came back **through the frontend** — razorpay to the browser, browser to my backend. which is exactly the model that had just failed:
 
-```text
-what i pictured                    what actually happens
-───────────────                    ─────────────────────
-razorpay                           razorpay servers
-   ↓                                   │
-frontend                               │  POST  (server → server)
-   ↓                                   ↓
-webhook                            my backend
-   ↓
-backend                            the browser is not involved at all
-```
+<WebhookPathDiagram />
 
 if it travelled through the browser it would be worthless. the entire value of the thing is that it survives the browser being gone. that's the whole point — and i'd drawn the one diagram where the point doesn't exist.
 
@@ -54,17 +44,7 @@ so it's a public endpoint with no session auth, because the caller isn't a logge
 
 what i landed on isn't "use the webhook instead". it's both, deliberately:
 
-```text
-                    ┌──────────────────────────────┐
-   user pays in     │  path 1 — browser callback   │   fast. gives the
-   checkout ───────►│  verify-payment              │   user instant feedback
-                    └───────────────┬──────────────┘
-                                    │   both end in the
-                    ┌───────────────▼──────────────┐   same activation
-   razorpay      ──►│  path 2 — webhook            │   ↓
-   servers          │  payment.captured            │   activate subscription
-                    └──────────────────────────────┘   + provision the school
-```
+<TwoPathsDiagram />
 
 path 1 exists for the user — nobody wants to stare at a spinner while a server-to-server call finds its way over. path 2 exists for the truth. if the browser makes it back, great, it's just faster. if it doesn't, the webhook still lands and the school still gets activated.
 

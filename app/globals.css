@@ -292,6 +292,53 @@ h3 {
     color: var(--color-muted);
   }
 
+  /* ------------------------------------------------------------ */
+  /* hand-drawn SVG figures (components/diagrams.tsx). the panel is
+     the same plate as .product-family; the drawing inherits --color-tag
+     so strokes set in currentColor follow the theme. */
+  .post-body .diagram {
+    border: 1px solid var(--color-line);
+    background: color-mix(in srgb, var(--color-paper-2) 72%, white 28%);
+    color: var(--color-tag);
+    margin: 30px 0;
+    padding: 22px 20px 18px;
+  }
+  .post-body .diagram-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 22px;
+  }
+  /* panels stack rather than shrink — a squeezed viewBox takes the labels
+     down with it, and 6px mono is not a diagram */
+  .post-body .diagram-panel {
+    flex: 1 1 240px;
+    max-width: 300px;
+    min-width: 0;
+  }
+  .post-body .diagram-solo {
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .post-body .diagram svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .post-body .diagram text {
+    font-family: var(--font-mono);
+    fill: currentColor;
+  }
+  .post-body .diagram figcaption {
+    margin: 18px auto 0;
+    max-width: 46ch;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+
   /* italic caption line right under an image: *like this*
      scoped to image containers only — a bare `div + p` also catches any
      paragraph whose lone element child is an <em> (text-node siblings are
@@ -330,6 +377,11 @@ html[data-theme="dark"] .post-body .product-family {
   background: color-mix(in srgb, var(--color-paper-2) 88%, white 12%);
 }
 
+/* dark mode: the plate lifts off the ground instead of mixing toward white */
+html[data-theme="dark"] .post-body .diagram {
+  background: color-mix(in srgb, var(--color-paper-2) 88%, white 12%);
+}
+
 /* dark mode: logo art is black marks — keep it on light paper chips */
 html[data-theme="dark"] .post-body .product-family-mark {
   background: #f4f1e8;
@@ -344,6 +396,10 @@ html[data-theme="dark"] .post-body .logo-row img {
   @layer components {
     .post-body .product-family {
       padding: 16px;
+    }
+    /* every px of padding is a px the viewBox has to shrink into */
+    .post-body .diagram {
+      padding: 16px 12px 14px;
     }
     .post-body .product-family-row {
       flex-direction: column;

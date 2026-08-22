@@ -1,10 +1,12 @@
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import * as React from "react";
+import { TwoPathsDiagram, WebhookPathDiagram } from "@/components/diagrams";
 
 /**
  * Components available inside every post without imports.
  * <Pull> — Fraunces italic pull quote (same as blockquote).
  * <Ex>   — the mono "Ex:" callout block.
+ * <WebhookPathDiagram> / <TwoPathsDiagram> — inline-SVG figures (diagrams.tsx).
  */
 export const mdxComponents: MDXRemoteProps["components"] = {
   Pull: ({ children }: { children?: React.ReactNode }) => (
@@ -13,6 +15,8 @@ export const mdxComponents: MDXRemoteProps["components"] = {
   Ex: ({ children }: { children?: React.ReactNode }) => (
     <div className="ex">{children}</div>
   ),
+  WebhookPathDiagram,
+  TwoPathsDiagram,
   // a row of small logo marks: <LogoRow items={[{src, alt, width?}]} />
   LogoRow: ({
     items,
