@@ -1,0 +1,91 @@
+---
+title: "The principal gets a salary too"
+summary: "Our first real school used the app for a week and sent back thirteen points of feedback. Not one of them was about architecture. Almost all of them were about the model of the world I had quietly assumed while building it."
+date: "2026-08-22"
+tag: "Product"
+arc: "signed our first pilot school → they used it for a week → thirteen points of feedback → none about code, all about the world i'd assumed"
+draft: false
+featured: false
+---
+
+in january we signed our first pilot school — aruna vidyalayam, tekkali. no procurement process, no pitch deck battle. a handshake, and a principal who decided to trust a young local team.
+
+about a week after they actually started using it, the feedback came back. thirteen points.
+
+i keep going back to that list, because six months later it's still the most useful document anyone has given me 😮‍💨
+
+## the one that rearranged my head
+
+> we should be able to add principal sir in faculty management.. as he gets the salary as an employee
+
+i had built a school where the principal was an *authority*. a role. the person who approves things, sees the dashboards, signs off on decisions. that's what a principal is, right?
+
+except a principal also collects a salary at the end of the month. so the principal is also an employee. my model had one slot for that person, and i had filled it with the wrong one.
+
+nothing in the codebase was broken. every screen worked. the bug was in my picture of a school 🥲
+
+<Pull>the hardest feedback isn't "this is broken". it's "this exists, and you didn't model it".</Pull>
+
+## our required fields were opinions
+
+> last name should be optional
+>
+> faculty email should be optional in faculty enrollment
+
+i had marked both of those required, and i couldn't tell you why beyond "forms have these fields". plenty of people here go by one name. plenty of staff at a school in tekkali don't have a work email, or any email they check.
+
+every `NOT NULL` i add is me claiming something about every person who will ever be entered into this system. i had been making that claim casually, dozens of times, from a desk 🤷‍♂️
+
+## our categories were too coarse
+
+> add sub categories to caste (like BCA, BCB, BCD)
+>
+> guardians names should appear in the drop-down in payment popup (paid by name should be dynamic with parents names of that student)
+
+the caste one is the clearest example of building for a spreadsheet instead of a country. we stored a flat category. the actual government classifications the school has to report against are sub-divided, and those sub-divisions are the ones that matter for their paperwork. our field wasn't wrong so much as useless at the resolution they work in.
+
+the "paid by" one is smaller and i like it more. i had a free-text box. of course i did — anyone could be paying. but in practice it's almost always one of two or three people whose names we *already have on that student's record*, and i was making the front desk type one of them out by hand, every single time, with typos.
+
+<Ex>Ex: a free text box is what you build when you don't know the domain yet. it's also what you leave behind when you never learn it.</Ex>
+
+## our validation was backwards
+
+> due dates for the terms should before the end date (not after)
+
+we let a term's fee due date land after the term itself ended. not as a deliberate allowance — we just never thought about the relationship. so the system happily accepted a configuration that makes no sense to anyone who runs a school year.
+
+## and then the receipt
+
+five of the thirteen were about the receipt, which tells you exactly which artifact leaves the building and gets looked at by parents:
+
+```text
+school details overlapping the school logo
+the time at the bottom is wrong
+remove the school stamp
+receipt number should be customisable
+student roll numbers should auto-adjust on transfer/discontinue
+```
+
+the stamp one taught me something. we drew a stamp on the receipt because a stamp is what makes a receipt look official. they didn't want it. i can guess why — a school's stamp is a real, physical thing with real authority behind it, and a printed picture of one is not that. either way, i had added decoration where they needed an actual document. i'd already learned this lesson once about [receipts being facts rather than renderings](/journal/the-receipt-that-kept-rewriting-itself); apparently i needed the visual version too.
+
+and "receipt number should be customisable" isn't a preference. schools have their own numbering that ties into books they already keep. our sequence was competing with a system that predates us.
+
+## the one that was an entire module
+
+> add salary management of all employees
+
+that's not feedback. that's "your product is missing a wing", written politely in a list between two receipt tweaks 😅
+
+which, combined with the principal point, was the real message underneath the whole document: a school is not a system for managing students. it's an organisation that employs people, pays them, reports on them — and we had built the student-shaped half and called it a school management system.
+
+## what i actually took from it
+
+not one of the thirteen points was about performance, architecture, code quality, or anything i had been proud of that month. i had spent that period thinking hard about schema design and allocation logic. all correct work. none of it was what stood between us and a school being able to use this.
+
+they weren't reviewing my software. they were telling me where my model of their world was wrong. and there is no way to get that list by thinking harder at my desk — it only exists because someone real used the thing for a week.
+
+<Pull>i can test whether the code does what i meant. only a user can tell me whether what i meant was right.</Pull>
+
+the whole reason for the pilot was trust — a principal who backed a young team with no track record. i think the return on that trust is thirteen honest lines, which is a much better deal than it sounds like.
+
+#buildinpublic #product #edtech #startup #maahitatechnologies

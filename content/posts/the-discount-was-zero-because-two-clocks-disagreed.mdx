@@ -1,0 +1,103 @@
+---
+title: "The discount was ₹0 because two clocks disagreed by 0.7 seconds"
+summary: "A discount was approved. The certificate froze it as ₹0. Nothing in the code was wrong — new Date() is what every codebase writes. But the database stamps its own time, my machine was 0.76 seconds behind, and for a fraction of a second an approval that already happened looked like it hadn't."
+date: "2026-06-04"
+tag: "Engineering"
+arc: "a discount freezes at ₹0 → the logic reads correct → two clocks, 0.76s apart → 'the app clock equals the db clock' was an assumption nobody wrote down"
+draft: false
+featured: false
+---
+
+a discount got approved. the certificate came out ₹0 😐
+
+not an error. not a crash. nothing in the logs. the discount row was right there in the database, approved, active, correct amount. and the frozen certificate next to it said the school owed us the full fee.
+
+i read that code many times. it was fine. that's the part that made me a little crazy.
+
+## what the code was doing
+
+context first — we freeze fee documents at the moment money moves, [same reason the receipts get frozen](/journal/the-receipt-that-kept-rewriting-itself). a certificate isn't a live query, it's a snapshot of what was true when it was issued.
+
+so when a certificate gets issued, the snapshot writer walks the discount events and asks a very reasonable question about each one:
+
+*has this discount actually been approved yet?*
+
+because a discount dated next month shouldn't show up on a certificate issued today. so it compares the discount's `approved_at` against "now" and drops anything still in the future.
+
+that's it. that's the whole bug 🙃
+
+## two clocks
+
+here's what i wasn't seeing:
+
+```text
+approved_at   ← stamped by the DATABASE     (NOW() on supabase)
+"now"         ← stamped by MY MACHINE       (new Date())
+```
+
+two different clocks. and i had silently assumed they were the same clock.
+
+they weren't. i measured it:
+
+```text
+supabase :  13:46:31.376
+my laptop:  13:46:30.617
+            ─────────────
+difference:  0.759 seconds behind
+```
+
+the certificate gets issued about 0.6 seconds after the approval. so at the instant the snapshot was written:
+
+```text
+approved_at (db clock)  = 1:00:00.760
+"now"       (my clock)  = 1:00:00.000
+
+is approved_at in the past?  →  NO. it's 0.76s in the FUTURE.
+                             →  drop the discount
+                             →  freeze applied_distribution = []
+                             →  certificate says ₹0. forever.
+```
+
+a discount that had genuinely been approved looked like it hadn't happened yet, because the two sides of the comparison came from two different wrists ⌚
+
+<Pull>`new Date()` isn't wrong. it's just not the same clock as `NOW()`. i had written a comparison across two clocks and called it a timestamp check.</Pull>
+
+and because we freeze snapshots, the wrong answer didn't stay a glitch. it got written down permanently. the freezing that saved us on receipts is exactly what turned a sub-second race into a permanent ₹0 😮‍💨
+
+## why it was hard to see
+
+nothing looked wrong. `new Date()` is what virtually every codebase writes, including every codebase i'd read. the logic was correct. the data was correct. the test would pass on any machine whose clock happened to be ahead.
+
+the flaw wasn't in the code. it was an assumption *underneath* the code — "the app clock equals the db clock" — and nobody ever wrote that assumption down, so nobody ever checked it.
+
+the only way to catch it was to run the real flow against the real database on a machine with a real clock difference. not a unit test. the actual thing.
+
+<Ex>Ex: a bug can live entirely in the gap between two systems, where neither system is doing anything wrong. reading either side on its own will never show it to you.</Ex>
+
+## the fix was three locks, not one
+
+my first instinct was "swap `new Date()` for the db clock, done." that removes the cause. it doesn't remove the *shape* of the bug.
+
+so it ended up as three separate things:
+
+1. **one clock everywhere.** the snapshot's "now" is `SELECT NOW()` from the same database that stamps `approved_at`. a clock can't disagree with itself — the approval is committed before the snapshot reads the clock, so `approved_at <= now` is guaranteed by postgres's own ordering. my laptop being fast, slow or plain wrong stopped mattering.
+
+2. **a zero-freeze became unwritable.** even if some event genuinely does look future, the writer now refuses to freeze it as dropped — the discount stays live and activates on its own date. the poisoned state i hit (`applied_distribution = []` written for an active discount) isn't a state the code can produce anymore.
+
+3. **silence became illegal.** the original sin wasn't the clock, it was the *silent* drop. a discount dropped as "future" now emits a loud violation in the logs, with a regression test pinning that behaviour. if anything in this family misbehaves again it announces itself instead of quietly rendering ₹0.
+
+lock 1 is the fix. locks 2 and 3 are the ones that matter, because they assume i'll be wrong again about something i haven't thought of yet.
+
+## honest edges
+
+i want to write these down, because "can this happen again?" deserves a scoped answer and not a confident one:
+
+- if the `SELECT NOW()` probe itself fails on a db hiccup, that one request falls back to the app clock and could transiently miss a discount approved less than a second ago. it self-heals on the next request, and lock 2 still prevents anything being frozen.
+- future-dated discounts now behave correctly, but stay live-computed until the next change after they activate — so their immutability starts when a certificate is eventually issued, not on day one.
+- if the database's own clock steps backwards (a bad NTP jump on supabase), that's out of my hands. locks 2 and 3 contain it: no zero-freeze, loud violation.
+
+none of those are the bug i had. all of them are things i'd rather have written down than discover twice.
+
+<Pull>if two timestamps are going to be compared, they have to come from the same clock. otherwise you don't have a comparison, you have a coin flip with a 0.7 second bias.</Pull>
+
+#buildinpublic #softwareengineering #postgres #debugging #maahitatechnologies
