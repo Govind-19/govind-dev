@@ -36,15 +36,7 @@ and the AI part — claude fixed the frontend because the bug was *running* in t
 
 so i fixed it for real. backend first — added a proper `search` parameter to the faculty query. then on the frontend, a 500ms debounce so each keystroke calls the API and gets back the right, already-paginated result.
 
-```text
-before — the "frontend fix"
-  load ALL ~1000 faculty into the browser  →  filter on the client
-  (the search box never touches the server)
-
-after — the real fix
-  type → debounce 500ms → GET /faculty?search=...&page=1&limit=10
-  server searches + paginates → return ONLY what was asked for
-```
+<SearchMovedDiagram />
 
 then i explained the why to her. don't load data the user never asked for. when the browser is holding all 1000 records just so it can "search", you've quietly made the page heavy for everyone. on a low-RAM or low-end device that's a genuinely bad experience.... and the user never even clicked "next page". show what they asked for, nothing more.
 

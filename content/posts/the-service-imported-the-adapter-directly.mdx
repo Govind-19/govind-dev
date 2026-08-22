@@ -18,15 +18,7 @@ then my lead, god-mode **Jagan** sir again, caught something i'd walked straight
 
 our backend has a clean separation of concerns. every layer is its own file, and they talk in a strict chain:
 
-```text
-the flow we follow
-  route → controller → service → repository → adapter → DB
-
-  each layer only knows the next one.
-  the service asks the repository. the repository holds the
-  queries and talks to the adapter. nobody reaches past their
-  neighbour.
-```
+<LayerChainDiagram />
 
 simple rule. you don't skip a link in the chain.
 

@@ -1,12 +1,12 @@
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import * as React from "react";
-import { TwoPathsDiagram, WebhookPathDiagram } from "@/components/diagrams";
+import { diagrams } from "@/components/diagrams";
 
 /**
  * Components available inside every post without imports.
  * <Pull> — Fraunces italic pull quote (same as blockquote).
  * <Ex>   — the mono "Ex:" callout block.
- * <WebhookPathDiagram> / <TwoPathsDiagram> — inline-SVG figures (diagrams.tsx).
+ * <...Diagram>  — the inline-SVG figures in diagrams.tsx, one per post.
  */
 export const mdxComponents: MDXRemoteProps["components"] = {
   Pull: ({ children }: { children?: React.ReactNode }) => (
@@ -15,8 +15,7 @@ export const mdxComponents: MDXRemoteProps["components"] = {
   Ex: ({ children }: { children?: React.ReactNode }) => (
     <div className="ex">{children}</div>
   ),
-  WebhookPathDiagram,
-  TwoPathsDiagram,
+  ...diagrams,
   // a row of small logo marks: <LogoRow items={[{src, alt, width?}]} />
   LogoRow: ({
     items,
@@ -38,7 +37,9 @@ export const mdxComponents: MDXRemoteProps["components"] = {
     </div>
   ),
   ProductFamily: ({ children }: { children?: React.ReactNode }) => {
-    const logos = React.Children.toArray(children).filter((child) => child !== "\n");
+    const logos = React.Children.toArray(children).filter(
+      (child) => child !== "\n",
+    );
 
     return (
       <figure className="product-family" aria-label="Product family logos">
@@ -84,7 +85,13 @@ export const mdxComponents: MDXRemoteProps["components"] = {
     </>
   ),
   // external links open in a new tab; internal links stay in-tab
-  a: ({ href = "", children }: { href?: string; children?: React.ReactNode }) => {
+  a: ({
+    href = "",
+    children,
+  }: {
+    href?: string;
+    children?: React.ReactNode;
+  }) => {
     const external = /^https?:\/\//.test(href);
     return (
       <a

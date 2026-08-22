@@ -48,15 +48,7 @@ difference:  0.759 seconds behind
 
 the certificate gets issued about 0.6 seconds after the approval. so at the instant the snapshot was written:
 
-```text
-approved_at (db clock)  = 1:00:00.760
-"now"       (my clock)  = 1:00:00.000
-
-is approved_at in the past?  →  NO. it's 0.76s in the FUTURE.
-                             →  drop the discount
-                             →  freeze applied_distribution = []
-                             →  certificate says ₹0. forever.
-```
+<ClockSkewDiagram />
 
 a discount that had genuinely been approved looked like it hadn't happened yet, because the two sides of the comparison came from two different wrists ⌚
 

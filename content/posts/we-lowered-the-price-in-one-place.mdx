@@ -20,12 +20,7 @@ it still turned into a customer-facing pricing bug, and the reason is more inter
 
 when i went to do the follow-up, the amount wasn't in one place waiting to be edited. it was defined independently in three, across two repositories:
 
-```text
-1.  landing page                    ← the ticket updated this
-2.  registration "choose your plan" ← frontend constants
-3.  backend PLAN_PRICING            ← paise, GST-inclusive
-                                       …and this one creates the razorpay order
-```
+<PriceInThreePlacesDiagram />
 
 so here is what a school actually experienced. they read ₹1,999 on the landing page. they started registering and the plan step quoted them ₹4,499. and whichever number they'd made peace with by then, the amount that reached the payment screen came from the third one — the backend — because that's the value the razorpay order is built from.
 

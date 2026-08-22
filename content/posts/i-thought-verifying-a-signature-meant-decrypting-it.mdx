@@ -38,12 +38,7 @@ nothing gets opened. nothing gets extracted. the backend never learns anything f
 
 it just does the same arithmetic a second time:
 
-```text
-razorpay computes:    HMAC_SHA256("order_xyz|payment_abc", SECRET)  →  a91f4c77bd…
-my backend computes:  HMAC_SHA256("order_xyz|payment_abc", SECRET)  →  a91f4c77bd…
-                                                                       ────────────
-                                                                       equal? → genuine
-```
+<SignatureCompareDiagram />
 
 that's it. that's the whole verification.
 

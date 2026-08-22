@@ -320,6 +320,11 @@ h3 {
     max-width: 360px;
     margin: 0 auto;
   }
+  /* figures whose viewBox is wider than ~330 get more room, so their labels
+     land at roughly the same rendered size as every other figure's */
+  .post-body .diagram-solo.diagram-wide {
+    max-width: 420px;
+  }
   .post-body .diagram svg {
     display: block;
     width: 100%;

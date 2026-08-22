@@ -18,14 +18,7 @@ but the backend had no real layering yet. so before the migration, **Jagan** sir
 
 the payoff was the entire reason we did it:
 
-```text
-the database lives behind ONE file — the adapter.
-
-  service → repository → adapter → (firebase | postgres | anything)
-
-swap firebase for a postgres adapter, and nothing above it changes.
-the queries, the services, the routes — all untouched.
-```
+<AdapterSeamDiagram />
 
 <Pull>good layering isn't about tidy folders. it's so the thing you'll swap one day lives in exactly one place.</Pull>
 
@@ -35,16 +28,7 @@ then the real shape of the problem showed up — **school switching**. one schoo
 
 this is where **Jagan** sir and his friend **Surendra** (a backend dev) sat down and designed our way out: go **multi-tenant**.
 
-```text
-multi-tenant layout
-  public            → shared by everyone (the registry of tenants)
-  tenant_schoolA    → its own tables: students, faculty, fees...
-  tenant_schoolB    → its own tables, fully isolated
-  ...
-
-every school is its own tenant. its data lives in its own space.
-school A literally cannot reach into school B.
-```
+<TenantIsolationDiagram />
 
 register a new school → a new tenant gets created → it gets its own world. that one design decision turned "scary shared database" into "every school behaves like it's the only one on the platform". the experience got dramatically better.
 
@@ -52,14 +36,7 @@ it was a big revamp. worth every minute of it.
 
 then came the part nobody warns you about — **keeping every tenant's schema in sync**. each new school needs all the tables. every existing school needs every future change. so we split migrations into two:
 
-```text
-migrations/
-  base-schema/   → the complete current structure: every table.
-                   run this to BIRTH a brand-new tenant.
-  versions/      → every change, numbered. v1, v2, v3...
-                   add a column to teachers? that's a new version,
-                   replayed onto the schools that already exist.
-```
+<MigrationSplitDiagram />
 
 new school? run the base schema — it's born with everything. existing schools need a new column? write a numbered migration and run it across them.
 
