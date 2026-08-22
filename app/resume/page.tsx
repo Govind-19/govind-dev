@@ -229,7 +229,7 @@ export default function ResumePage() {
               <p className="text-[16.5px] text-muted">
                 Sri Venkateswara College of Engineering and Technology,
                 Srikakulam. <span className="text-accent">Gold medalist.</span>{" "}
-                8.0/10 CGPA.
+                8.17/10 CGPA.
               </p>
             </div>
           </div>
