@@ -1,34 +1,32 @@
 ---
 title: "I fought my team lead over extracting strings into constants"
-summary: "I thought it was busywork. Then we needed to ship the whole product in a second language, and one file changed everything."
+summary: "I thought it was busywork. The text was right there in the component, so why move it. Then a school asked for the product in their regional language."
 date: "2026-06-01"
 tag: "Engineering"
-arc: "resist → reject → real requirement → revelation"
+arc: "i thought it was busywork → did it half annoyed → a school asked for a second language → i was judging the code by today's requirement"
 draft: false
 featured: false
 ---
 
-Few months back i had a PR rejected for the dumbest reason....
+a few months back i got a PR rejected for what felt like the dumbest reason.
 
-i had written some labels directly in the code. button text, headings, small messages. normal stuff. it worked perfectly.
+i had written some labels directly in the code. button text, headings, small messages. normal stuff, and it all worked perfectly.
 
-my team lead **Jagan Kumar Mudila** sir asked me to pull all of them out into a constants file 🤷‍♂️
+my team lead **Jagan Kumar Mudila** sir asked me to pull all of them out into a constants file.
 
-i genuinely thought it was a waste of time. the text was right there. why move it somewhere else and import it back.... it felt like extra work for zero benefit.
+i genuinely thought it was a waste of time. the text was right there in the component. why move it to another file and import it back. after doing it the screen looked exactly the same as before.
 
-i pushed back a little. he didnt force it as a rule, he just said "you'll see why later".
+he did not force it as a rule. he just said you will see why later. so i did it, half annoyed.
 
-i did it anyway, half annoyed 🥲
+months later a school asked us for the product in their regional language.
 
-<Pull>Then months later a school asked us for the product in their regional language.</Pull>
+that is when i understood. all the text was already sitting in one file. we could swap the language without going through 40 components praying we did not miss one. the same file handled it again when a client wanted "Grade" to become "Class/Standard" across the whole app. one change, and the whole product said the right word.
 
-and suddenly that "waste of time" was the only reason it wasnt a nightmare. all the text was in one place. one file. we could swap languages without hunting through 40 components praying we didnt miss one.
+with those labels still inside the components, that request would have been a week of hunting every hardcoded "Submit", "Save" and "Welcome" under a deadline, and still missing a few.
 
-<Ex>Ex: imagine finding every hardcoded "Submit" "Save" "Welcome" across the whole app under deadline.... no thanks 😮‍💨</Ex>
+so the constants file was never about today. today it changes nothing, and that is exactly why it looked useless to me.
 
-that i when i understood what he actually meant. the constants thing was never about today. it was about the change that hadnt happened yet.
-
-good engineering isnt optimising for the task in front of you. its optimising for the change you cant see yet.
+that is what i was getting wrong. i was judging the code by the requirement in front of me. he was judging it by the requirement that had not arrived yet.
 
 ![Day 1 — extracting strings is not just about clean code: one strings.ts file, client asked Grade to become Class/Standard, one small change updated the whole app](/journal/day-1.webp)
 

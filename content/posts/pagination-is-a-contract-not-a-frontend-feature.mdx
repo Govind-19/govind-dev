@@ -1,34 +1,28 @@
 ---
 title: "Pagination is a contract, not a frontend feature"
-summary: "My frontend was showing pages. The backend was still sending the entire list. 'Looks done' and 'is done' are different things."
+summary: "My frontend was showing pages and the backend was still sending the entire list every time. It looked complete and it was not complete."
 date: "2026-06-05"
 tag: "Engineering"
-arc: "looks done → one question → definition of done corrected"
+arc: "frontend pagination looked perfect → my lead asked where the backend pagination was → i was only hiding rows → i gave claude a frontend question so i got a frontend answer"
 draft: false
 featured: false
 ---
 
-Got a pagination task this week.
+i got a pagination task this week.
 
-Did it on frontend, claude helped me make it clean.... looked perfect. Pages, page numbers, everything working 😮‍💨
+i did it on the frontend, claude helped me make it clean, and it looked perfect. pages, page numbers, everything working. i marked it almost done in my head.
 
-I marked it almost done in my head.
+then my lead asked one question. where is the backend pagination.
 
-Then my lead asked one question....
+that is when it hit me. my frontend was showing pages, but the backend was still sending the entire list on every single request. i was only hiding rows on the screen.
 
-<Pull>"where is the backend pagination?"</Pull>
+imagine a school with 5000 students. my API was sending all 5000 rows to load page one, and the browser was throwing away 4980 of them. it works fine today because our data is small, which is exactly why nothing looked wrong to me.
 
-That i when it hit me. My frontend was showing pages.... but the backend was still sending the ENTIRE list every time. I was just hiding rows on the screen 🥲
+so pagination is not a frontend feature. it is a contract between the frontend and the backend. page numbers on the screen mean nothing if the data is not being cut at the source, with the backend returning only that page's rows and a total count.
 
-It looked complete. It was not complete.
+and claude did exactly what i asked. i gave it a frontend question so it gave me a frontend answer, and it was a good one. it cannot fix a scope i never gave it. the missing scope was mine.
 
-<Ex>Ex: imagine a school with 5000 students. My API was happily sending all 5000 every single page. Today it works fine because our data is small. Tomorrow it breaks.</Ex>
-
-Pagination is not a FE feature. Its a contract between FE and BE. The screen showing pages means nothing if the data is not actually getting cut at the source.
-
-Claude made my FE perfect because i asked it a FE question.... it can only solve the scope i give it. The missing scope was on me.
-
-Feature completion is a trap. "looks done" and "is done" are different things 🤷‍♂️
+"looks done" and "is done" are different things.
 
 ![Day 5 — pagination is a contract, not just a frontend feature: backend sending all 5000 students while frontend hides rows vs backend sending only 20 per page](/journal/day-5.webp)
 

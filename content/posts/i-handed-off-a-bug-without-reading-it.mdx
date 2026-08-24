@@ -1,47 +1,43 @@
 ---
 title: "I handed off a bug without reading it. My lead opened the network tab."
-summary: "A 'frontend' search bug got fixed in the frontend — by loading all 1000 records into the browser and filtering there. No API call at all. The real fix lived in the backend, and reading the ticket first was my job."
+summary: "A search bug in the faculty tab got fixed in the frontend, by loading all 1000 records into the browser and filtering there. There was no API call at all. I never read the ticket."
 date: "2026-06-12"
 tag: "Engineering"
-arc: "handed off a 'frontend' bug → no API call at all → the fix was in the backend → own the ticket before you assign it"
+arc: "search plus faculty tab, so i called it a frontend bug → he opened the network tab → no API call at all → i pattern-matched on the words in the ticket"
 draft: false
 featured: false
 ---
 
-we had a bug in the faculty tab of our school ERP. search was only finding people on the page you were already looking at 🤷‍♂️
+we had a bug in the faculty tab of our school ERP. search was only finding people on the page you were already looking at.
 
-the list shows 10 records per page. and search only matched those 10. the faculty you wanted on page 3? search just couldn't see them 🥲
+the list shows 10 records per page, and search only matched those 10. the faculty you wanted on page 3, search simply could not see them.
 
-i handle both frontend and backend. i took one look at the words "search" + "faculty tab" and decided — frontend bug. handed it straight to a frontend dev on my team. didn't analyse it. didn't read the code. just assigned it.
+i handle both frontend and backend. i took one look at the words search and faculty tab and decided it was a frontend bug. i handed it straight to a frontend dev on my team. i did not analyse it, i did not read the code, i just assigned it.
 
-she fixed it with claude, raised a PR. i didn't open that either.
+she fixed it with claude and raised a PR. i did not open that either.
 
-then my lead **Jagan** sir went into god-mode on the review.
+then my lead **Jagan** sir went into god-mode on the review. he asked her what the bug was and how she fixed it, she explained the page-3 thing, and then he actually read the PR. it was a pure frontend fix. debounce, then filter the records already sitting on the client.
 
-he asked her what the bug was and how she fixed it. she explained the page-3 thing. then he actually read the PR.... and it was a pure frontend fix — debounce, then filter the records already sitting on the client.
+so he opened the real app, typed in the search box, and opened the network tab.
 
-so he opened the real app. typed in the search box. opened the network tab.
+no API call. not one. for any letter he typed, the backend was never hit.
 
-<Pull>no API call. not one. for any letter he typed, the backend was never hit.</Pull>
+that is when it clicked for him. we were not searching the database at all. the frontend was quietly fetching every faculty record at once and filtering the whole lot in the browser. he checked the params, page and limit were both there, but there was no search param. the backend was never built to search.
 
-that's when it clicked for him — we weren't searching the database at all. the frontend was quietly fetching *every* faculty record at once and filtering the whole lot in the browser. he checked the params — `page`, `limit`, all there. but no `search` param. the backend was never built to search 😮‍💨
+and i am sitting there wondering why i did not check this myself first.
 
-and i'm sitting there going.... why didn't i check this myself first 🙃
+the honest answer is that i pattern-matched on the words in the ticket. search plus faculty tab equals frontend. i thought i knew how the app worked, so i never opened the code and never opened the network tab. that is exactly the thing i keep warning about with the AI, and i did it myself, on a ticket i owned.
 
-the lesson my lead handed me, in a call right after: every ticket that lands is MINE to read first. analyse it — frontend or backend? if it's backend, i fix it and find the real reason. if it's genuinely frontend, then i assign it. i don't get to skip the reading.
+the AI part is the same shape. claude fixed the frontend because the bug was running in the frontend. that is all it could see. it never opened the backend and never asked whether a search endpoint even existed. it optimised the side that was in front of it. steering it to look at the other side is the engineering, and the tool only goes as deep as the person guiding it.
 
-<Ex>Ex: i "knew" how the app worked. but i never opened the code or the network tab. i pattern-matched on the words in the ticket — exactly the thing i keep warning about with the AI.</Ex>
-
-and the AI part — claude fixed the frontend because the bug was *running* in the frontend. that's all it could see. it never opened the backend, never asked "is there even a search endpoint?". it optimised the side that was in front of it. steering it to look at the other side.... that's the engineering. the tool only goes as deep as the person guiding it.
-
-so i fixed it for real. backend first — added a proper `search` parameter to the faculty query. then on the frontend, a 500ms debounce so each keystroke calls the API and gets back the right, already-paginated result.
+so i fixed it for real. backend first, a proper search parameter on the faculty query. then on the frontend a 500ms debounce, so each keystroke calls the API and gets back the right, already-paginated result.
 
 <SearchMovedDiagram />
 
-then i explained the why to her. don't load data the user never asked for. when the browser is holding all 1000 records just so it can "search", you've quietly made the page heavy for everyone. on a low-RAM or low-end device that's a genuinely bad experience.... and the user never even clicked "next page". show what they asked for, nothing more.
+then i explained the why to her. do not load data the user never asked for. when the browser is holding all 1000 records just so it can search, you have quietly made the page heavy for everyone. on a low-RAM or low-end device that is a genuinely bad experience, and the user never even clicked next page.
 
-<Pull>store and ship only the data the user asked for — not the data you might need.</Pull>
+the rule my lead handed me in a call right after is the one i actually needed. every ticket that lands is mine to read first. analyse it, frontend or backend. if it is backend, i fix it and find the real reason. if it is genuinely frontend, then i assign it. i do not get to skip the reading.
 
-she got it. said she'll look from this angle next time. and honestly.... it was my lesson more than hers 🤷‍♂️
+she got it, and said she will look from this angle next time. honestly it was my lesson more than hers.
 
 #buildinpublic #softwareengineering #frontend #backend #maahitatechnologies

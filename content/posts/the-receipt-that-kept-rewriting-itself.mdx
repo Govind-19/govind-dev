@@ -1,30 +1,28 @@
 ---
 title: "The receipt that kept rewriting itself"
-summary: "The payment was correct. The database was correct. Nothing crashed. The receipt was answering the wrong question."
+summary: "The payment was correct, the database was correct, nothing crashed. The receipt was answering the wrong question."
 date: "2026-06-04"
 tag: "Production"
-arc: "bug in production → wrong question → real understanding"
+arc: "wrong amount on a receipt with no error anywhere → receipts were rebuilt on every download → we were asking what the fees are, not what they were"
 draft: false
 featured: false
 ---
 
-a parent downloaded a fee receipt and the amount was wrong 🥲
+a parent downloaded a fee receipt and the amount was wrong.
 
-the payment was correct. the database was correct. nothing crashed. no errors in the logs.
+the payment was correct. the database was correct. nothing crashed and there were no errors in the logs. that combination is what made it confusing for a while.
 
-turns out our receipts were built fresh on every download. so they always showed TODAY's data about a payment from the PAST. a school changed its fee structure mid year and every old receipt silently recalculated against the new one 😮‍💨
+it turned out our receipts were being built fresh on every download. so a receipt always showed today's data about a payment from the past. a school changed its fee structure mid year, and every old receipt silently recalculated itself against the new structure.
 
-the receipt wasnt lying about the data. it was answering the wrong question.
+the receipt was not lying about the data. it was answering the wrong question. we were asking what do the fees look like. we should have been asking what did the fees look like when the money changed hands.
 
-we asked "what do the fees look like?" we should have asked "what did the fees look like when the money changed hands?" 🤷‍♂️
-
-the fix.... freeze the moment. the instant a payment succeeds we snapshot it. the facts go into one column as JSON (frozen numbers, names, real date). the actual rendered PDF goes into another column as raw bytes (BYTEA). on download we just hand back the saved file. no rebuilding.
+so the fix is to freeze the moment. the instant a payment succeeds we snapshot it. the facts go into one column as JSON, the frozen numbers and names and the real date. the rendered PDF goes into another column as raw bytes. on download we hand back the saved file instead of building a new one.
 
 <ReceiptFreezeDiagram />
 
-honest bit: i didnt understand BYTEA at first. i thought it was for text files. it isnt. its for any raw binary data.... the actual PDF bytes. i shipped my first version half understanding it and only really got it later.
+honest bit, i did not understand BYTEA at first. i thought it was something for text. it is not, it is for any raw binary data, which here is the actual PDF bytes. i shipped my first version half understanding it and only really got it later.
 
-<Pull>a receipt is a fact, not a query.</Pull>
+a receipt is a fact, not a query.
 
 ![Day 4 — what actually gets frozen: receipt_data JSONB holds the frozen facts, receipt_pdf BYTEA holds the file itself, live fees changed but the receipt did not](/journal/day-4.webp)
 

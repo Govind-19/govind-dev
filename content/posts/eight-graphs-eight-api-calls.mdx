@@ -1,37 +1,27 @@
 ---
 title: "Eight graphs. Eight API calls."
-summary: "Claude built me a school dashboard with beautiful graphs and it rendered fast on my screen. Then my lead asked why one page was hitting the backend so many times, I opened the network tab, and found every single graph fetching its own data."
+summary: "Claude built me a school dashboard with beautiful graphs and it rendered fast on my screen. Then my lead asked why one page was hitting the backend so many times."
 date: "2026-06-06"
 tag: "Engineering"
-arc: "claude built beautiful graphs → 'why is this one page hitting the backend so many times?' → the network tab → a dashboard is one screen asking one question"
+arc: "beautiful graphs, looked done → why is this page hitting the backend so many times → the network tab → i was counting per graph, the server counts per page load"
 draft: false
 featured: false
 ---
 
-built a dashboard for schools this week. claude helped.... beautiful graphs, clean cards, everything rendering nicely 😮‍💨
+built a dashboard for schools this week. claude helped, and it came out with beautiful graphs and clean cards, everything rendering nicely. i was happy. it looked done.
 
-i was happy. it looked done.
+took it to my lead and he asked one thing. why is this one page hitting the backend so many times.
 
-took it to my lead and he asked one thing....
+so i opened the network tab. every graph was making its own api call. one dashboard, one page load, and the server getting hit eight separate times for data we could have pulled in a single call.
 
-<Pull>"why is this one page hitting the backend so many times?"</Pull>
+it looked fast on my screen, and that is the trap. my screen is one browser sitting next to the server on my own machine, so eight calls cost me nothing. but every school opening that dashboard was quietly making all eight, all day, every day. eight felt normal to me because i was counting per graph. the server counts per page load, multiplied by every school using it.
 
-and i opened the network tab 🥲
+the fix was simple once i could see it. one endpoint, one response with all the dashboard data together, and the frontend splits it into the graphs.
 
-every graph was making its OWN api call. one dashboard, one page load, and the server getting hit again and again for data we could have pulled in a single call.
+this is the second time in two days i have learned the same lesson from a different direction. [pagination was the exact same shape](/journal/pagination-is-a-contract-not-a-frontend-feature). the screen looked right and the work under the screen was wrong.
 
-it looked fast on my screen. thats the trap. my screen is one browser sitting next to the server on my own machine. but every school opening that dashboard was quietly hammering the backend, all day, every day.
+and claude built exactly what i asked. i asked for graphs, it gave me graphs. it did not think about the number of backend calls because i did not either.
 
-<Ex>Ex: 8 graphs = 8 calls felt completely normal to me. but 8 calls per page load × every school × every day.... thats the part i wasnt seeing 🤷‍♂️</Ex>
-
-the fix was simple once i could see it. one endpoint, one response, all the dashboard data together. the frontend just splits it into the graphs.
-
-and this is the second time in two days i've learned the same lesson from a different direction — [pagination was the exact same shape](/journal/pagination-is-a-contract-not-a-frontend-feature). the screen looked right, the work under the screen was wrong.
-
-claude built exactly what i asked. i asked for graphs, it gave me graphs. it didnt think about the number of backend calls because i didnt either.
-
-<Pull>a dashboard isnt a pile of graphs. its one screen asking the server one question.</Pull>
-
-the scope i miss is always the scope thats under the screen.
+a dashboard is not a pile of graphs. it is one screen asking the server one question.
 
 #buildinpublic #softwareengineering #startup #learninginpublic #maahitatechnologies

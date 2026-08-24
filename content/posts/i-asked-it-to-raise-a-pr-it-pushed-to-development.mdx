@@ -1,0 +1,98 @@
+---
+title: "I asked it to raise a PR. It pushed to development."
+summary: "I was working on two tickets and I stayed on the same branch for both, because they touched completely different files. That was the assumption that broke. I asked it to raise a PR, it pushed into development instead, and I only found out the next morning."
+date: "2026-07-07"
+tag: "Engineering"
+arc: "two tickets on one branch because they touched different files → i asked it to raise a PR → it pushed into development → the branch it created had nothing in between, so the push carried development with it"
+draft: false
+featured: false
+---
+
+every time i write about this tool, it is about something wrong in the code it wrote. [a length-checked dropdown](/journal/the-ai-length-checked-a-dropdown), [a migration for a column we already had](/journal/ai-can-write-the-sql-you-still-have-to-read-the-schema), [eight graphs making eight API calls](/journal/eight-graphs-eight-api-calls). those are all code mistakes, and code sits there until i read it.
+
+this one is not about the code. the code was correct. this one is about it missing the rules we wrote for it in `CLAUDE.md`. that is the part you cannot trust anymore.
+
+## what i was doing
+
+i had two tickets. the first one was finished, i had already raised a PR for it, and i was waiting for the review score. so i was still sitting on that feature branch.
+
+while i was testing that PR, i found another bug. the tabulation sheet was showing the average of the subject percentages instead of the real marks.
+
+i did not switch branches for it. the two tickets touched completely different files, different repo, different tab, so in my head there was no way one could affect the other. that assumption is where everything else came from.
+
+i fixed the tabulation sheet from the same branch. once it was working i asked, can i raise the PR now. then i thought no, first the ticket, so i told it to create the jira ticket. it created the ticket.
+
+then i went away for a few hours. i never said commit.
+
+## what i found the next morning
+
+i took the latest pull and there were changes in `development` that i never sent.
+
+```text
+3f33807f8  2026-07-06 20:50  Govinda Rao
+fix(marks): show real marks in Tabulation Sheet instead of averaged percentages
+```
+
+i asked it what it did and it gave me paragraphs. i could not even read all of that. so i asked it to explain simply, and it said it put everything into development.
+
+## what actually happened
+
+my first thought was that it committed on my branch and pushed, and that my PR was now spoiled. that is not what happened.
+
+it left my branch. it created a new branch from `development`, committed there, and pushed.
+
+<BranchFastForwardDiagram />
+
+the difference is what sits between the branch and `development`.
+
+my branch already had its own commits on top of `development`, so it had moved away from it. pushing that branch can only ever move that branch.
+
+the branch it created had nothing in between. it was cut from the tip of `development` and had exactly one commit on it. so that commit is simply the next commit on `development`, and the push fast-forwards `development` onto it.
+
+that is also why nothing looked strange afterwards. the commit is sitting between two properly merged PRs and it looks like it belongs there.
+
+the commit message is not in our format either. we start with the ticket number, `MAAHITA-928: ...`. it wrote a generic message and pushed the ticket number down into the body.
+
+## it knew the rule the whole time
+
+i was not polite when i asked what it had done.
+
+![Claude Code's reply: I own this. I ran the git push that put your commit straight onto development. You asked me to raise a PR — that should have been: push the feature branch only, then open a PR. GitHub didn't stop it because development isn't branch-protected.](/journal/dev-push-i-own-this.webp)
+
+look at the second bullet. i asked it to raise a PR, and it says that should have been push the feature branch only, then open a PR. so it knew the correct sequence. it gave me the correct sequence in twelve seconds when i asked for it. it just did not do it.
+
+and the reason it gives for nothing stopping it is not that it misunderstood me. it is that `development` is not branch protected. the server simply let it through.
+
+then i asked it a very simple question. does `CLAUDE.md` have any rule saying never commit into the dev branch.
+
+![Claude Code's reply: Yes. It's there, and I violated it. It quotes CLAUDE.md line 7, bolded, the first rule in the file — NEVER push directly to development, main, or master; a pre-push hook enforces this — and admits the rule was in its context the whole time.](/journal/dev-push-rule-was-there.webp)
+
+line 7. bolded. the first rule in the file. the same rule in the backend repo also. and in its own words, it was in its context the whole time.
+
+so it can find the rule, quote the rule, and accept that it broke the rule, all in one minute. what it could not do is any of that before pushing.
+
+## the hook that does not check anything
+
+that same line in `CLAUDE.md` says a pre-push hook enforces this. i had never actually opened that hook to see what it does. so i opened it.
+
+`.husky/pre-push` takes the changed files, finds their test files, and runs vitest. that is all it does. there is no branch check anywhere in it.
+
+so the rule is written in the file, and the thing that is supposed to enforce that rule is not enforcing anything.
+
+i have written this post twice already. [i gave a check to a hook](/journal/i-kept-forgetting-the-check-so-i-gave-it-to-a-hook) so that i could stop depending on my memory, and then [that hook turned out to be in the wrong repo](/journal/the-hook-worked-it-just-wasnt-where-i-was-working). this time the hook is in the right repo and it does not do the check at all.
+
+## what i do now
+
+i created a command this time to work on two separate tickets, which creates a separate worktree for any issue, so i can run two separate claude sessions in parallel. they can do whatever changes they want to — i won't stop them this time. i've totally switched to auto mode as well, and i don't care what they do, if the two tickets are totally independent of each other.
+
+but if there are two tickets which are dependent, i can't do anything. i either wait until it merges, or take the base branch approach.
+
+## what i got wrong
+
+this was Opus 4.8 with a 1 million token context window. it had the rule in its context and it could repeat the rule back to me when i asked. so having the rule available is not the same as following it.
+
+but the part i got wrong is my own. i decided the two tickets could not affect each other because they touched different files. that was true about the files. they did not share a file, they shared a branch, and that turned out to be the thing that mattered.
+
+the commit is still in `development` and it is staying there. the code was correct, a reviewed PR is already merged on top of it, and rewinding it now would break something real to clean up something that is not. it was not wrong, and it was still a problem.
+
+#buildinpublic #softwareengineering #ai #claudecode #git #devops #maahitatechnologies

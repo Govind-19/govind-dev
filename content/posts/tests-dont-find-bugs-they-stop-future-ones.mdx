@@ -1,26 +1,26 @@
 ---
 title: "Tests don't find bugs. They stop future ones."
-summary: "I fixed a small bug in one place and broke something unrelated somewhere else. That's when it clicked."
+summary: "I thought tests were for finding bugs. Then I fixed one small thing and broke something completely unrelated, in code I had no reason to open."
 date: "2026-06-03"
 tag: "Engineering"
-arc: "resist → reject → real requirement → revelation"
+arc: "the feature works so why test it → i broke unrelated code and did not notice → tests protect working code from future me"
 draft: false
 featured: false
 ---
 
-As a beginner I thought tests were for finding bugs....
+as a beginner i thought tests were for finding bugs.
 
-Feature works → ship it. why write more code to check code that already runs 🤷‍♂️
+the feature works, so ship it. why write more code to check code that already runs.
 
-then one day i fixed a small bug in one place.... and broke something completely unrelated somewhere else. didn't even notice for a while 🥲
+then one day i fixed a small bug in one place and broke something completely unrelated somewhere else. i did not even notice for a while.
 
-a test would have caught it the second i made the change.
+the reason is the part worth keeping. the thing i broke was not in the code i was looking at. it was code that was already working, that i had no reason to open and no reason to click through after my change. so nothing told me. a test sitting on that other piece would have failed the second i saved the file.
 
-That i when it clicked.... tests are not for finding bugs today. the code already works today. tests are for protecting that working code when future-me changes something months later.
+so tests are not for finding bugs today. the code already works today, that is why it shipped. they protect that working code from what future-me does to it months later.
 
-<Ex>Ex: extract a string, rename a function, refactor a flow.... a good test tells you instantly if you just broke something.</Ex>
+extract a string, rename a function, refactor a flow. every one of those is a change to code that is currently fine.
 
-<Pull>tests don't find bugs. they stop future bugs from shipping 😮‍💨</Pull>
+i used to see tests as extra work on top of a finished feature. now they are the thing that lets me change my own code without being scared of it.
 
 ![Day 3 — tests are not for finding bugs, they're for preventing future bugs: without tests every change is a risk, with tests every change is protected](/journal/day-3.webp)
 

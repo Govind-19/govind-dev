@@ -1,9 +1,9 @@
 ---
 title: "I kept forgetting the check. So I gave it to a hook."
-summary: "Last post: every schema change has to update both the migration and the base schema, so I'd ask Claude 'did you do both?'. Then I stopped asking — and the two quietly drifted until a bug exposed dozens of mismatched tables. The fix wasn't more discipline. It was a hook."
+summary: "Every schema change has to update both the migration and the base schema, so I would ask Claude each time. Then I stopped asking, and the two quietly drifted for months."
 date: "2026-06-12"
 tag: "Engineering"
-arc: "ask claude 'did you update both?' → forget to ask → the schemas drift → a hook that won't let me forget"
+arc: "ask claude did you update both → stop asking around the tenth change → the schemas drift silently → a check that depends on me remembering is not a check"
 series: "the schema-sync saga"
 part: 2
 draft: false
@@ -12,21 +12,19 @@ featured: false
 
 quick follow-up to [the multi-tenant story](/journal/every-school-thinks-its-the-only-one), because this is how that one actually bit me.
 
-the rule was simple: every schema change updates *both* sources of truth — the numbered migration (for existing schools) and the base schema (for new ones). and the way i "enforced" it was.... i'd ask claude every time, "did you update both?" 🤷‍♂️
+the rule was simple. every schema change updates both sources of truth, the numbered migration for existing schools and the base schema for new ones. and the way i enforced it was that i would ask claude every time, did you update both.
 
-it worked. for about two or three changes.
+it worked, for about two or three changes.
 
-then i did what every human does with a manual checklist — i stopped doing it. not on purpose. you're moving fast, the migration looks right, you merge. ask once, ask twice, and by the tenth change you've quietly decided claude has probably got it 🙃
+then i did what every human does with a manual checklist. i stopped doing it. not on purpose. you are moving fast, the migration looks right, you merge. ask once, ask twice, and by the tenth change you have quietly decided claude has probably got it.
 
-it did not always have it. and the base schema and the migrations started drifting apart. silently. for a long time.
+it did not always have it. and the base schema and the migrations started drifting apart, silently, for a long time.
 
-<Pull>a check that depends on me remembering isn't a check. it works twice, then it's decoration.</Pull>
+that is the part worth saying plainly. a check that depends on me remembering is not a check. it works twice, and after that it is decoration.
 
-we only found out because a bug surfaced in the app — and chasing it forced us to admit the two schema sources had genuinely diverged. so we pointed the claude agent at the whole codebase and had it diff them.
+we only found out because a bug surfaced in the app, and chasing it forced us to admit the two schema sources had genuinely diverged. so we pointed the claude agent at the whole codebase and had it diff them. it came back with a pile. tables that did not match, columns in one and not the other, months of small un-mirrored changes. we went through and brought them back in line.
 
-it came back with a pile. tables that didn't match. columns in one and not the other. months of small, un-mirrored changes 😮‍💨 we went through and brought them back in line.
-
-that could've been the end of it — "okay, i'll remember next time". but i'd already proved i won't. the answer wasn't more discipline. it was making the check impossible to skip.
+that could have been the end of it. okay, i will remember next time. but i had already proved that i will not. the answer was not more discipline, it was making the check impossible to skip.
 
 so i asked claude to build it for me. it landed as three small files:
 
@@ -37,21 +35,19 @@ so i asked claude to build it for me. it landed as three small files:
                                          a prompt, not a shell script
 ```
 
-and the flow turned out more subtle than "a script notices and fixes it" — which is honestly how i'd pictured it before i read what claude actually wired up:
+and the flow turned out more subtle than a script notices and fixes it, which is honestly how i had pictured it before i read what claude actually wired up:
 
-1. **i edit a file.** it's a `PostToolUse` hook matching `Write|Edit`, so it fires right after *my* tool calls. edit a file by hand in your IDE and it stays silent — only the agent's edits trip it.
+1. **i edit a file.** it is a `PostToolUse` hook matching `Write|Edit`, so it fires right after my tool calls. edit a file by hand in the IDE and it stays silent. only the agent's edits trip it.
 2. **the harness runs `check-migration-sync.py`,** piping in JSON of what i just did, including the file path.
-3. **the hook checks the path** for `database/migrations/tenant/`. not a tenant migration? it says nothing, we move on. is one? it prints a small JSON message.
-4. **here's the part i had backwards** — the hook does *not* run the sync, and it doesn't diff anything itself. all it does is drop a line into my context: *"you MUST now run /sync-tenant-schema."* (that's the `additionalContext` field.)
+3. **the hook checks the path** for `database/migrations/tenant/`. not a tenant migration, it says nothing and we move on. is one, it prints a small JSON message.
+4. **this is the part i had backwards.** the hook does not run the sync, and it does not diff anything itself. all it does is drop a line into my context, you MUST now run /sync-tenant-schema. that is the `additionalContext` field.
 5. **i read that reminder** and choose to run `/sync-tenant-schema` myself.
-6. **and that command is a prompt, not a bash script** — running it just loads the audit steps from the `.md` into my context. then i do the real work with normal tools (`git diff`, `ls`, read, edit) — checking whether `database/tenant-schema/tables/` drifted from the migration, reporting what's off, and asking before i change a thing.
+6. **and that command is a prompt, not a bash script.** running it loads the audit steps from the `.md` into my context. then i do the real work with normal tools, `git diff`, `ls`, read, edit, checking whether `database/tenant-schema/tables/` has drifted from the migration, reporting what is off, and asking before changing anything.
 
-so it's a nudge, not an autopilot. the hook can't fix the schema, can't even block the edit. all it guarantees is that i can't *not* notice — and the actual fix still runs through a prompt that asks me first.
+so it is a nudge, not an autopilot. the hook cannot fix the schema and cannot even block the edit. all it guarantees is that i cannot not notice, and the actual fix still runs through a prompt that asks me first.
 
-<Ex>Ex: i turned "did you update both?" from a question i had to remember to ask.... into a thing the repo asks for me, every single time, automatically.</Ex>
+and there is a symmetry in it. the AI is what made it easy to drift, change one file and move on. and the AI, pointed by a hook i set up, is what catches the drift now. the tool did not save me. the guardrail i built around the tool did.
 
-and there's a neat symmetry to it. the AI is what made it easy to drift — change one file, move on. and the AI, pointed by a hook i set up, is now what catches the drift. the tool didn't save me. the guardrail i built around the tool did 🤷‍♂️
-
-<Pull>don't trust yourself to remember the boring, critical check. encode it somewhere it can't be skipped.</Pull>
+so what i would tell past-me is this. do not trust yourself to remember the boring, critical check. put it somewhere it cannot be skipped.
 
 #buildinpublic #softwareengineering #claudecode #automation #databasemigrations #maahitatechnologies

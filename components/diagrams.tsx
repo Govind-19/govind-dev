@@ -1387,6 +1387,119 @@ export function PromptCurveDiagram() {
   );
 }
 
+/**
+ * Figure 13 — why one push moved the shared branch.
+ * Same push, two topologies; the only difference is whether anything sits
+ * between the branch and development. Accent is the fast-forward, because
+ * the fast-forward is the whole incident.
+ */
+export function BranchFastForwardDiagram() {
+  return (
+    <figure className="diagram">
+      <div className="diagram-row">
+        <div className="diagram-panel">
+          <svg
+            viewBox="0 0 280 200"
+            role="img"
+            aria-label="The branch I was on diverged from development several commits back, so its tip and development's tip are different commits and pushing it can only ever move the branch."
+          >
+            <PanelHead title="the branch i was on" />
+
+            <text x="20" y="131" fontSize="10.5" fill={MUTED}>
+              development
+            </text>
+            <line x1="20" y1="140" x2="260" y2="140" stroke={MUTED} />
+            <circle cx="60" cy="140" r="4" fill={PAPER} stroke={MUTED} />
+            <circle cx="110" cy="140" r="4" fill={PAPER} stroke={MUTED} />
+
+            <polyline
+              points="110,140 152,96 245,96"
+              fill="none"
+              stroke={MUTED}
+            />
+            <circle cx="185" cy="96" r="4" fill={PAPER} stroke={MUTED} />
+            <circle cx="230" cy="96" r="4" fill={PAPER} stroke={MUTED} />
+            <text x="198" y="80" fontSize="10.5" textAnchor="middle">
+              feature/MAAHITA-922
+            </text>
+
+            <text
+              x="140"
+              y="180"
+              fontSize="10.5"
+              textAnchor="middle"
+              fill={MUTED}
+            >
+              diverged — a push moves only it
+            </text>
+          </svg>
+        </div>
+
+        <div className="diagram-panel">
+          <svg
+            viewBox="0 0 280 200"
+            role="img"
+            aria-label="The branch it made was created from development's tip with nothing in between, so its one commit is development's next commit and the push fast-forwards development onto it."
+          >
+            <Arrowhead id="dgm-ff" color={ACCENT} />
+            <PanelHead title="the branch it made" />
+
+            <text x="20" y="131" fontSize="10.5" fill={MUTED}>
+              development
+            </text>
+            <line x1="20" y1="140" x2="260" y2="140" stroke={MUTED} />
+            <circle cx="60" cy="140" r="4" fill={PAPER} stroke={MUTED} />
+            <circle cx="110" cy="140" r="4" fill={PAPER} stroke={MUTED} />
+
+            <line
+              x1="114"
+              y1="140"
+              x2="162"
+              y2="140"
+              stroke={ACCENT}
+              markerEnd="url(#dgm-ff)"
+            />
+            <circle cx="176" cy="140" r="4" fill={PAPER} stroke={ACCENT} />
+            <text
+              x="176"
+              y="118"
+              fontSize="10.5"
+              textAnchor="middle"
+              fill={ACCENT}
+            >
+              fix/MAAHITA-928
+            </text>
+            <text
+              x="176"
+              y="158"
+              fontSize="9.5"
+              textAnchor="middle"
+              fill={MUTED}
+            >
+              3f33807f8
+            </text>
+
+            <text
+              x="140"
+              y="180"
+              fontSize="10.5"
+              textAnchor="middle"
+              fill={ACCENT}
+            >
+              no divergence — dev comes too
+            </text>
+          </svg>
+        </div>
+      </div>
+      <figcaption>
+        one push, two topologies. the branch i was on had commits of its own
+        between it and development, so a push could only ever move the branch.
+        the branch it cut had none — so development came along with it.
+      </figcaption>
+    </figure>
+  );
+}
+
 export const diagrams = {
   WebhookPathDiagram,
   TwoPathsDiagram,
@@ -1400,4 +1513,5 @@ export const diagrams = {
   SearchMovedDiagram,
   ClockSkewDiagram,
   PromptCurveDiagram,
+  BranchFastForwardDiagram,
 };
