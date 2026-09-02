@@ -1,57 +1,70 @@
 import Link from "next/link";
 import EntryRow from "@/components/EntryRow";
 import Footer from "@/components/Footer";
-import ProjectCard from "@/components/ProjectCard";
 import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
+import WorkRow from "@/components/WorkRow";
 import { experienceShort } from "@/lib/experience";
 import { getAllPosts, toMeta } from "@/lib/posts";
-import { getFeaturedProjects } from "@/lib/projects";
+import { getHomeWork } from "@/lib/projects";
+import { site } from "@/lib/site";
 
 // the experience chip is derived from the start date — re-render daily so it
 // moves on its own instead of freezing at whatever the last deploy computed.
 export const revalidate = 86400;
 
-const ENGINEERING = [
-  "frontend & backend",
-  "database design",
-  "git workflows",
-  "deployments & releases",
-  "production debugging",
+/** what I work in day to day — the resume page carries the full list */
+const STACK = [
+  "TypeScript / JavaScript",
+  "React",
+  "React Native",
+  "Next.js",
+  "Node.js / Express",
+  "PostgreSQL",
+  "MongoDB",
+  "Firebase",
+  "REST APIs",
+  "Git / CI",
+  "Jira",
 ];
 
-const PRODUCT_OPS = [
-  "PRDs & product design",
-  "Jira management",
-  "QA support",
-  "customer-driven features",
-  "SaaS & branding calls",
+const CONTACT = [
+  { label: "email", href: `mailto:${site.email}` },
+  { label: "linkedin", href: site.linkedin },
+  { label: "github", href: site.github },
 ];
+
+const quietLink =
+  "border-b border-transparent text-accent no-underline transition-colors hover:border-accent";
 
 export default function HomePage() {
+  const work = getHomeWork();
   const latest = getAllPosts().slice(0, 3).map(toMeta);
-  const featured = getFeaturedProjects();
   const served = experienceShort();
 
   return (
     <>
-      <header className="border-b border-line pb-14 pt-[78px]">
+      <header className="border-b border-line pb-12 pt-[72px]">
         <div className="mx-auto max-w-[760px] px-7">
           <p className="kicker rise mb-[22px]">
-            Engineering journal · build in public
+            {site.role} · open to roles
           </p>
-          <h1 className="rise rise-1 mb-[26px] font-display text-masthead font-medium leading-[1.02] tracking-[-1.5px]">
-            I&apos;m learning to build software the way it&apos;s{" "}
-            <em className="italic text-accent">actually</em> built.
-            <span className="caret" aria-hidden="true" />
+          <h1 className="rise rise-1 mb-[22px] font-display text-masthead font-medium leading-[1.02] tracking-[-1.5px]">
+            I&apos;m Govind. I ship a school ERP SaaS{" "}
+            <em className="italic text-accent">end to end</em>.
           </h1>
-          <p className="rise rise-2 mb-[34px] max-w-[600px] text-[19px] text-lede sm:text-[21px]">
-            Software engineer at Maahita Technologies, shipping a real school
-            ERP product end-to-end since my 4th year of BTech. Frontend to
-            deployments to production fires. Documenting what I get wrong, and
-            what shipping teaches me.
+          <p className="rise rise-2 mb-[26px] max-w-[600px] text-[19px] text-lede sm:text-[20px]">
+            At Maahita Technologies since January 2025, building a multi-tenant
+            ERP for Indian schools: frontend, backend, database, releases, and
+            the production fires in between.{" "}
+            <Link
+              href="/about"
+              className="text-accent underline underline-offset-4"
+            >
+              More about me →
+            </Link>
           </p>
-          <div className="rise rise-3 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
+          <div className="rise rise-3 mb-[30px] flex flex-wrap gap-[10px] font-mono text-[12.5px]">
             <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
               <b className="font-medium text-accent">{served}</b> shipping
               production
@@ -60,48 +73,113 @@ export default function HomePage() {
               mentored by <b className="font-medium text-accent">10–14 yr</b>{" "}
               engineers
             </span>
-            <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
-              full-stack · product · releases
-            </span>
-            <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
-              built with <b className="font-medium text-accent">AI</b>,
-              reviewed by humans
-            </span>
+          </div>
+          <div className="rise rise-4 flex flex-wrap items-center gap-x-[22px] gap-y-3 font-mono text-[13px]">
+            <a
+              href="/Govind_Resume.pdf"
+              download
+              className="inline-flex items-center gap-2 rounded-[2px] bg-accent px-5 py-[11px] text-paper no-underline transition-opacity hover:opacity-[0.88]"
+            >
+              ↓ Resume PDF
+            </a>
+            {CONTACT.map((c) => {
+              // mailto opens the mail client, not a page — a new tab would be blank
+              const external = !c.href.startsWith("mailto:");
+              return (
+                <a
+                  key={c.label}
+                  href={c.href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  className={quietLink}
+                >
+                  {c.label} →
+                </a>
+              );
+            })}
           </div>
         </div>
       </header>
 
-      <section className="border-b border-line py-[54px]" id="about">
+      <section className="border-b border-line py-[54px]" id="work">
         <Reveal className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="01" className="mb-[30px]">
-            About
+          <SectionLabel number="01" className="mb-[18px]">
+            Work
           </SectionLabel>
-          <p className="mb-[18px] text-body">
-            I didn&apos;t take the usual path. No years of grinding LeetCode,
-            no big MNC onboarding. I joined a 3-founder startup as a 4th-year
-            intern and started shipping production code on day one — on a
-            product that wasn&apos;t mature, in a company that was still
-            figuring itself out.
+          {work.map((row, i) => (
+            <WorkRow key={row.title} row={row} last={i === work.length - 1} />
+          ))}
+          <p className="mt-5 font-mono text-[13px]">
+            <Link href="/work" className="text-accent no-underline hover:underline">
+              all work, side projects included →
+            </Link>
           </p>
-          <p className="mb-[18px] text-body">
-            I learned engineering during the AI-coding era — Gemini, Claude,
-            all of it. But every line went through senior engineers with a
-            decade-plus of experience. They rejected my PRs. They asked why.
-            They made me defend my choices. That friction is where I actually
-            learned.
-          </p>
-          <p className="pull">
-            Most of my best lessons started as things I thought were pointless
-            — until the product got big enough to prove me wrong.
-          </p>
-          <p className="text-body">
-            This site is the public record of that growth. Not polished
-            theory. The real version, written down as it happens.{" "}
-            <Link
-              href="/about"
-              className="text-accent underline underline-offset-4"
-            >
-              The longer story →
+        </Reveal>
+      </section>
+
+      <section className="border-b border-line py-[54px]" id="stack">
+        <Reveal className="mx-auto max-w-[760px] px-7">
+          <SectionLabel number="02" className="mb-[26px]">
+            Stack
+          </SectionLabel>
+          <div className="flex flex-wrap gap-2">
+            {STACK.map((s) => (
+              <span
+                key={s}
+                className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[7px] font-mono text-[13px] text-tag"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
+      <section className="border-b border-line py-[54px]" id="experience">
+        <Reveal className="mx-auto max-w-[760px] px-7">
+          <SectionLabel number="03" className="mb-[18px]">
+            Experience
+          </SectionLabel>
+
+          <div className="flex flex-col gap-1 py-[18px] sm:flex-row sm:gap-[18px]">
+            <div className="pt-[5px] font-mono text-[12px] text-muted sm:min-w-[130px]">
+              Jan 2025 — present
+            </div>
+            <div>
+              <h3 className="mb-[3px] font-display text-[20px] font-medium">
+                Full Stack Developer
+              </h3>
+              <div className="mb-[7px] font-mono text-[12.5px] text-accent">
+                Maahita Technologies · Remote
+              </div>
+              <p className="text-[16.5px] text-muted">
+                Joined in my 4th year of BTech and started shipping production
+                code on the school ERP from day one. Engineering, releases,
+                product, and production support, mentored through PR reviews
+                by senior engineers.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1 border-t border-line py-[18px] sm:flex-row sm:gap-[18px]">
+            <div className="pt-[5px] font-mono text-[12px] text-muted sm:min-w-[130px]">
+              2021 — 2025
+            </div>
+            <div>
+              <h3 className="mb-[3px] font-display text-[20px] font-medium">
+                B.Tech, Artificial Intelligence &amp; Machine Learning
+              </h3>
+              <p className="text-[16.5px] text-muted">
+                Sri Venkateswara College of Engineering and Technology,
+                Srikakulam. <span className="text-accent">Gold medalist.</span>{" "}
+                8.17/10 CGPA.
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-3 font-mono text-[13px]">
+            <Link href="/resume" className="text-accent no-underline hover:underline">
+              full resume →
             </Link>
           </p>
         </Reveal>
@@ -109,93 +187,24 @@ export default function HomePage() {
 
       <section className="border-b border-line py-[54px]" id="journal">
         <Reveal className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="02" className="mb-[30px]">
-            The journal — latest entries
+          <SectionLabel number="04" className="mb-[18px]">
+            Writing — the engineering journal
           </SectionLabel>
           {latest.map((post, i) => (
-            <EntryRow key={post.slug} post={post} last={i === latest.length - 1} />
+            <EntryRow
+              key={post.slug}
+              post={post}
+              compact
+              last={i === latest.length - 1}
+            />
           ))}
-          <p className="mt-6 font-mono text-[13px]">
-            <Link
-              href="/journal"
-              className="text-accent no-underline hover:underline"
-            >
+          <p className="mt-5 font-mono text-[13px]">
+            <Link href="/journal" className="text-accent no-underline hover:underline">
               all entries →
             </Link>
           </p>
         </Reveal>
       </section>
-
-      <section className="border-b border-line py-[54px]" id="work">
-        <Reveal className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="03" className="mb-[30px]">
-            What I build, end to end
-          </SectionLabel>
-          <div className="grid grid-cols-1 gap-px border border-line bg-line sm:grid-cols-2">
-            <div className="bg-paper px-[22px] py-5">
-              <h4 className="mb-3 font-mono text-[12px] uppercase tracking-[1px] text-accent">
-                Engineering
-              </h4>
-              <ul className="font-mono text-[13.5px] text-lede">
-                {ENGINEERING.map((item) => (
-                  <li key={item} className="py-[3px]">
-                    <span className="text-muted" aria-hidden="true">
-                      ›{" "}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-paper px-[22px] py-5">
-              <h4 className="mb-3 font-mono text-[12px] uppercase tracking-[1px] text-accent">
-                Product & ops
-              </h4>
-              <ul className="font-mono text-[13.5px] text-lede">
-                {PRODUCT_OPS.map((item) => (
-                  <li key={item} className="py-[3px]">
-                    <span className="text-muted" aria-hidden="true">
-                      ›{" "}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <p className="mt-6 font-mono text-[13px]">
-            <Link
-              href="/work"
-              className="text-accent no-underline hover:underline"
-            >
-              the full surface area →
-            </Link>
-          </p>
-        </Reveal>
-      </section>
-
-      {featured.length > 0 && (
-        <section className="border-b border-line py-[54px]" id="projects">
-          <Reveal className="mx-auto max-w-[760px] px-7">
-            <SectionLabel number="04" className="mb-[30px]">
-              Selected work
-            </SectionLabel>
-            <div className="flex flex-col gap-6">
-              {featured.map((project) => (
-                <ProjectCard key={project.slug} project={project} />
-              ))}
-            </div>
-            <p className="mt-6 font-mono text-[13px]">
-              <Link
-                href="/work"
-                className="text-accent no-underline hover:underline"
-              >
-                all projects →
-              </Link>
-            </p>
-          </Reveal>
-        </section>
-      )}
 
       <Footer who="One product. Every layer. Out in the open." />
     </>

@@ -35,6 +35,8 @@ export interface Project {
   kicker: string;
   /** one-line positioning — card body + hero subhead */
   tagline: string;
+  /** one sentence for compact listings — the homepage work rows */
+  short: string;
   /** SEO / meta description */
   summary: string;
   year: string;
@@ -68,6 +70,8 @@ export const PROJECTS: Project[] = [
     kicker: "Client pilot · Operations platform",
     tagline:
       "A centralized operations platform that turns shift handovers, testing, and production updates into one structured, auditable system.",
+    short:
+      "Replaces paper shift handovers and scattered chat threads with one auditable operations system for a metro manufacturer. In pilot.",
     summary:
       "A web platform that digitizes shift handovers, testing workflows, production updates, and team communication for metro manufacturing teams — replacing paper logs and scattered chat threads with a single source of truth. Built with React, TypeScript, and Firebase.",
     year: "2026",
@@ -229,6 +233,8 @@ export const PROJECTS: Project[] = [
     kicker: "Product prototype · Communication platform",
     tagline:
       "Helping child care centers stay connected with parents through real-time updates and automated communication.",
+    short:
+      "Keeps parents in the loop with activity updates, announcements, and automated email through Brevo. Early prototype.",
     summary:
       "A web platform that centralizes parent communication for child care centers — activity updates, announcements, and automated email notifications — replacing scattered calls and messaging apps. Built with React, TypeScript, Firebase, and Brevo.",
     year: "2026",
@@ -377,6 +383,89 @@ export const PROJECTS: Project[] = [
     featured: true,
   },
 ];
+
+/**
+ * The Maahita products I work on day to day. Listed on the homepage and the
+ * work page; no detail page of their own — the journal tells those stories.
+ */
+export interface Product {
+  /** compact name for the homepage rows */
+  name: string;
+  /** descriptive heading for the work-page card */
+  title: string;
+  /** mono uppercase label, e.g. "Maahita Technologies · School ERP" */
+  kicker: string;
+  /** one sentence for compact listings — the homepage work rows */
+  short: string;
+  /** the work-page card paragraph */
+  body: string;
+  stack: string[];
+  /** site paths (/journal/…) open in place; http(s) links open in a new tab */
+  links: ProjectLink[];
+}
+
+export const PRODUCTS: Product[] = [
+  {
+    name: "Maahita School ERP",
+    title: "A school ERP built for Indian local schools",
+    kicker: "Maahita Technologies · School ERP",
+    short:
+      "Multi-tenant SaaS for Indian schools: students, attendance, fees and receipts, subscriptions. I build and ship every layer, from schema to release.",
+    body:
+      "An early-stage SaaS product run by three founders investing in the idea directly. No big roadmap handed down, no perfect process. We learn from real schools, evolve the product, and ship. I've been on it since my 4th year of BTech, across every layer above.",
+    stack: ["React", "Node.js", "PostgreSQL", "Firebase"],
+    links: [{ label: "live product", href: "https://school.maahita.com/" }],
+  },
+  {
+    name: "Vinodam",
+    title: "A live quiz platform for school events",
+    kicker: "Maahita Technologies · Vinodam",
+    short:
+      "Live quiz platform for school events: three synced screens, real-time scoring. Built as a secret prototype, adopted as a product, first event ran with 300 students.",
+    body:
+      "Born from a principal's challenge: TV-show-style quizzes for school events. I built the prototype in secret — three synchronized screens (admin control, projector display, participant phones) with real-time scoring, timers, and leaderboards. The team adopted it as an official product, and it ran its first live event with 300 students without breaking.",
+    stack: ["React", "Firebase", "real-time sync"],
+    links: [
+      { label: "live app", href: "https://vinodam-maahita.web.app/" },
+      {
+        label: "the full story",
+        href: "/journal/building-vinodam-what-shipping-really-means",
+      },
+    ],
+  },
+];
+
+/** One row of the homepage work list — products and featured projects, same shape. */
+export interface WorkRow {
+  title: string;
+  kicker: string;
+  short: string;
+  stack: string[];
+  links: ProjectLink[];
+  /** detail page, when one exists; the title links there */
+  href?: string;
+}
+
+/** Homepage work list: the day job first, then the featured client and product work. */
+export function getHomeWork(): WorkRow[] {
+  return [
+    ...PRODUCTS.map((p) => ({
+      title: p.name,
+      kicker: p.kicker,
+      short: p.short,
+      stack: p.stack,
+      links: p.links,
+    })),
+    ...getFeaturedProjects().map((p) => ({
+      title: p.cardTitle,
+      kicker: p.kicker,
+      short: p.short,
+      stack: p.stack,
+      links: [...p.links, { label: "the breakdown", href: `/work/${p.slug}` }],
+      href: `/work/${p.slug}`,
+    })),
+  ];
+}
 
 /** Featured first, then most recent year first. */
 export function getAllProjects(): Project[] {

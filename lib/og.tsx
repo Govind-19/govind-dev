@@ -25,9 +25,12 @@ async function loadFraunces(): Promise<ArrayBuffer | null> {
 export async function ogCard({
   title,
   kicker,
+  foot = "engineering journal",
 }: {
   title: string;
   kicker: string;
+  /** the line after the author's name, bottom right */
+  foot?: string;
 }) {
   const fraunces = await loadFraunces();
 
@@ -87,7 +90,9 @@ export async function ogCard({
           <span>
             govind<span style={{ color: "#9a3412" }}>.</span>dev
           </span>
-          <span>{site.author} · engineering journal</span>
+          <span>
+            {site.author} · {foot}
+          </span>
         </div>
       </div>
     ),

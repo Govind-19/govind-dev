@@ -25,10 +25,13 @@ const jetbrains = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
+// the homepage tab and link-preview title — every other page fills the template
+const homeTitle = `${site.title} — ${site.role}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: site.title,
+    default: homeTitle,
     template: "%s — Govind",
   },
   description: site.description,
@@ -36,13 +39,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: site.name,
-    title: site.title,
+    title: homeTitle,
     description: site.description,
     url: site.url,
   },
   twitter: {
     card: "summary_large_image",
-    title: site.title,
+    title: homeTitle,
     description: site.description,
   },
   alternates: {

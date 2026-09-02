@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import SectionLabel from "@/components/SectionLabel";
 import { experienceLong } from "@/lib/experience";
-import { getAllProjects } from "@/lib/projects";
+import { PRODUCTS, getAllProjects } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "What I build",
@@ -137,65 +137,53 @@ export default function WorkPage() {
             The product I work on
           </SectionLabel>
           <div className="flex flex-col gap-6">
-            <div className="rounded-[3px] border border-line bg-paper-2 px-[30px] py-7">
-              <p className="mb-[14px] font-mono text-[12px] uppercase tracking-[1px] text-accent">
-                Maahita Technologies · School ERP
-              </p>
-              <h3 className="mb-3 font-display text-[24px] font-medium">
-                A school ERP built for Indian local schools
-              </h3>
-              <p className="mb-5 text-[18px] text-lede">
-                An early-stage SaaS product run by three founders investing in
-                the idea directly. No big roadmap handed down, no perfect
-                process. We learn from real schools, evolve the product, and
-                ship. I&apos;ve been on it since my 4th year of BTech, across
-                every layer above.
-              </p>
-              <div className="flex gap-[22px] font-mono text-[13px]">
-                <a
-                  href="https://school.maahita.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
-                >
-                  live product →
-                </a>
+            {PRODUCTS.map((product) => (
+              <div
+                key={product.name}
+                className="rounded-[3px] border border-line bg-paper-2 px-[30px] py-7"
+              >
+                <p className="mb-[14px] font-mono text-[12px] uppercase tracking-[1px] text-accent">
+                  {product.kicker}
+                </p>
+                <h3 className="mb-3 font-display text-[24px] font-medium">
+                  {product.title}
+                </h3>
+                <p className="mb-5 text-[18px] text-lede">{product.body}</p>
+                <div className="mb-5 flex flex-wrap gap-2 font-mono text-[12px]">
+                  {product.stack.map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-[2px] border border-line bg-paper px-[10px] py-[5px] text-tag"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-[22px] font-mono text-[13px]">
+                  {product.links.map((link) =>
+                    /^https?:/.test(link.href) ? (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
+                      >
+                        {link.label} →
+                      </a>
+                    ) : (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
+                      >
+                        {link.label} →
+                      </Link>
+                    ),
+                  )}
+                </div>
               </div>
-            </div>
-
-            <div className="rounded-[3px] border border-line bg-paper-2 px-[30px] py-7">
-              <p className="mb-[14px] font-mono text-[12px] uppercase tracking-[1px] text-accent">
-                Maahita Technologies · Vinodam
-              </p>
-              <h3 className="mb-3 font-display text-[24px] font-medium">
-                A live quiz platform for school events
-              </h3>
-              <p className="mb-5 text-[18px] text-lede">
-                Born from a principal&apos;s challenge: TV-show-style quizzes
-                for school events. I built the prototype in secret — three
-                synchronized screens (admin control, projector display,
-                participant phones) with real-time scoring, timers, and
-                leaderboards. The team adopted it as an official product, and
-                it ran its first live event with 300 students without
-                breaking.
-              </p>
-              <div className="flex gap-[22px] font-mono text-[13px]">
-                <a
-                  href="https://vinodam-maahita.web.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
-                >
-                  live app →
-                </a>
-                <Link
-                  href="/journal/building-vinodam-what-shipping-really-means"
-                  className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
-                >
-                  the full story →
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

@@ -6,9 +6,9 @@ import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const LINKS = [
-  { href: "/journal", label: "journal" },
-  { href: "/work", label: "what i build" },
+  { href: "/work", label: "work" },
   { href: "/resume", label: "resume" },
+  { href: "/journal", label: "journal" },
   { href: "/about", label: "about" },
   { href: "/contact", label: "contact" },
 ];

@@ -9,8 +9,10 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_URL,
   name: "govind.dev",
   title: "Govind",
+  /** the one-line role, used wherever the name needs a job title next to it */
+  role: "Full-stack developer",
   description:
-    "Engineering journal of Govind — building a school ERP in public, and the honest notes from doing it.",
+    "Govind — full-stack developer shipping a school ERP SaaS end to end at Maahita Technologies, plus client and product work. Engineering journal included.",
   author: "Govind",
   email: "bammidigovindarao3825@gmail.com",
   linkedin: "https://www.linkedin.com/in/bammidi-govinda-rao-b8286a229/",
