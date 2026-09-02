@@ -17,14 +17,17 @@ export const revalidate = 86400;
 const STACK = [
   "TypeScript / JavaScript",
   "React",
-  "React Native",
   "Next.js",
+  "React Native",
   "Node.js / Express",
   "PostgreSQL",
   "MongoDB",
   "Firebase",
   "REST APIs",
-  "Git / CI",
+  "Docker / Nginx",
+  "GitHub Actions",
+  "Vitest",
+  "Git",
   "Jira",
 ];
 
@@ -153,10 +156,10 @@ export default function HomePage() {
                 Maahita Technologies · Remote
               </div>
               <p className="text-[16.5px] text-muted">
-                Joined in my 4th year of BTech and started shipping production
-                code on the school ERP from day one. Engineering, releases,
-                product, and production support, mentored through PR reviews
-                by senior engineers.
+                Ship features across 15+ modules of a multi-tenant school ERP,
+                own releases and Docker deployments on DigitalOcean, and debug
+                live incidents while schools are mid-session. Mentored through
+                PR reviews by senior engineers since my 4th year of BTech.
               </p>
             </div>
           </div>

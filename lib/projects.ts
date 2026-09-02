@@ -410,10 +410,10 @@ export const PRODUCTS: Product[] = [
     title: "A school ERP built for Indian local schools",
     kicker: "Maahita Technologies · School ERP",
     short:
-      "Multi-tenant SaaS for Indian schools: students, attendance, fees and receipts, subscriptions. I build and ship every layer, from schema to release.",
+      "Multi-tenant SaaS for Indian schools: 15+ modules from admissions to fees, schema-per-tenant PostgreSQL, 570 REST endpoints. I ship every layer, from schema to release.",
     body:
       "An early-stage SaaS product run by three founders investing in the idea directly. No big roadmap handed down, no perfect process. We learn from real schools, evolve the product, and ship. I've been on it since my 4th year of BTech, across every layer above.",
-    stack: ["React", "Node.js", "PostgreSQL", "Firebase"],
+    stack: ["React", "TypeScript", "Node.js / Express", "PostgreSQL", "Docker"],
     links: [{ label: "live product", href: "https://school.maahita.com/" }],
   },
   {
