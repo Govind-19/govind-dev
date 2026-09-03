@@ -82,7 +82,7 @@ const PROJECTS: {
   {
     title: "Maahita School ERP",
     stack: "React · TypeScript · Node.js/Express · PostgreSQL · Firebase · Docker",
-    when: "2025 — present",
+    when: "2024 — present",
     items: [
       "The platform Maahita sells: one product serving many Indian schools, each with fully isolated data, covering the academic year from enrolment through timetables, exams, fees, and reporting",
       "Every school runs in its own PostgreSQL schema, resolved per request; 240+ versioned migrations with paired rollbacks and a CI drift check keep every schema in step",
@@ -216,7 +216,7 @@ export default function ResumePage() {
 
           <div className="flex flex-col gap-1 py-[18px] sm:flex-row sm:gap-[18px]">
             <div className="pt-[5px] font-mono text-[12px] text-muted sm:min-w-[130px]">
-              Jan 2025 — present
+              Sep 2024 — present
             </div>
             <div>
               <h4 className="mb-[3px] font-display text-[20px] font-medium">

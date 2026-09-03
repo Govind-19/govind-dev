@@ -57,9 +57,9 @@ export default function HomePage() {
             <em className="italic text-accent">end to end</em>.
           </h1>
           <p className="rise rise-2 mb-[26px] max-w-[600px] text-[19px] text-lede sm:text-[20px]">
-            At Maahita Technologies since January 2025, building a multi-tenant
-            ERP for Indian schools: frontend, backend, database, releases, and
-            the production fires in between.{" "}
+            At Maahita Technologies since September 2024, building a
+            multi-tenant ERP for Indian schools: frontend, backend, database,
+            releases, and the production fires in between.{" "}
             <Link
               href="/about"
               className="text-accent underline underline-offset-4"
@@ -146,7 +146,7 @@ export default function HomePage() {
 
           <div className="flex flex-col gap-1 py-[18px] sm:flex-row sm:gap-[18px]">
             <div className="pt-[5px] font-mono text-[12px] text-muted sm:min-w-[130px]">
-              Jan 2025 — present
+              Sep 2024 — present
             </div>
             <div>
               <h3 className="mb-[3px] font-display text-[20px] font-medium">

@@ -8,8 +8,8 @@
  * deploy.
  */
 
-/** Joined Maahita Technologies — January 2025. */
-const START = { year: 2025, month: 1 } as const;
+/** Joined Maahita Technologies — September 2024. */
+const START = { year: 2024, month: 9 } as const;
 
 /** Whole months elapsed since the start date. */
 function monthsSince(now: Date): number {
