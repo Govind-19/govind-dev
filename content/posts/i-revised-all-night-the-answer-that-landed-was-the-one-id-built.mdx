@@ -1,0 +1,181 @@
+---
+title: "I revised all night. The answer that landed was the one I'd built."
+summary: "A cold LinkedIn message turned into a referral, the referral turned into a Java full stack interview I'm not qualified for on paper, and I crammed for one night to get there. The interviewer overslept. Then the only answer that came out without effort was the architecture nobody had to remind me about."
+date: "2026-09-12"
+tag: "Engineering"
+arc: "cold message → referral → an interview for a stack i don't have → one night of cramming → the crammed answers held, barely → the built answer needed no cramming → round two"
+draft: false
+featured: false
+---
+
+## it started as spam
+
+i wasn't hunting this company. i was applying everywhere.
+
+linkedin, job portals, company sites, anything with an opening on it. location, didn't filter. salary, didn't filter. stack, didn't filter. half the time i wasn't sure the role even matched me. i was trying to make something happen.
+
+then i started messaging people directly. i found someone from andhra, around the vizag area, and sent a plain message asking whether anything was open.
+
+he replied. "send me your resume."
+
+i sent it. he told me to mail it to someone else and gave me an address. so i mailed it, saying rahul had referred me.
+
+the next day, a call.
+
+```text
+a cold linkedin message
+  → send me your resume
+  → an email address i didn't have before
+  → a call the next day
+  → an interview on saturday
+```
+
+none of that was planned. i had no connection to that company, no shortlist, no strategy. it happened because i was messaging strangers at volume.
+
+<Pull>you can't pick which application turns into something. you can only raise the number of doors you knock on, and be ready when one of them opens.</Pull>
+
+## the role was not my stack
+
+java full stack. react, java, spring boot, react native, and an existing application that needs bugs fixed and development continued.
+
+my actual experience is MERN shaped. react, node, postgres. java spring boot is not on that list.
+
+i'm working remotely from my hometown, and srikakulam to vizag on short notice isn't simple, so after asking about an in-office round we settled on a virtual one. saturday, 10:30, about half an hour, he said.
+
+which gave me one night.
+
+## the night
+
+i went through everything i could think of.
+
+react fundamentals, jsx, babel, props, state, fragments, hooks, useState, useEffect, useMemo, useCallback, context, redux. javascript, callbacks, promises. cors, jwt, authentication, authorization. aws, lambda, firebase. razorpay. nginx, redis. ci/cd, github actions, runners, linting, formatting, testing. frontend performance. the end to end request flow. multi-tenant architecture and schema isolation. spring boot fundamentals, routes, controllers, services, repositories.
+
+years of concepts in one night.
+
+i studied until about 10pm and fell asleep with the light still on.
+
+then some time after 1am i woke up, because i had dreamt about the interview. i didn't go back to sleep. i studied until 3. at 3 i put on suprabhatam because i needed to stay upright. i slept again some time after 5, woke at 7, and started revising the whole thing over from the top. then i practised out loud with chatgpt.
+
+it wasn't elegant preparation. it was survival preparation. but i wanted to be able to stand behind whatever was on my resume.
+
+## then he didn't show up
+
+by the time it got close my hands were actually shaking. a friend had told me to put on hanuman chalisa, so i did. i'm spiritual, and it steadied me enough to sit down.
+
+i joined teams ten minutes early.
+
+then nothing. five minutes. ten. twenty past the time nobody had let me in. i sent an email. no reply. i sat there working out whether this was simply not going to happen.
+
+then i remembered i had his phone number. i called.
+
+he picked up. he had been asleep. he asked for five minutes.
+
+five minutes later he joined, and we started.
+
+## the part i didn't revise for
+
+"can you explain your multi-tenant project?"
+
+this is the only answer of the day that did not come out of the night before.
+
+we started on firebase and moved to postgres as the requirements got harder. one requirement in particular forced it: a person can hold different roles in different schools, a principal in one and a teacher in another, so identity had to be global and permission had to be per school.
+
+a school is a tenant. common data in the public schema, one schema per school, which is [the whole shape of the product](/journal/every-school-thinks-its-the-only-one). then the request flow on top of it:
+
+<MembershipCheckDiagram />
+
+the frontend sends the school id along with the jwt. the backend verifies the token, pulls the user out of it, and checks that user's membership and role against the school being requested. if they don't belong to that tenant, the request is rejected.
+
+that is the step i'd want an interviewer to push on, because it's the one people skip. authentication proves the token is real. it says nothing about whether the token is allowed inside this school. edit the school id in the url and the token still verifies perfectly. the membership check is the only thing standing there to say no.
+
+i wasn't repeating a tutorial. i built that, and i have debugged it.
+
+<Pull>the only answer i didn't have to revise for was the one i had built.</Pull>
+
+## the honest no
+
+"have you worked with java spring boot?"
+
+no. and i said no, without dressing it up.
+
+what i could say is that i had started on the fundamentals, and that the shape is the same as the backend i already know. routes, controllers, services, repositories. in express those are files and a router. in spring boot the same responsibilities live in classes and annotations, `@GetMapping` and `@PostMapping` where i would have written an express route. i know the shape. i don't know the ecosystem.
+
+"how long would you need to learn spring boot?"
+
+two to three weeks.
+
+then the question that was actually the interview:
+
+"if we already have an application, would you be able to find and solve issues in it?"
+
+not do you know spring boot. can you get inside our codebase and be useful.
+
+i said yes and i meant it, because the backend architecture and the engineering under it are familiar. the gap is the language and the framework, not the job. walking into code i didn't write, following something through frontend, backend and database until i find where it goes wrong, and shipping the fix is most of what i already do.
+
+## the answers that were eight hours old
+
+then react.
+
+state management: useState, context, useReducer. hooks: useEffect, useMemo, useCallback, useState, useContext.
+
+then, "what is the difference between useMemo and useEffect?"
+
+i answered it. useEffect is for side effects, api calls, timers, subscriptions. useMemo memoizes a computed value. useCallback memoizes a function.
+
+it wasn't a perfect answer. i mixed a couple of things and i could have drawn the line more sharply than i did. but it held, and the conversation kept moving.
+
+then passing data parent to child. props, and context when prop drilling gets out of hand. that held too.
+
+and here is what i noticed while it was happening, which is the reason i'm writing any of this down. those answers were eight hours old. i had revised them at 2am. i wasn't pulling them out of two years of work. i was pulling them out of last night.
+
+<Ex>Ex: i have written useMemo into real components and it did exactly what i wanted. the definition i gave in the interview did not come from that. it came from a revision session at 2am.</Ex>
+
+<Pull>an answer that comes out of last night's revision isn't knowledge. it's cache. and cache expires.</Pull>
+
+that's a different problem from [the screening round in july](/journal/two-years-of-vibe-coding-and-a-screening-round-i-deserved-to-fail), where i had nothing at all to give. this time i had something. i just know exactly where it came from.
+
+## the rest of it
+
+firebase, and why we used it. authentication, storage, serverless functions, and those compared to lambda. notifications, where i said firebase can do realtime sync and notifications but that we hadn't built that particular requirement.
+
+ci/cd. github actions, runners, testing, linting and formatting, eslint and prettier.
+
+mobile. we started a react native project and dropped it when the client couldn't settle on what they wanted, so exposure, not production experience.
+
+jwt came up too, and i can draw header, payload, signature, and i know [the signature is recomputed, not decrypted](/journal/i-thought-verifying-a-signature-meant-decrypting-it), because i wrote an entire entry about learning that one.
+
+## round two
+
+near the end he told me what the work actually is. an existing react and java application, currently bug fixing and improving the product, and they need people who can work with what is already there.
+
+then:
+
+> "i will move your profile to the next round."
+
+for a java full stack role, with no professional spring boot experience.
+
+## the money part
+
+he asked my current ctc. i didn't want the conversation anchored on that number, because it doesn't describe what i've done. eventually i told him: early stage startup, about ₹15,000 a month.
+
+then i told him why i stayed. i joined in my final year, and it gave me the thing the salary didn't. frontend and backend. testing. requirements. going to schools and listening to what they actually needed. features shipped. production bugs fixed. a lot of responsibility very early, in a job that was never a conventional engineering job.
+
+he asked my expectation. 6 to 7 lpa. he said that was fine, and the interview ended.
+
+## what today actually showed me
+
+the lesson isn't spring boot.
+
+i can explain the architecture. i can explain multi-tenancy, authentication, the product, and why we made the calls we made. that part is real and it is what carried the interview.
+
+but some of the basics were only available to me because i had revised them hours earlier, and i could hear which was which while i was talking.
+
+i don't want to be someone who can make an application work. i want to be someone who understands why it works, without a 2am cram sitting underneath the answer.
+
+<Pull>i saw the gap today between what i can build and what i can explain. not because i failed. because i got through, and i could feel exactly which answers were load bearing.</Pull>
+
+a week ago i was firing applications into the internet with no plan. today there's a second round. i don't know where the process ends.
+
+the cold message turned into something. now the next round has to be earned 🙂
+
+#buildinpublic #softwareengineering #react #javascript #springboot #learninginpublic

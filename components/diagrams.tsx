@@ -1500,6 +1500,121 @@ export function BranchFastForwardDiagram() {
   );
 }
 
+/** two requests carrying the same valid jwt, one with its own school id and
+ *  one with another school's. authentication passes both. the membership
+ *  check is the only band that tells them apart. */
+export function MembershipCheckDiagram() {
+  const L = 90; // own-school request
+  const R = 290; // swapped-school request
+  const bands = [
+    { y: 48, title: "authentication", q: "is the signature valid?" },
+    { y: 104, title: "membership check", q: "is this user in this school?", accent: true },
+    { y: 160, title: "tenant schema", q: "repository → postgres" },
+  ];
+
+  return (
+    <figure className="diagram">
+      <div className="diagram-solo diagram-wide">
+        <svg
+          viewBox="0 0 380 226"
+          role="img"
+          aria-label="Two requests carry the same valid JWT. One asks for the user's own school and passes authentication, passes the membership check, and reaches the tenant schema. The other asks for another school's id: it still passes authentication, because the signature is valid either way, and is rejected at the membership check."
+        >
+          <Arrowhead id="dgm-membership" />
+
+          {/* the two requests */}
+          <text x={L} y="13" fontSize="10" textAnchor="middle">
+            valid jwt
+          </text>
+          <text x={L} y="26" fontSize="10" textAnchor="middle" fill={MUTED}>
+            own school id
+          </text>
+          <text x={R} y="13" fontSize="10" textAnchor="middle">
+            same valid jwt
+          </text>
+          <text x={R} y="26" fontSize="10" textAnchor="middle" fill={MUTED}>
+            another school&apos;s id
+          </text>
+
+          {/* the checks both requests pass through */}
+          {bands.map((b) => (
+            <g key={b.title}>
+              <rect
+                x="16"
+                y={b.y}
+                width="348"
+                height="36"
+                fill={PAPER}
+                stroke={b.accent ? ACCENT : MUTED}
+              />
+              <text
+                x="190"
+                y={b.y + 15}
+                fontSize="11"
+                textAnchor="middle"
+                fill={b.accent ? ACCENT : "currentColor"}
+              >
+                {b.title}
+              </text>
+              <text
+                x="190"
+                y={b.y + 29}
+                fontSize="9.5"
+                textAnchor="middle"
+                fill={MUTED}
+              >
+                {b.q}
+              </text>
+            </g>
+          ))}
+
+          {/* own school: through every band */}
+          <line
+            x1={L}
+            y1="34"
+            x2={L}
+            y2="158"
+            stroke={MUTED}
+            markerEnd="url(#dgm-membership)"
+          />
+          <text x={L + 8} y="70" fontSize="11" fill={MUTED}>
+            ✓
+          </text>
+          <text x={L + 8} y="126" fontSize="11" fill={MUTED}>
+            ✓
+          </text>
+          <text x={L} y="214" fontSize="9.5" textAnchor="middle" fill={MUTED}>
+            reaches the school&apos;s tables
+          </text>
+
+          {/* another school's id: the signature is still fine, so
+              authentication passes. the membership check stops it. */}
+          <line x1={R} y1="34" x2={R} y2="122" stroke={MUTED} />
+          <text x={R + 8} y="70" fontSize="11" fill={MUTED}>
+            ✓
+          </text>
+          <line
+            x1={R - 10}
+            y1="122"
+            x2={R + 10}
+            y2="122"
+            stroke={ACCENT}
+            strokeWidth="2"
+          />
+          <text x={R + 16} y="126" fontSize="10" fill={ACCENT}>
+            rejected
+          </text>
+        </svg>
+      </div>
+      <figcaption>
+        two requests, one valid token. authentication passes both, because the
+        signature is fine either way. the membership check is the only step
+        that asks whether this user belongs in the school the url points at.
+      </figcaption>
+    </figure>
+  );
+}
+
 export const diagrams = {
   WebhookPathDiagram,
   TwoPathsDiagram,
@@ -1514,4 +1629,5 @@ export const diagrams = {
   ClockSkewDiagram,
   PromptCurveDiagram,
   BranchFastForwardDiagram,
+  MembershipCheckDiagram,
 };
