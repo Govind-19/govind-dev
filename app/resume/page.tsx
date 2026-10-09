@@ -7,7 +7,7 @@ import { experienceLong, experienceShort } from "@/lib/experience";
 export const metadata: Metadata = {
   title: "Resume",
   description:
-    "Govind — Full Stack Developer at Maahita Technologies, building a multi-tenant school ERP for Indian schools end to end: schema, APIs, UI, releases, production.",
+    "Govind — Full Stack Developer (Founding Team) at Maahita Technologies, building a multi-tenant school ERP for Indian schools end to end: schema, APIs, UI, releases, production.",
 };
 
 // the experience fact is derived from the start date — re-render daily so it
@@ -50,7 +50,7 @@ const OWNERSHIP: { heading: string; items: string[] }[] = [
     items: [
       "Own the git workflow, releases, and Docker/Nginx deployments on DigitalOcean via GitHub Actions",
       "CI gates for schema drift across 240+ versioned migrations with paired rollbacks",
-      "Debug live production issues while schools are mid-session; support QA through the release cycle",
+      "Debugged live production issues during school pilots; covered testing myself when no dedicated tester was available",
     ],
   },
   {
@@ -58,6 +58,7 @@ const OWNERSHIP: { heading: string; items: string[] }[] = [
     items: [
       "Write PRDs and contribute to product design decisions",
       "Manage work in Jira; help shape the roadmap from customer feedback",
+      "Went to schools in person with a teammate: product demos to administrators, follow-up meetings, negotiation, and a closed deal",
       "Revamped the official company website (40% better performance scores) and integrated WebRTC for real-time classroom sessions",
       "Contribute to branding and product naming decisions",
     ],
@@ -84,7 +85,7 @@ const PROJECTS: {
     stack: "React · TypeScript · Node.js/Express · PostgreSQL · Firebase · Docker",
     when: "2024 — present",
     items: [
-      "The platform Maahita sells: one product serving many Indian schools, each with fully isolated data, covering the academic year from enrolment through timetables, exams, fees, and reporting",
+      "The platform Maahita sells: one multi-tenant product built so every school gets fully isolated data, covering the academic year from enrolment through timetables, exams, fees, and reporting; piloted with two schools",
       "Every school runs in its own PostgreSQL schema, resolved per request; 240+ versioned migrations with paired rollbacks and a CI drift check keep every schema in step",
       "570 REST endpoints and 680+ test files across two repositories; Razorpay billing, PDF fee receipts, and WhatsApp Business broadcasts on one backend",
     ],
@@ -96,7 +97,7 @@ const PROJECTS: {
     when: "2026",
     items: [
       "Real-time quiz platform for school events: an admin control panel, a projector display, and every participant's phone stay in sync",
-      "Built solo as a prototype in weeks, adopted as an official Maahita product, and ran its first live event for 300 students with zero downtime",
+      "Built solo as a prototype in weeks, adopted as an official Maahita product, and ran its first live event for 300 students with zero downtime; the principal rewarded the team with ₹5,000",
     ],
     link: {
       label: "the full story",
@@ -142,17 +143,20 @@ export default function ResumePage() {
             Bammidi Govinda Rao
           </h1>
           <p className="rise rise-2 mb-4 text-[21px] text-lede">
-            <b className="font-medium text-accent">Full Stack Developer</b> at
+            <b className="font-medium text-accent">
+              Full Stack Developer (Founding Team)
+            </b>{" "}
+            at
             Maahita Technologies · building a multi-tenant school ERP for
             Indian schools
           </p>
           <p className="rise rise-2 mb-6 max-w-[640px] text-[17.5px] text-body">
-            Full-stack developer with {experienceLong()} shipping production
-            software used daily by Indian schools. I build the ERP end to end,
-            schema-per-tenant PostgreSQL, Node.js/Express APIs, React/TypeScript
-            interfaces, and own what comes after the code: migrations,
-            releases, deployments, and debugging live incidents while schools
-            are mid-session.
+            One of the founding engineers of a multi-tenant school ERP, with{" "}
+            {experienceLong()} shipping production software. I build it end to
+            end, schema-per-tenant PostgreSQL, Node.js/Express APIs,
+            React/TypeScript interfaces, and own what comes after the code:
+            migrations, releases, deployments, and live incidents. I&apos;ve
+            also taken it to schools in person, from demos to a closed deal.
           </p>
           <div className="rise rise-3 mb-7 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
             {facts().map((f) => (
@@ -220,16 +224,18 @@ export default function ResumePage() {
             </div>
             <div>
               <h4 className="mb-[3px] font-display text-[20px] font-medium">
-                Full Stack Developer
+                Full Stack Developer (Founding Team)
               </h4>
               <div className="mb-[7px] font-mono text-[12.5px] text-accent">
                 Maahita Technologies · Remote
               </div>
               <p className="text-[16.5px] text-muted">
-                Joined in my 4th year of BTech and started shipping production
-                code on the school ERP from day one: engineering, releases,
-                product, and production support, mentored through PR reviews
-                by senior engineers.
+                One of the founding engineers. Joined in my 4th year of BTech
+                and started shipping production code on the school ERP from day
+                one: engineering, releases, product, and production support,
+                mentored through PR reviews by senior engineers. With the
+                founder in Canada, I also went to schools with a teammate to
+                demo the product and helped close a deal.
               </p>
             </div>
           </div>

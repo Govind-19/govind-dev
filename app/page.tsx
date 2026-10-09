@@ -150,16 +150,17 @@ export default function HomePage() {
             </div>
             <div>
               <h3 className="mb-[3px] font-display text-[20px] font-medium">
-                Full Stack Developer
+                Full Stack Developer (Founding Team)
               </h3>
               <div className="mb-[7px] font-mono text-[12.5px] text-accent">
                 Maahita Technologies · Remote
               </div>
               <p className="text-[16.5px] text-muted">
                 Ship features across 15+ modules of a multi-tenant school ERP,
-                own releases and Docker deployments on DigitalOcean, and debug
-                live incidents while schools are mid-session. Mentored through
-                PR reviews by senior engineers since my 4th year of BTech.
+                own releases and Docker deployments on DigitalOcean, debug live
+                incidents, and demo the product to schools in person. Mentored
+                through PR reviews by senior engineers since my 4th year of
+                BTech.
               </p>
             </div>
           </div>

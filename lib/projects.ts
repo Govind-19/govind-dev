@@ -412,7 +412,7 @@ export const PRODUCTS: Product[] = [
     short:
       "Multi-tenant SaaS for Indian schools: 15+ modules from admissions to fees, schema-per-tenant PostgreSQL, 570 REST endpoints. I ship every layer, from schema to release.",
     body:
-      "An early-stage SaaS product run by three founders investing in the idea directly. No big roadmap handed down, no perfect process. We learn from real schools, evolve the product, and ship. I've been on it since my 4th year of BTech, across every layer above.",
+      "An early-stage SaaS product run by three founders investing in the idea directly. No big roadmap handed down, no perfect process. We learn from real schools (two piloted it, and I demoed it to schools in person), evolve the product, and ship. I've been on it since my 4th year of BTech, across every layer above.",
     stack: ["React", "TypeScript", "Node.js / Express", "PostgreSQL", "Docker"],
     links: [{ label: "live product", href: "https://school.maahita.com/" }],
   },
@@ -423,7 +423,7 @@ export const PRODUCTS: Product[] = [
     short:
       "Live quiz platform for school events: three synced screens, real-time scoring. Built as a secret prototype, adopted as a product, first event ran with 300 students.",
     body:
-      "Born from a principal's challenge: TV-show-style quizzes for school events. I built the prototype in secret — three synchronized screens (admin control, projector display, participant phones) with real-time scoring, timers, and leaderboards. The team adopted it as an official product, and it ran its first live event with 300 students without breaking.",
+      "Born from a principal's challenge: TV-show-style quizzes for school events. I built the prototype in secret — three synchronized screens (admin control, projector display, participant phones) with real-time scoring, timers, and leaderboards. The team adopted it as an official product, and it ran its first live event with 300 students without breaking. The principal rewarded the team with ₹5,000.",
     stack: ["React", "Firebase", "real-time sync"],
     links: [
       { label: "live app", href: "https://vinodam-maahita.web.app/" },
