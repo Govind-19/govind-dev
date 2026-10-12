@@ -29,7 +29,7 @@ Drop a `.mdx` file into `content/posts/` and push. The filename is the URL slug.
 title: "I fought my team lead over extracting strings into constants"
 summary: "One-line summary shown in lists and link previews."
 date: "2026-03-14"
-tag: "Engineering"        # one of: Engineering | Product | Production | Startup
+tag: "Engineering"        # one of: Engineering | Interviews | Product | Production | Startup | Personal
 arc: "resist → reject → real requirement → revelation"   # optional
 readTime: 4               # optional; computed from word count (~200 wpm) if omitted
 draft: false              # true = never rendered or listed

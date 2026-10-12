@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site } from "@/lib/site";
 
 export default function Footer({ who }: { who?: string }) {
@@ -37,6 +38,12 @@ export default function Footer({ who }: { who?: string }) {
           >
             Email
           </a>
+          <Link
+            href="/journal"
+            className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
+          >
+            Journal
+          </Link>
         </div>
         <p className="mt-6 font-mono text-[11px] text-muted">{site.fine}</p>
       </div>

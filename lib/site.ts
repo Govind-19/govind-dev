@@ -12,9 +12,9 @@ export const site = {
   /** the one-line role, used wherever the name needs a job title next to it */
   role: "Full-stack developer",
   description:
-    "Govind — full-stack developer shipping a school ERP SaaS end to end at Maahita Technologies, plus client and product work. Engineering journal included.",
+    "Bammidi Govinda Rao (Govind), Full Stack Developer (Founding Team) at Maahita Technologies: React, TypeScript, Node.js and PostgreSQL on a multi-tenant school ERP. Open to roles.",
   author: "Govind",
-  email: "bammidigovindarao3825@gmail.com",
+  email: "bammidigovindarao1729@gmail.com",
   linkedin: "https://www.linkedin.com/in/bammidi-govinda-rao-b8286a229/",
   github: "https://github.com/Govind-19",
   githubWork: "https://github.com/govindaraob-maahita",

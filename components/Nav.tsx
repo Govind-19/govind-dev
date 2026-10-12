@@ -5,11 +5,14 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 
+// recruiter-first: the resume sections, then other work, the journal for
+// anyone who wants the longer read, and contact. The home page itself stays
+// the resume.
 const LINKS = [
+  { href: "/#experience", label: "experience" },
+  { href: "/#projects", label: "projects" },
   { href: "/work", label: "work" },
-  { href: "/resume", label: "resume" },
   { href: "/journal", label: "journal" },
-  { href: "/about", label: "about" },
   { href: "/contact", label: "contact" },
 ];
 

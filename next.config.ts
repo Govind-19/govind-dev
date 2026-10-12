@@ -6,6 +6,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        // the home page is the resume now; keep links sent out to /resume alive
+        source: "/resume",
+        destination: "/",
+        permanent: false,
+      },
+      {
         // post renamed: framing changed from "i gave the AI the answer" to the
         // length-checked-a-dropdown angle. keep the old shared link alive.
         source: "/journal/i-gave-the-ai-the-answer-it-still-guarded-the-wrong-thing",

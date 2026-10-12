@@ -65,7 +65,6 @@ const SIDE_PROJECTS: SideProject[] = [
     stack: ["React", "Capacitor (Android)", "Firebase", "offline-first", "Recharts"],
     links: [
       { label: "live app", href: "https://expensetracker-seven-zeta.vercel.app" },
-      { label: "github", href: "https://github.com/Govind-19/Roots" },
     ],
   },
 ];
