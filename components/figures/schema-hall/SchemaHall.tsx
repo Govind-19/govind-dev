@@ -6,9 +6,11 @@ import { mountSchemaHall } from "./live.mjs";
 import "./schema-hall.css";
 
 const KEYS = [
-  { mark: "lit", label: "The open drawer: one school's PostgreSQL schema" },
-  { mark: "raised", label: "15 cards inside: the same module tables in every schema" },
-  { mark: "raised", label: "Carriage and key: one connection setting its search_path" },
+  { mark: "lit", label: "Open drawer: one school's PostgreSQL schema, the same 15+ module tables in each" },
+  { mark: "raised", label: "Top floors: the React frontend" },
+  { mark: "raised", label: "Columns: the shared Express API" },
+  { mark: "raised", label: "Base and steps: Docker and Nginx on DigitalOcean" },
+  { mark: "dim", label: "Carriage and key: one request's connection, scoped to one school" },
 ];
 
 /**

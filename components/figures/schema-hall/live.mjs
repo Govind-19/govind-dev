@@ -21,19 +21,14 @@ export function mountSchemaHall(stage, readout, data) {
     home = i;
   };
   const still = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const TOUR = [2, 5, 0, 4, 6, 1, 3];
   const name = (i) => `school_${String(i + 1).padStart(2, "0")}`;
 
-  let target = TOUR[0];
+  let target = data.startBay;
   let x = data.bays[target];
   const open = data.bays.map((_, i) => (i === target ? 1 : 0));
-  let touring = !still.matches;
-  let clock = 0;
-  let step = 0;
   let frame = 0;
   let last = 0;
   let visible = false;
-  let idle = 0;
 
   function draw() {
     const dx = x - data.start;
@@ -57,14 +52,6 @@ export function mountSchemaHall(stage, readout, data) {
     const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
     last = now;
     const calm = still.matches;
-    if (touring) {
-      clock += dt;
-      if (clock > 4) {
-        clock = 0;
-        step = (step + 1) % TOUR.length;
-        target = TOUR[step];
-      }
-    }
     const tx = data.bays[target];
     x = calm ? tx : x + (tx - x) * (1 - Math.exp(-dt / 0.32));
     if (Math.abs(tx - x) < 0.02) x = tx;
@@ -80,7 +67,8 @@ export function mountSchemaHall(stage, readout, data) {
       if (open[i] !== want) moving = true;
     });
     draw();
-    frame = visible && (touring || moving) ? requestAnimationFrame(tick) : 0;
+    // still until someone asks: only hover, tap or the arrow keys start it
+    frame = visible && moving ? requestAnimationFrame(tick) : 0;
   }
 
   const run = () => {
@@ -90,15 +78,7 @@ export function mountSchemaHall(stage, readout, data) {
     }
   };
   const steer = (index) => {
-    touring = false;
     target = Math.max(0, Math.min(data.bays.length - 1, index));
-    window.clearTimeout(idle);
-    idle = window.setTimeout(() => {
-      touring = !still.matches;
-      clock = 0;
-      step = Math.max(0, TOUR.indexOf(target));
-      run();
-    }, 4000);
     run();
   };
 
@@ -118,7 +98,7 @@ export function mountSchemaHall(stage, readout, data) {
     data.bayFx.forEach((f, i) => {
       if (Math.abs(f - fx) < Math.abs(data.bayFx[best] - fx)) best = i;
     });
-    if (best !== target || touring) steer(best);
+    if (best !== target) steer(best);
   };
   const onKey = (event) => {
     let to = null;
@@ -137,7 +117,6 @@ export function mountSchemaHall(stage, readout, data) {
 
   return () => {
     cancelAnimationFrame(frame);
-    window.clearTimeout(idle);
     observer.disconnect();
     stage.removeEventListener("pointermove", onMove);
     stage.removeEventListener("pointerdown", onMove);

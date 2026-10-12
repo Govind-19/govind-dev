@@ -7,7 +7,8 @@
  *   hall of drawers   PostgreSQL, one schema per school, each holding the same
  *                     15 module cards (admissions, timetable, marks, fees ...)
  *   stepped attic     the React frontend people actually see
- *   carriage + key    one connection; it sets search_path, so only the drawer
+ *   carriage + key    one request's connection; the API scopes it to one school (schema-qualified
+ *                     SQL, plus search_path set on the connection), so only the drawer
  *                     at its bay can slide out
  *
  * Run `node scripts/figures/schema-hall/build.mjs` after changing anything here.
@@ -303,6 +304,7 @@ const ay = k.axisVector(P, [0, 1, 0]);
 const DATA = {
   bays: BAYS,
   start: 0,
+  startBay: START_BAY,
   travel: TRAVEL,
   ax: ax.map(fmt),
   ay: ay.map(fmt),

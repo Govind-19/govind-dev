@@ -5,16 +5,16 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 
-// recruiter-first: the resume sections, then other work, the journal for
-// anyone who wants the longer read, and contact. The home page itself stays
-// the resume.
+// recruiter-first: the resume sections, the journal for anyone who wants the
+// longer read, contact, and the PDF itself. /work is linked from Projects.
 const LINKS = [
   { href: "/#experience", label: "experience" },
   { href: "/#projects", label: "projects" },
-  { href: "/work", label: "work" },
   { href: "/journal", label: "journal" },
   { href: "/contact", label: "contact" },
 ];
+
+const RESUME = { href: "/Govind_Resume.pdf", file: "Bammidi_Govinda_Rao_Resume.pdf" };
 
 export default function Nav() {
   const pathname = usePathname();
@@ -51,6 +51,13 @@ export default function Nav() {
                 {l.label}
               </Link>
             ))}
+            <a
+              href={RESUME.href}
+              download={RESUME.file}
+              className="nav-link text-accent no-underline transition-opacity hover:opacity-80"
+            >
+              resume ↓
+            </a>
           </div>
 
           <ThemeToggle />
@@ -98,6 +105,18 @@ export default function Nav() {
                 </Link>
               );
             })}
+            <a
+              href={RESUME.href}
+              download={RESUME.file}
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-between py-[14px] font-mono text-[14px] text-accent no-underline"
+            >
+              <span className="flex items-center gap-[11px]">
+                <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-accent" />
+                resume
+              </span>
+              <span aria-hidden="true">↓</span>
+            </a>
           </div>
         </div>
       )}

@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import SectionLabel from "@/components/SectionLabel";
 import SchemaHall from "@/components/figures/schema-hall/SchemaHall";
 import { experienceShort } from "@/lib/experience";
+import { getAllPosts } from "@/lib/posts";
 import { site } from "@/lib/site";
 
 // the experience chip is derived from the start date, so re-render daily and
@@ -30,7 +31,7 @@ const NUMBERS = [
 ];
 
 const EXPERIENCE = [
-  "Joined at the early product stage and owned a large part of the core implementation of the company's **multi-tenant school ERP**, across product requirements, React/TypeScript frontend, Node.js/Express APIs, PostgreSQL, testing and deployment.",
+  "Joined at the early product stage and owned core areas of the company's **multi-tenant school ERP**, across product requirements, React/TypeScript frontend, Node.js/Express APIs, PostgreSQL, testing and deployment.",
   "Helped migrate the platform from single-tenant Firebase to **schema-per-tenant PostgreSQL** behind an Adapter/Repository data layer, isolating each school's data in its own schema.",
   "Implemented core business logic across **15+ ERP modules** (admissions, timetable, marks, fees, subscriptions), from requirement to release.",
   "Built authentication and **role-based access control** across four roles, and a **Razorpay** webhook-driven subscription lifecycle (trial, grace period, upgrade).",
@@ -53,18 +54,22 @@ const PROJECTS: {
     points: [
       {
         tag: "Problem",
-        text: "Multiple schools needed to share one platform while keeping their data isolated.",
+        text: "Multiple schools needed one shared platform with each school's data kept isolated.",
       },
       {
         tag: "Built",
         text: "A **schema-per-tenant PostgreSQL** architecture with the tenant search path set per connection, **240+ versioned migrations** with paired rollbacks, and a CI schema-drift check.",
       },
       {
-        tag: "Built",
+        tag: "Shipped",
         text: "The REST API layer behind **15+ ERP modules**, covered by Vitest unit and Playwright E2E tests, including Razorpay billing, PDF receipts and WhatsApp broadcasts.",
       },
+      {
+        tag: "Result",
+        text: "A pilot-ready school ERP, **piloted with two schools** and refined through their feedback.",
+      },
     ],
-    links: [{ label: "live product", href: "https://school.maahita.com/" }],
+    links: [{ label: "deployed app", href: "https://school.maahita.com/" }],
   },
   {
     title: "Vinodam, live quiz platform",
@@ -105,6 +110,13 @@ const SKILLS = [
   },
 ];
 
+/** Three entries, one of each kind, for interviewers who want the depth. */
+const WRITING = [
+  { kind: "Interview retrospective", slug: "the-interview-wasnt-about-my-code" },
+  { kind: "Debugging lesson", slug: "the-discount-was-zero-because-two-clocks-disagreed" },
+  { kind: "Architecture note", slug: "every-school-thinks-its-the-only-one" },
+];
+
 const link =
   "border-b border-transparent text-accent no-underline transition-colors hover:border-accent";
 
@@ -140,21 +152,31 @@ export default function HomePage() {
     "Remote or relocation",
   ];
 
+  const posts = getAllPosts();
+  const writing = WRITING.flatMap((w) => {
+    const post = posts.find((p) => p.slug === w.slug);
+    return post ? [{ ...w, title: post.title }] : [];
+  });
+
   return (
     <>
       <header className="border-b border-line pb-12 pt-[64px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <p className="kicker rise mb-[20px]">{site.role} · open to roles</p>
+          <p className="kicker rise mb-[20px]">Open to roles</p>
           <h1 className="rise rise-1 mb-[14px] font-display text-masthead font-medium leading-[1.02] tracking-[-1.5px]">
             Bammidi Govinda Rao
           </h1>
-          <p className="rise rise-2 mb-[24px] max-w-[620px] text-[19px] text-lede sm:text-[20px]">
-            <b className="font-medium text-accent">
-              Full Stack Developer (Founding Team)
-            </b>{" "}
-            at Maahita Technologies. I built a multi-tenant school ERP from the
-            early product stage with React, TypeScript, Node.js and PostgreSQL,
-            and own it through testing, deployment and production.
+          {/* role and stack on their own lines, so neither has to be read out of a sentence */}
+          <p className="rise rise-2 mb-[6px] font-display text-[22px] font-medium text-accent sm:text-[24px]">
+            Full Stack Developer (Founding Team)
+          </p>
+          <p className="rise rise-2 mb-[18px] font-mono text-[14px] tracking-[0.2px] text-tag">
+            React · TypeScript · Node.js · PostgreSQL
+          </p>
+          <p className="rise rise-2 mb-[24px] max-w-[620px] text-[18px] text-lede sm:text-[19px]">
+            At Maahita Technologies, I built core parts of a multi-tenant school
+            ERP, working across product requirements, architecture, testing,
+            deployment and production support.
           </p>
           <div className="rise rise-3 mb-[28px] flex flex-wrap gap-[10px] font-mono text-[12.5px]">
             {facts.map((f) => (
@@ -216,29 +238,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-line py-[46px]" id="architect">
-        <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="01" className="mb-[22px]">
-            How I build
-          </SectionLabel>
-          <div className="mb-[26px] border-l-2 border-accent pl-5">
-            <p className="mb-[4px] font-mono text-[12px] uppercase tracking-[1.2px] text-muted">
-              The architect · builds what holds
-            </p>
-            <p className="text-[17.5px] leading-[1.55] text-body">
-              The school ERP I built, drawn as a model. Every school gets its own
-              PostgreSQL schema behind one Express API and one React frontend, so
-              a single codebase serves them all and no school can ever read
-              another&apos;s data. Hover a bay to send a connection there.
-            </p>
-          </div>
-          <SchemaHall />
-        </div>
-      </section>
-
       <section className="border-b border-line py-[46px]" id="experience">
         <div className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="02" className="mb-[22px]">
+          <SectionLabel number="01" className="mb-[22px]">
             Experience
           </SectionLabel>
           <div className="mb-[14px] flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -259,6 +261,26 @@ export default function HomePage() {
               </Bullet>
             ))}
           </ul>
+        </div>
+      </section>
+
+      <section className="border-b border-line py-[46px]" id="architect">
+        <div className="mx-auto max-w-[760px] px-7">
+          <SectionLabel number="02" className="mb-[22px]">
+            How I build
+          </SectionLabel>
+          <div className="mb-[26px] border-l-2 border-accent pl-5">
+            <p className="mb-[4px] font-mono text-[12px] uppercase tracking-[1.2px] text-muted">
+              Multi-tenant architecture
+            </p>
+            <p className="text-[17.5px] leading-[1.55] text-body">
+              Each school has its own PostgreSQL schema behind a shared Express
+              API and React frontend. The API checks that the signed-in user
+              belongs to the requested school, then runs that request&apos;s
+              queries against that school&apos;s schema only.
+            </p>
+          </div>
+          <SchemaHall />
         </div>
       </section>
 
@@ -358,6 +380,35 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-line py-[46px]" id="writing">
+        <div className="mx-auto max-w-[760px] px-7">
+          <SectionLabel number="06" className="mb-[14px]">
+            Selected writing
+          </SectionLabel>
+          {writing.map((w, i) => (
+            <Link
+              key={w.slug}
+              href={`/journal/${w.slug}`}
+              className={`group flex flex-col gap-1 py-[14px] no-underline sm:flex-row sm:items-baseline sm:gap-5 ${
+                i === 0 ? "" : "border-t border-line"
+              }`}
+            >
+              <span className="font-mono text-[12px] uppercase tracking-[0.8px] text-muted sm:min-w-[190px]">
+                {w.kind}
+              </span>
+              <span className="font-display text-[18.5px] leading-[1.35] text-ink transition-colors group-hover:text-accent">
+                {w.title}
+              </span>
+            </Link>
+          ))}
+          <p className="mt-4 font-mono text-[13px]">
+            <Link href="/journal" className={link}>
+              the whole journal →
+            </Link>
+          </p>
+        </div>
+      </section>
+
       <section className="py-[40px]">
         <div className="mx-auto max-w-[760px] px-7 text-center">
           <a
@@ -367,16 +418,6 @@ export default function HomePage() {
           >
             ↓ Download resume
           </a>
-          <p className="mt-5 font-mono text-[12.5px] text-muted">
-            Want the longer story?{" "}
-            <Link href="/about" className={link}>
-              about me
-            </Link>{" "}
-            ·{" "}
-            <Link href="/journal" className={link}>
-              engineering journal
-            </Link>
-          </p>
         </div>
       </section>
 
