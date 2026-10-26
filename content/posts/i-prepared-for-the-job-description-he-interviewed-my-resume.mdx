@@ -1,9 +1,9 @@
 ---
 title: "I prepared for the job description. He interviewed my resume."
-summary: "I went in with no hope, after a run of rejections. I'd studied Python, Workato and webhooks because that's what the job description asked for. The interviewer never opened it. He went through my resume line by line instead, and it turned out to be my best interview so far."
+summary: "After a run of rejections, I sat for half an hour in a Google Meet waiting room nobody opened, asked for a reschedule anyway, and spent the weekend revising everything the job description could possibly ask. The interviewer was late again, never opened the job description, and went through my resume instead. It turned out to be my best interview so far."
 date: "2026-10-26"
 tag: "Interviews"
-arc: "a run of rejections, no hope for this one → prepared python, workato, webhooks for the jd → he skipped the jd and read my resume → nginx yes, forward proxy no → the tenant question, and i steered it to jwt on purpose → dsa, five out of ten, pseudo code anyway → my best interview so far"
+arc: "a run of rejections, a simple jd on linkedin → hr call friday, interview saturday → thirty minutes in a waiting room nobody opened → asked for a reschedule anyway → revised everything from tcp to workato → he was late again, and this time i stayed → he skipped the jd and read my resume → nginx yes, forward proxy no → the tenant question, and i steered it to jwt on purpose → dsa, five out of ten, pseudo code anyway → my best interview so far"
 draft: false
 featured: false
 ---
@@ -14,23 +14,86 @@ i've had a lot of interviews these past few months. [a screening round](/journal
 
 every one of them ended in a no, or in nothing.
 
-so when this one got scheduled, i didn't expect anything from it. honestly.
+so this one started like all the others. an application on linkedin.
 
-but the job description was simple. http headers, pagination, webhooks, workato automation, python. a short list, and nothing on it scared me.
+but the job description was strangely simple. http headers, pagination, webhooks, workato automation, python. nothing fancy. i read it and thought, ok. i can make an attempt at this.
 
-so i prepared for exactly that. i went through python basics. i read about workato, which i'd never used, and once i understood it was an automation tool, i tied it to something real. we've finished building our product and we're moving into marketing, so we need to collect leads from people who fill in the demo form. that's an automation problem. i could explain it.
+## friday, a call. saturday, a waiting room
+
+i applied, and on friday night the hr called.
+
+the usual. introduce yourself. what do you do now. why are you switching. current salary. how many people are in the company.
+
+then: "can you attend the interview tomorrow?"
+
+yes.
+
+saturday, 3 to 4, a google meet link. the kind where you can't just walk in. you click ask to join, and someone on the other side has to let you in.
+
+so i clicked ask to join, and i waited.
+
+ten minutes. nobody.
+
+i started doubting myself. is this even the right link? i left, opened it again, clicked ask to join again. same screen. waiting for the host to let you in.
+
+i sent a mail. then another one. i called the hr directly. no reply to any of it.
+
+at 3:30 i was still sitting in the waiting room, looking at my own face. a few minutes later i left.
+
+<Pull>half an hour in a waiting room nobody opens is its own kind of rejection. you don't even get the no.</Pull>
+
+i could have let it go. after everything this year, it would've been easy to read it as one more door that never opened.
+
+instead, sunday morning, i wrote again. i'm still interested. if it works for you, please reschedule.
+
+monday afternoon, a reply. rescheduled. today, 4:15 to 5.
+
+## i revised everything
+
+the job description was simple, but i didn't trust simple. i assumed simple meant they'd go deep on the fundamentals.
+
+so over the weekend i went through all of it.
+
+```text
+http         every header i could remember, status codes,
+             pagination logic, rate limiting, the request lifecycle
+network      tcp handshake, tls handshake, ssl, ip, tcp vs udp
+crypto       symmetric vs asymmetric, hmac, hs256,
+             hashing vs signing vs encrypting
+security     cors, xss, csrf
+node         event emitter, event loop, libuv, microtasks, promises
+javascript   closures, the basics
+react        fundamentals
+python       fundamentals
+workato      recipe, trigger, action, datapill, connector,
+             connection, if / repeat, monitor / on error,
+             recipe functions
+also         multi-tenant architecture, aws lambda, github basics
+```
+
+workato i had never touched. once i understood it was an automation tool, i tied it to something real. we've finished building our product and we're moving into marketing, so we need to collect leads from people who fill in the demo form. that's an automation problem. i could explain it.
 
 i was ready for the job description.
 
-he never opened it.
+## and then, waiting again
 
-## he went straight to my resume
+4:15. ask to join. waiting for the host.
 
-i introduced myself. 2025 graduate, joined an early stage edtech startup in my final year as a founding engineer, built a multi-tenant school erp for indian schools from the core idea to production. small team, so more than code: requirements, testing, deployments, production issues. our founders are in canada, so i also went to schools, gave demos, and we signed a few.
+he was thirty minutes late. again.
+
+i was exhausted. same waiting room, same doubt, two days later. part of me wanted to leave exactly like saturday.
+
+this time i decided i wouldn't. whatever happened, i'd still be in that room when someone opened it.
+
+and then, suddenly, he was on screen.
+
+no small talk. i introduced myself. 2025 graduate, joined an early stage edtech startup in my final year as a founding engineer, built a multi-tenant school erp for indian schools from the core idea to production. small team, so more than code: requirements, testing, deployments, production issues. our founders are in canada, so i also went to schools, gave demos, and we signed a few.
 
 then he said he'd just reviewed my resume, and every question after that came from it.
 
-not python. not workato. docker and nginx.
+not http headers. not pagination. not python. not workato.
+
+docker and nginx.
 
 ## nginx, yes. forward proxy, no
 
@@ -175,6 +238,8 @@ no bluffing. "i have an idea, but i can't explain it in depth" is a real answer.
 
 i used the time to tell him what i'd prepared. python, workato, the lead collection example. i'd learned the basics only for this interview, and i wanted him to know i'd done the reading even though he never asked about it.
 
+almost nothing from that weekend list came up by name. the one thing that did was hmac, hiding inside the jwt and razorpay answers. maybe that's why those two came out so clean.
+
 ## how it went
 
 better than any interview i've had so far.
@@ -192,6 +257,8 @@ prepare for the resume, not just the job description. every line on it is a ques
 answer the question that was asked. if i don't know it, say that, rather than walking it over to something i do know.
 
 and dsa. not a crash course before the next interview, a small amount, regularly. arrays, hash maps, complexity. the stuff i once knew all the way up to dp and let go.
+
+and the least technical one. on saturday i left the waiting room. today i stayed. if i'd left today too, there'd be nothing to write about here.
 
 <Pull>i walked in prepared for the job description. i came out knowing my own resume is the real syllabus.</Pull>
 
