@@ -1,0 +1,138 @@
+---
+title: "I've built a payment flow. I couldn't get past Two Sum."
+summary: "A full stack interview that went deep on what I've built, multi-tenancy, JWTs, Razorpay, and held. Then came a reverse proxy versus a forward proxy, OAuth, and Two Sum, and I found the edges of what I actually understand."
+date: "2026-10-26"
+tag: "Interviews"
+arc: "nginx, and a question i'd never asked myself → tenant ids, tokens, payments: the built answers held → two sum, and nested loops were as far as i got → using a thing is not knowing it → turn every gap into a plan"
+draft: false
+featured: false
+---
+
+## this one went deep
+
+this is my fourth interview entry. [the first](/journal/two-years-of-vibe-coding-and-a-screening-round-i-deserved-to-fail) was a screening round where i had nothing to give. [the second](/journal/i-revised-all-night-the-answer-that-landed-was-the-one-id-built) was a java full stack round i crammed for in one night. [the third](/journal/the-interview-wasnt-about-my-code) was a conversation that stayed at the surface, and i was the one who kept it there.
+
+today was a full stack developer interview, and it did not stay at the surface.
+
+i introduced myself the way i do now. founding engineer at an early stage edtech startup, building a multi-tenant school erp from scratch. the code, but also the requirements, testing, deployments, production issues and customer demos.
+
+the role leaned towards integrations, so before the interview i had read up on python and workato, and i connected the automation idea to a real business case, collecting leads. that part felt prepared.
+
+then the questions started.
+
+## nginx, and a question i'd never asked myself
+
+the first topic was nginx and where it sits in our architecture.
+
+i explained it. reverse proxy, load balancing, rate limiting, caching, tls termination. all things i have configured, or at least seen working in our setup.
+
+then he asked: what's the difference between a reverse proxy and a forward proxy?
+
+and i didn't have a clean answer.
+
+i have used a reverse proxy for a long time. i had never once needed to know what the other kind was, so i never asked.
+
+<Pull>knowing how to use a technology is not the same as understanding the concept it's built on.</Pull>
+
+the difference, written down so i don't lose it again:
+
+```text
+forward proxy   sits in front of the clients
+                the server sees the proxy, not the user
+                e.g. a company proxy all employees browse through
+
+reverse proxy   sits in front of the servers
+                the user sees the proxy, not the servers
+                e.g. nginx in front of our node backend
+```
+
+same idea, a middleman. which side it's hiding is the whole difference.
+
+## the built answers held
+
+then we went into the things i've actually built, and it got easier.
+
+**multi-tenancy.** i explained how we [keep each school's data separate](/journal/every-school-thinks-its-the-only-one). postgresql schemas, shared tables, tenant specific tables, and a membership check before any request touches a school's data.
+
+he pushed on it. what if someone changes the tenant id in the request? what stops a user from one school reading another school's data?
+
+those are the right questions. multi-tenancy isn't a way of organising tables. it's a security boundary, and the boundary only holds if every request is authorised against the tenant it asks for, and the tenant context reaches the query in a way the client can't tamper with.
+
+**jwt.** i walked through header, payload, signature, the secret, and how the backend verifies the token on each request.
+
+the thing i want to say more clearly next time is the line between the two words people blur.
+
+<Ex>Ex: authentication answers "who are you?" a valid token proves that. authorization answers "are you allowed to touch this school's fees?" the token alone doesn't prove that.</Ex>
+
+**razorpay.** order creation, checkout, signature verification, webhooks. this is the one i've already [got wrong once](/journal/i-thought-verifying-a-signature-meant-decrypting-it) and had to relearn, so it came out properly. a signature isn't decrypted, it's recomputed and compared. and the webhook exists because [the user can close the tab](/journal/they-paid-then-they-closed-the-tab) before the browser reports anything.
+
+what the conversation added was the part past the happy path. failures, retries, the same event arriving twice, and keeping the payment status we store consistent with what actually happened.
+
+## two sum
+
+then he gave me two sum. find the indices of two numbers in an array that add up to a target.
+
+i got to the brute force. two nested loops, check every pair.
+
+then i couldn't say the time complexity cleanly, and i couldn't get to the better solution.
+
+this is the part of the interview i keep coming back to. not because two sum is hard. because it isn't.
+
+the answer i couldn't reach:
+
+```text
+seen = {}                        value → index
+for i, n in nums:
+    need = target - n
+    if need in seen:
+        return [seen[need], i]
+    seen[n] = i
+
+nested loops  → O(n²), every pair checked
+one pass      → O(n), the map answers "have i seen my partner?" in O(1)
+```
+
+the trick is that the hash map removes a loop. instead of searching for the partner every time, you remember everything you've passed.
+
+i've written code that uses maps exactly like this. i just didn't recognise the shape when it was a puzzle instead of a feature.
+
+<Pull>i can build a payment flow end to end. i couldn't get past the warm-up problem. both of those are true.</Pull>
+
+## oauth, webhooks, sse, websockets
+
+the last stretch was integration patterns.
+
+webhooks i could explain from real use. sse i related to how llm responses stream in token by token.
+
+oauth, and when to pick sse over websockets or the other way round, i knew the names better than the mechanisms.
+
+that's the pattern of the whole interview, really. familiarity with the term is where understanding starts, not where it ends. i should be able to say what problem each one solves, how it works underneath, and when i'd choose it.
+
+## what went well
+
+- i could talk about real work, built from the ground up, without inventing any of it.
+- the tenant isolation and payment answers came from things i've built and debugged.
+- i said so when i didn't know something, instead of talking around it.
+
+## what i need to fix
+
+- **dsa, regularly.** not a crash course before an interview. arrays, hash maps, and noticing when a data structure can remove a loop.
+- **big o.** deriving it for loops, nested loops and common structures, out loud, without hesitating.
+- **security fundamentals.** authentication, authorization, tenant isolation, and safe database access, explained as separate ideas.
+- **networking.** forward proxy, reverse proxy, load balancer, api gateway, and where each one stops.
+- **integrations.** oauth 2.0, webhooks, idempotency, sse and websockets, past the definitions.
+- **shorter answers.** when an interviewer asks something more specific, answer that, instead of repeating the broader explanation i already gave.
+
+## what i'm taking from it
+
+in the last interview i stayed at the surface and wished someone had pushed. this time someone pushed, and i found exactly where my understanding ends.
+
+building production software and passing a technical interview are related skills, but they aren't the same skill. i've spent two years on the first one.
+
+i don't want to prepare just to answer interview questions. i want to know these things well enough to use them when i'm building, debugging and scaling real systems.
+
+so the next step is to take every gap from today and turn it into a plan, and revisit each one until i can explain it clearly and implement it without looking it up.
+
+<Pull>the goal isn't to pretend i knew everything. it's to make sure that next time, i actually do.</Pull>
+
+#buildinpublic #softwareengineering #dsa #backend #systemdesign #interviews #learninginpublic
