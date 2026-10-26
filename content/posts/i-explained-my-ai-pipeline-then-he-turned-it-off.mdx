@@ -1,0 +1,150 @@
+---
+title: "I explained my AI pipeline. Then he turned it off."
+summary: "An on-site role with a 12 to 18 LPA budget, worth every bit of preparation. I opened by walking the interviewer through the AI pipeline I build features with. He asked for one paginated Express endpoint, no AI, twenty minutes. I spent the hour dragging instead of saying I couldn't."
+date: "2026-10-21"
+tag: "Interviews"
+arc: "an on-site role, a budget worth trying for → i walked him through my ai pipeline → 'now write a paginated endpoint. no ai.' → an hour of dragging instead of saying i can't → 'you need hands-on experience' → i learned pagination properly → five days later, pagination was on the next job description"
+draft: false
+featured: false
+---
+
+## worth a shot
+
+an on-site role in punjab. a budget of 12 to 18 lpa.
+
+for me, that budget was very tempting. tempting enough to make the attempt.
+
+so i prepared properly. the same fundamentals i'd go through again five days later. the request lifecycle, node, javascript, react, security basics, everything i could cover.
+
+wednesday, the call.
+
+## i led with the pipeline
+
+he asked what my role is and what i've experienced so far.
+
+i gave the usual introduction. 2025 b.tech graduate, joined an edtech startup in my final year, a school erp for tier 3 indian schools. small team, so beyond code too. business discussions with the founders, code review, deployments, testing, and since the founders are in canada, sales. i went to schools myself, gave demos, and after many meetings we signed two of them.
+
+then he picked a line from my resume, the code delivery pipeline, and asked me to explain the architecture.
+
+and i was proud of this one, so i went all in.
+
+we're a small team that needs to ship fast, so we build with claude code. on big projects it loses context, so we use the bmad method, an open source setup that gives the ai role based workflows, product, developer, tester. on top of that i built a pipeline:
+
+```text
+read the jira ticket
+  → create a branch, or a worktree to run two or three tickets in parallel
+  → generate a plan
+  → ai reviews the plan, three passes, until it scores 98%
+  → implement
+  → schema drift checks and the rest, on github runners
+  → raise the pr, review, merge
+```
+
+he listened. then he said: "ok govind, i get an understanding of what kind of experience you have. i want you to move directly to a coding question."
+
+i didn't hear it then. i hear it now.
+
+## no ai, no autocomplete
+
+the question came in the chat.
+
+> implement an express.js endpoint that returns paginated leads from a set of leads. the endpoint accepts page and limit query parameters.
+
+"you can google. you can't use any ai. turn off autocomplete as well. it's a simple question. i'd expect about twenty minutes."
+
+i had just spent five minutes explaining how much of my work goes through ai. now the ai was off.
+
+## the hour
+
+i'd like to say i struggled with something hard. i didn't. i struggled with everything around a simple thing.
+
+i asked if there was an api that already had the leads. he said generate some with an llm, that's fine. the first structure i got back had metadata and nesting, and he said it was too complicated for something this simple. in the end he generated the leads himself and pasted them in the chat. name, email, phone. that's it.
+
+then i didn't remember the shape of an express route. he said google it.
+
+i opened an online ide. what it gave me was a plain node http server, not express. i kept going with it anyway.
+
+he said, "my question specifically asks for express. can you use express, please?"
+
+i said it was taking too much time, and this works.
+
+he told me to just install express in the terminal. the terminal session disconnected. he suggested a local ide. i installed things in the wrong folder.
+
+then i asked if i could use an llm to create a simple server. he said, sure, go ahead.
+
+by the end i had an endpoint returning `limit` items. not pages. he asked, can you try page number as well?
+
+and this is what i said:
+
+> generally, when we click the page number, we have a limit and an offset, right? so that much data comes from the backend. i think we don't pass the parameter to the url, sir. i mean, in the frontend.
+
+back in june my lead asked me [where the backend pagination was](/journal/pagination-is-a-contract-not-a-frontend-feature), because i had built pages that only hid rows on the screen. i wrote a whole entry about how pagination is a contract between frontend and backend.
+
+four months later, in an interview, asked to write the backend half, i drifted to the frontend again.
+
+"ok govind, i think the time is up for our interview."
+
+## the part that's actually on me
+
+not knowing express syntax by heart isn't the failure. i've written about [this exact gap](/journal/two-years-of-vibe-coding-and-a-screening-round-i-deserved-to-fail) before. i let ai write my code for a long time, and my hands forgot things my head still understands.
+
+the failure is what i did with the hour.
+
+i knew early that i couldn't do this cleanly without ai. i could have said it. "i don't have hands on practice writing this without ai. let me tell you the logic instead." that's an honest answer. it might even have been a short interview.
+
+instead i kept dragging. saying whatever came into my mouth, filling silence, hoping it would turn into something. an hour of his time, and mine, spent hiding a gap he had already seen.
+
+<Pull>"i can't do this without ai" would have cost me five minutes. pretending i could cost the whole hour.</Pull>
+
+## i asked for feedback
+
+when he asked if i had any questions, i asked for feedback. i already knew how it went.
+
+"govind, i think you need to have hands on coding experience. you need to be fluent in what you do, rather than thinking so much. the question was quite clear, but i don't think you could follow it clearly. but i think you'll be able to achieve great results if you do a little hands on coding, rather than just relying on llms."
+
+he was right about all of it.
+
+## what i learned after
+
+so i went and learned it. properly, by hand.
+
+the backend gets two numbers, page and limit. from those it works out how many rows to skip, the offset. it sends back only that slice, plus enough for the frontend to draw the page numbers.
+
+```text
+const express = require("express");
+const app = express();
+
+app.get("/api/leads", (req, res) => {
+  const page  = Math.max(parseInt(req.query.page)  || 1, 1);
+  const limit = Math.max(parseInt(req.query.limit) || 10, 1);
+  const offset = (page - 1) * limit;
+
+  res.json({
+    page,
+    limit,
+    total: leads.length,
+    totalPages: Math.ceil(leads.length / limit),
+    data: leads.slice(offset, offset + limit),
+  });
+});
+
+app.listen(3000);
+```
+
+page 1, limit 10 skips nothing and returns rows 1 to 10. page 3 skips 20 and returns 21 to 30. against a real database, the same two numbers become `LIMIT 10 OFFSET 20`.
+
+that's the whole question. maybe fifteen lines.
+
+## the butterfly effect
+
+five days later i had another interview. its job description had five things on it, and one of them was pagination.
+
+this time i didn't have to cram it. wednesday had already made me learn it. [that interview](/journal/i-prepared-for-the-job-description-he-interviewed-my-resume) turned out to be my best one so far.
+
+every interview is a butterfly effect of something. the java round sent me to spring boot. this hour is why pagination is something i now understand from the backend first, not the screen.
+
+i don't need the result to know how this one went. but i got the lesson for the next one.
+
+<Pull>the interview was lost early. what decided how bad it got was everything after.</Pull>
+
+#buildinpublic #softwareengineering #nodejs #expressjs #interviews #learninginpublic #jobsearch
