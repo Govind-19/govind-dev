@@ -1,0 +1,198 @@
+---
+title: "I prepared for the job description. He interviewed my resume."
+summary: "I went in with no hope, after a run of rejections. I'd studied Python, Workato and webhooks because that's what the job description asked for. The interviewer never opened it. He went through my resume line by line instead, and it turned out to be my best interview so far."
+date: "2026-10-26"
+tag: "Interviews"
+arc: "a run of rejections, no hope for this one → prepared python, workato, webhooks for the jd → he skipped the jd and read my resume → nginx yes, forward proxy no → the tenant question, and i steered it to jwt on purpose → dsa, five out of ten, pseudo code anyway → my best interview so far"
+draft: false
+featured: false
+---
+
+## i had no hope for this one
+
+i've had a lot of interviews these past few months. [a screening round](/journal/two-years-of-vibe-coding-and-a-screening-round-i-deserved-to-fail) where i had nothing to give. [a java round](/journal/i-revised-all-night-the-answer-that-landed-was-the-one-id-built) that went well and then went silent. [a conversation](/journal/the-interview-wasnt-about-my-code) where i stayed at the surface. and more that never made it into this journal.
+
+every one of them ended in a no, or in nothing.
+
+so when this one got scheduled, i didn't expect anything from it. honestly.
+
+but the job description was simple. http headers, pagination, webhooks, workato automation, python. a short list, and nothing on it scared me.
+
+so i prepared for exactly that. i went through python basics. i read about workato, which i'd never used, and once i understood it was an automation tool, i tied it to something real. we've finished building our product and we're moving into marketing, so we need to collect leads from people who fill in the demo form. that's an automation problem. i could explain it.
+
+i was ready for the job description.
+
+he never opened it.
+
+## he went straight to my resume
+
+i introduced myself. 2025 graduate, joined an early stage edtech startup in my final year as a founding engineer, built a multi-tenant school erp for indian schools from the core idea to production. small team, so more than code: requirements, testing, deployments, production issues. our founders are in canada, so i also went to schools, gave demos, and we signed a few.
+
+then he said he'd just reviewed my resume, and every question after that came from it.
+
+not python. not workato. docker and nginx.
+
+## nginx, yes. forward proxy, no
+
+"what's the primary purpose of nginx?"
+
+this one i had. it sits between the client and our backend, so the backend is never exposed directly. it's a reverse proxy that forwards requests to the backend. load balancing across processes. rate limiting, so a bot can't flood us with requests. caching static files so they don't hit the server every time. tls.
+
+then: "can you define what a reverse proxy is, and what a forward proxy is?"
+
+reverse proxy, fine. forward proxy, i just stopped. i said i'd never set one up. i even guessed it might be the other direction, coming from the backend. then i said i had no idea.
+
+i never thought he'd ask for the opposite of the thing i use. that was the one i fully missed.
+
+```text
+forward proxy   stands in front of the clients
+                the server sees the proxy, not the user
+                e.g. an office network every employee browses through
+
+reverse proxy   stands in front of the servers
+                the user sees the proxy, not the servers
+                e.g. nginx in front of our node backend
+```
+
+same middleman. it's just about which side is being hidden.
+
+## the question i once said i wanted
+
+then multi-tenancy. "you've mentioned schema per tenant in postgresql. how did you segregate tenants at the database level?"
+
+six weeks ago, after the java interview, i wrote that the membership check is [the step i'd want an interviewer to push on](/journal/i-revised-all-night-the-answer-that-landed-was-the-one-id-built). today one did.
+
+i told him how we got there. we started on firebase. then a requirement came in: a school can have branches, and the same person can be a teacher in one school and a principal in another. that's what pushed us to postgresql.
+
+a public schema for what's shared, users, memberships, boards, grades. a separate schema for each school, with its own classes, students, teachers. the frontend sends the school id, the backend takes the user from the jwt, and the membership table decides whether this user belongs to this school. change the school id in the url and the request fails right there. after that, the repository layer works against a list of allowed tables and knows whether to hit the shared schema or the school's own one.
+
+he kept pushing, and he was right to. "i'm a user in tenant b. you're in tenant a. i'm logged in. i put a random tenant in the request. what happens?"
+
+membership check fails. 403. authenticated, but forbidden.
+
+"yes, that's what i was asking. so how do you handle that authorization in your service layer?"
+
+and that's where i did something i should be honest about.
+
+## i steered it to jwt. on purpose
+
+i said, "you mean the jwt implementation, sir?"
+
+it wasn't really what he asked. but i know jwt well, so i walked the question over to it.
+
+and the jwt answer itself was right. header and payload, base64 encoded. the backend holds a secret. hmac sha256 over the header and payload with that secret makes the signature. the token goes back to the frontend, and every request carries it. the backend recomputes the signature and compares. [nothing is decrypted](/journal/i-thought-verifying-a-signature-meant-decrypting-it), it's checked.
+
+he said, "got it, perfect."
+
+but the honest answer to his question was **tenant context**, and i didn't say it.
+
+<Ex>Ex: once the membership check passes, the school this request is allowed to touch becomes the request's tenant context. the services and repositories take the school from that context, never from whatever the client sent. on the frontend, the selected school is context too. the user only ever picks from schools they belong to.</Ex>
+
+i know this. i've built this. i just went to the answer i was most comfortable with instead of the one he was asking for.
+
+<Pull>steering an interview to what you know works once. he'll notice the second time.</Pull>
+
+## dsa. five out of ten
+
+"how good are you at data structures and algorithms?"
+
+i was straight with him. i've only been doing development. it's been a long time since i practised dsa consistently. i might take time.
+
+"rate yourself, one to ten."
+
+five.
+
+and five was generous. in final year i'd prepared all the way up to dynamic programming. since then, nothing. partly laziness, if i'm honest. partly because nothing at work ever asked for it. the only pull i felt was towards system design, so that's where my time went.
+
+he said, "it'll be at a basic level. you need not worry about it." then, share your screen, open a notepad.
+
+the problem was two sum. an array of numbers, a target. return the indices of the two numbers that add up to it.
+
+i explained the brute force. take each element, compare it with every other one, return the pair when the sum matches. somewhere in my head two pointers came up too, a half memory from final year.
+
+"write the pseudo code, fast."
+
+i did. i started with `i + j == target`, heard myself, and fixed it to the values, not the indices.
+
+```text
+for i in 0 .. arr.length - 1
+    for j in i + 1 .. arr.length - 1
+        if arr[i] + arr[j] == target
+            return [i, j]
+```
+
+he said, "got it, got it. fine."
+
+honestly, that surprised me. i'd rated myself a five and walked in expecting to freeze, and the pseudo code came out clean.
+
+then the follow ups, and that's where it stopped.
+
+"time complexity?" i said n plus one. it's n squared, a loop inside a loop. i'd forgotten even that.
+
+"can you do it in a single loop? you can use any data structure." i thought about duplicates. i thought about a linked list. i couldn't see it, and we moved on.
+
+what his hint was pointing at:
+
+```text
+seen = map of value → index
+for i, n in arr
+    if seen has (target - n)
+        return [seen[target - n], i]
+    seen[n] = i
+```
+
+one loop. the map remembers everything already passed, so finding the partner is a lookup, not another loop. o(n).
+
+i've used maps like this in real code. i didn't recognise it as a puzzle.
+
+## razorpay, the one i was waiting for
+
+then payments. "walk me through your razorpay integration."
+
+i started by connecting it to jwt, because it's the same idea. one secret, held by our backend and by razorpay.
+
+the user clicks pay. the backend asks razorpay to create an order and gets an order id. the frontend opens checkout with that order id and our public key. the user pays. razorpay returns a payment id, the order id and a signature. the backend runs hmac sha256 over the order id and payment id with its own copy of the secret, and compares. match, save the payment. no match, don't.
+
+and then the part i learned the hard way. what if [the user closes the tab](/journal/they-paid-then-they-closed-the-tab) in the middle? you could poll. or you use a webhook, where razorpay talks to our backend directly, without the browser in between.
+
+he asked about failures, and i covered that. he didn't go deeper into razorpay than that. i think this was my strongest answer of the day.
+
+## where i just said "i don't know"
+
+the last stretch was quick.
+
+oauth. we use jwt, and i know oauth at the surface, sign in with google, a third party. what happens on the backend? no idea. i said so.
+
+webhooks. i could explain them from razorpay, a server calling a server instead of going through the frontend.
+
+sse and websockets. i'd looked into sse once, because i was curious how chatgpt writes word by word. so i knew that's what llm streaming uses. but we never had a requirement for it, and i never built it. i said that too.
+
+no bluffing. "i have an idea, but i can't explain it in depth" is a real answer. it's better than a confident wrong one.
+
+## the jd came back at the end
+
+"do you have any questions?"
+
+i used the time to tell him what i'd prepared. python, workato, the lead collection example. i'd learned the basics only for this interview, and i wanted him to know i'd done the reading even though he never asked about it.
+
+## how it went
+
+better than any interview i've had so far.
+
+not perfect. i missed forward proxy completely. i dodged the tenant question into jwt instead of saying tenant context. i couldn't get two sum into one loop, and i forgot the complexity of two loops.
+
+but nginx, multi-tenancy, jwt and razorpay all came from things i built and owned, and they held under follow ups. and the pseudo code came out right, minutes after i'd rated myself a five.
+
+i don't know yet what comes next. for once i'm not expecting a no.
+
+## what i'm taking from it
+
+prepare for the resume, not just the job description. every line on it is a question, and the interviewer gets to pick which one.
+
+answer the question that was asked. if i don't know it, say that, rather than walking it over to something i do know.
+
+and dsa. not a crash course before the next interview, a small amount, regularly. arrays, hash maps, complexity. the stuff i once knew all the way up to dp and let go.
+
+<Pull>i walked in prepared for the job description. i came out knowing my own resume is the real syllabus.</Pull>
+
+#buildinpublic #softwareengineering #interviews #backend #dsa #jobsearch #learninginpublic
